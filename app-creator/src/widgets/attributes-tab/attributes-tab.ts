@@ -270,7 +270,12 @@ ${value}</textarea
     step: number | undefined,
     id: string,
     attributeType: AttributeType
+<<<<<<< HEAD
   ): TemplateResult {
+=======
+  ) {
+    console.log({ key, title, value, placeholder, unit, id, attributeType });
+>>>>>>> added chart widget
     const unitMarkup =
       unit == null
         ? nothing
@@ -317,7 +322,7 @@ ${value}</textarea
             store.dispatch(
               updateWidgetMetaData(
                 key,
-                (e.target as HTMLInputElement).value + valueUnit,
+                (e.target as HTMLInputElement).value,
                 id,
                 attributeType
               )
@@ -397,7 +402,12 @@ ${value}</textarea
     });
   }
 
+<<<<<<< HEAD
   getUniqueAttributes(): (TemplateResult | {})[] | {} {
+=======
+  getUniqueAttributes() {
+    debugger;
+>>>>>>> added chart widget
     const widget = this.editingWidget;
     if (widget == null) {
       return nothing;

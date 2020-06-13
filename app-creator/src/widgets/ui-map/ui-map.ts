@@ -1,6 +1,5 @@
 import {} from 'googlemaps';
 import { customElement, html, LitElement, property, css } from 'lit-element';
-import { nothing } from 'lit-html';
 import { InputType } from '../../redux/types/enums';
 import {
   AttributeMetaData,
@@ -157,19 +156,7 @@ export class Map extends LitElement {
   }
 
   render() {
-    const { editable, handleEditWidget } = this;
-    const editableMarkup = editable
-      ? html`
-          <div id="editable-view">
-            <iron-icon
-              class="edit-buttons"
-              icon="create"
-              @click=${handleEditWidget}
-            ></iron-icon>
-          </div>
-        `
-      : nothing;
-    return html` ${editableMarkup}`;
+    return html``;
   }
 
   setAttribute(key: string, value: any) {
