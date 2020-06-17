@@ -44,14 +44,9 @@ export interface AppCreatorStore {
  * Initial state of our application.
  */
 const INITIAL_STATE: AppCreatorStore = {
-<<<<<<< HEAD
   editingElement: null,
   draggingElement: null,
   selectedTab: Tab.widgets,
-=======
-  element: null,
-  selectedTab: Tab.templates,
->>>>>>> added templates tab and card
   eventType: EventType.none,
   widgetIDs: {
     label: 0,

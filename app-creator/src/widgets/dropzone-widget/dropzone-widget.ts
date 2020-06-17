@@ -138,6 +138,7 @@ export class Dropzone extends LitElement {
     }
 
     store.dispatch(addWidgetMetaData(clone.id, clone));
+    store.dispatch(updateChildrenOrdering());
   }
 
   /**
