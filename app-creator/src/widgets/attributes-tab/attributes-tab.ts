@@ -274,8 +274,11 @@ ${value}</textarea
   ): TemplateResult {
 =======
   ) {
+<<<<<<< HEAD
     console.log({ key, title, value, placeholder, unit, id, attributeType });
 >>>>>>> added chart widget
+=======
+>>>>>>> added templates tab and card
     const unitMarkup =
       unit == null
         ? nothing
@@ -294,8 +297,14 @@ ${value}</textarea
                   )
                 )}
             >
-              <option value="px" ?selected=${unit === 'px'}>px</option>
-              <option value="%" ?selected=${unit === '%'}>%</option>
+              <option
+                value="px"
+                ?selected=${value.endsWith('px') || unit === 'px'}
+                >px</option
+              >
+              <option value="%" ?selected=${value.endsWith('%') || unit === '%'}
+                >%</option
+              >
             </select>
           `;
 
@@ -313,6 +322,7 @@ ${value}</textarea
         <input
           class='attribute-input'
           type='number'
+          step="1"
           placeholder="${placeholder ?? ''}"
           min="0"
           step="${step ?? 0.01}"
@@ -406,8 +416,11 @@ ${value}</textarea
   getUniqueAttributes(): (TemplateResult | {})[] | {} {
 =======
   getUniqueAttributes() {
+<<<<<<< HEAD
     debugger;
 >>>>>>> added chart widget
+=======
+>>>>>>> added templates tab and card
     const widget = this.editingWidget;
     if (widget == null) {
       return nothing;

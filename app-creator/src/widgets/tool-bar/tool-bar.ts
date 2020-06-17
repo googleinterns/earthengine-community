@@ -122,6 +122,7 @@ export class ToolBar extends LitElement {
           <strong id="app-title-prefix">${ToolBar.prefix}</strong>
           <span id="app-title-suffix">${ToolBar.suffix}</span>
         </h3>
+
         <ui-button
           .raised=${false}
           id="export-button"
