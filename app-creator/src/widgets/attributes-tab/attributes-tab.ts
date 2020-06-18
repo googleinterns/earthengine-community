@@ -271,6 +271,13 @@ ${value}</textarea
     id: string,
     attributeType: AttributeType
   ): TemplateResult {
+    let valueUnit = '';
+    if (value.endsWith('px')) {
+      valueUnit = 'px';
+    } else if (value.endsWith('%')) {
+      valueUnit = '%';
+    }
+
     const unitMarkup =
       unit == null
         ? nothing
@@ -291,21 +298,14 @@ ${value}</textarea
             >
               <option
                 value="px"
-                ?selected=${value.endsWith('px') || unit === 'px'}
+                ?selected=${unit === 'px' || valueUnit === 'px'}
                 >px</option
               >
-              <option value="%" ?selected=${value.endsWith('%') || unit === '%'}
+              <option value="%" ?selected=${unit === '%' || valueUnit === '%'}
                 >%</option
               >
             </select>
           `;
-
-    let valueUnit = '';
-    if (value.endsWith('px')) {
-      valueUnit = 'px';
-    } else if (value.endsWith('%')) {
-      valueUnit = '%';
-    }
 
     return html`
       <div class='attribute-input-container'>
@@ -314,7 +314,6 @@ ${value}</textarea
         <input
           class='attribute-input'
           type='number'
-          step="1"
           placeholder="${placeholder ?? ''}"
           min="0"
           step="${step ?? 0.01}"
