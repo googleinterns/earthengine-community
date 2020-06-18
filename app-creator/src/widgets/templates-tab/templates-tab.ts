@@ -1,15 +1,8 @@
 /**
  *  @fileoverview The templates-tab widget contains the different templates that the user can use for their earth engine app.
  */
-import {
-  LitElement,
-  html,
-  customElement,
-  css,
-  TemplateResult,
-  property,
-} from 'lit-element';
-import { nothing } from 'lit-html';
+import { LitElement, html, customElement, css, property } from 'lit-element';
+import { nothing, TemplateResult } from 'lit-html';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '../tab-container/tab-container';
@@ -25,30 +18,15 @@ import '../ui-chart/ui-chart';
 import '../search-bar/search-bar';
 import '../empty-notice/empty-notice';
 import { onSearchEvent } from '../search-bar/search-bar';
-import { AppCreatorStore } from '../../redux/reducer';
-import { store } from '../../redux/store';
-import { setSelectedTemplate, setSelectedTab } from '../../redux/actions';
-import { Tab } from '../../redux/types/enums';
 import '../template-card/template-card';
+import { store } from '../../redux/store';
+import { setSelectedTemplate } from '../../redux/actions';
+import { database } from '../../templates/templates-database';
 
-interface TemplateItem {
-  id: string;
-  title: string;
-  card: TemplateResult;
-  initialState: AppCreatorStore['template'];
-  markup: string;
-}
-
-function createSelectionCallback(id: string) {
+function createSelectionCallback(context: TemplatesTab, template: string) {
   return () => {
-    store.dispatch(
-      setSelectedTemplate(
-        TemplatesTab.templates[id].initialState,
-        TemplatesTab.templates[id].markup
-      )
-    );
-
-    store.dispatch(setSelectedTab(Tab.widgets));
+    store.dispatch(setSelectedTemplate(JSON.parse(template)));
+    context.requestUpdate();
   };
 }
 
@@ -65,94 +43,41 @@ export class TemplatesTab extends LitElement {
     }
   `;
 
-  static templates: { [key: string]: TemplateItem } = {
-    'side-panel': {
-      id: 'side-panel',
-      title: 'Side Panel',
-      card: html`
-        <h6 class="subtitle">Side Panel</h6>
-        <template-card
-          id="side-panel"
-          imageUrl="https://miro.medium.com/max/552/0*aR2TiedsgbC4n0uQ"
-          .onSelection=${createSelectionCallback('side-panel')}
-        ></template-card>
-      `,
-      initialState: {
-        id: 'side-panel',
-        name: 'Side Panel',
-        'panel-template-0': {
-          id: 'panel-template-0',
-          children: ['panel-template-1', 'map-template-0'],
-          uniqueAttributes: {
-            layout: 'row',
-          },
-          style: {
-            height: '100%',
-            width: '100%',
-            padding: '0px',
-            margin: '0px',
-          },
-        },
-        'panel-template-1': {
-          id: 'panel-template-1',
-          children: [],
-          uniqueAttributes: {
-            layout: 'column',
-            hasDropzone: 'true',
-          },
-          style: {
-            height: '100%',
-            width: '30%',
-            padding: '0px',
-            margin: '0px',
-            color: 'black',
-            backgroundColor: '#FFFFFF',
-            borderWidth: '0px',
-            borderStyle: 'solid',
-            borderColor: 'black',
-            fontSize: '12px',
-            fontWeight: '300',
-            fontFamily: 'Roboto',
-            textAlign: 'left',
-            whiteSpace: 'normal',
-            shown: 'true',
-          },
-        },
-        'map-template-0': {
-          id: 'map-template-0',
-          children: [],
-          uniqueAttributes: {},
-          style: {
-            height: '100%',
-            width: '100%',
-          },
-        },
-      },
-      markup: `
-        <ui-panel>
-          <ui-panel id="panel-template-1" style="width: 30%;" class="full-height" editable>
-            <dropzone-widget class="full-height"></dropzone-widget>
-          </ui-panel>
-          <ui-map
-            id="map-template-0"
-            editable
-            class="full-width"
-            apiKey=${window.process.env.MAPS_API_KEY}
-            zoom="4"
-          ></ui-map>
-        </ui-panel>
-      `,
-    },
-  };
-
   /**
    * Sets the search query.
    */
   @property({ type: String }) query = '';
 
+  getTemplateCards(showTitle = false) {
+    return database.map(({ id, name, variant, template }) => {
+      const templateData = template[variant];
+      return {
+        id,
+        name,
+        markup: html`
+          ${showTitle ? nothing : html`<h6 class="subtitle">${name}</h6>`}
+          <template-card
+            id="${id}"
+            title="${name}"
+            imageUrl="${templateData.imageUrl}"
+            ?showTitle=${showTitle}
+            .onSelection=${createSelectionCallback(this, templateData.template)}
+          ></template-card>
+        `,
+      };
+    });
+  }
+
   render() {
-    const { query, filterTemplates, handleSearch } = this;
-    const filteredTemplates: TemplateItem[] = filterTemplates(query);
+    const { query, getTemplateCards, handleSearch } = this;
+
+    const templateCards = getTemplateCards.call(this);
+
+    const filteredTemplates = TemplatesTab.filterTemplates(
+      templateCards,
+      query
+    );
+
     const emptyNotice =
       filteredTemplates.length === 0
         ? html`
@@ -173,7 +98,7 @@ export class TemplatesTab extends LitElement {
           @onsearch=${handleSearch}
         ></search-bar>
         <div id="cards-container">
-          ${filteredTemplates.map(({ card }) => card)} ${emptyNotice}
+          ${filteredTemplates.map(({ markup }) => markup)} ${emptyNotice}
         </div>
       </tab-container>
     `;
@@ -182,12 +107,15 @@ export class TemplatesTab extends LitElement {
   /**
    * Returns widgets with names and ids that include the search query.
    */
-  filterTemplates(query: string): TemplateItem[] {
-    return Object.values(TemplatesTab.templates).filter(({ id, title }) => {
+  static filterTemplates(
+    templateCards: { id: string; name: string; markup: TemplateResult }[],
+    query: string
+  ) {
+    return templateCards.filter(({ id, name }) => {
       const lowerCasedQuery = query.toLowerCase();
       return (
         id.toLowerCase().includes(lowerCasedQuery) ||
-        title.toLowerCase().includes(lowerCasedQuery)
+        name.toLowerCase().includes(lowerCasedQuery)
       );
     });
   }

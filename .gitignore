@@ -13,13 +13,5 @@ app-creator/widgets
 app-creator/utils
 app-creator/app.yaml
 app-creator/build
-<<<<<<< HEAD
-app-creator/env.js
-<<<<<<< HEAD
-=======
 app-creator/env.js
 app-creator/templates
->>>>>>> added chart widget
-=======
-app-creator/templates
->>>>>>> modified gitignore

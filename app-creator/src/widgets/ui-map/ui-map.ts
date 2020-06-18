@@ -21,8 +21,10 @@ let initCalled: boolean = false;
 const callbackPromise = new Promise((r) => (window.__initGoogleMap = r));
 
 function loadGoogleMaps(apiKey: string) {
+  if (apiKey == null || apiKey === '') {
+    return callbackPromise;
+  }
   if (!initCalled) {
-    console.log('loading maps');
     const script = document.createElement('script');
     script.src =
       'https://maps.googleapis.com/maps/api/js?' +
@@ -128,6 +130,14 @@ export class Map extends LitElement {
 
       this.mapOptions.center = this.center;
 
+      this.mapOptions.zoomControl = false;
+
+      this.mapOptions.streetViewControl = false;
+
+      this.mapOptions.fullscreenControl = false;
+
+      this.mapOptions.mapTypeControl = false;
+
       this.map = new google.maps.Map(this, this.mapOptions);
       this.dispatchEvent(
         new CustomEvent('google-map-ready', { detail: this.map })
@@ -176,8 +186,10 @@ export class Map extends LitElement {
       case 'map':
         this.map = value;
         break;
+      case 'apiKey':
+        this.apiKey = value;
+        break;
     }
-
     this.initMap();
   }
 

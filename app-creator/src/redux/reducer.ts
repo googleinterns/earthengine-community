@@ -16,6 +16,7 @@ import {
   UPDATE_WIDGET_META_DATA,
   UPDATE_WIDGET_REF,
   SET_SELECTED_TEMPLATE,
+  UPDATE_WIDGET_CHILDREN,
 } from './types/actions';
 import { Reducer, AnyAction } from 'redux';
 import { UniqueAttributes } from './types/attributes';
@@ -24,7 +25,8 @@ import { getIdPrefix } from '../utils/helpers';
 
 export interface WidgetMetaData {
   id: string;
-  widgetRef: HTMLElement;
+  editable?: boolean;
+  widgetRef?: HTMLElement;
   children: string[];
   uniqueAttributes: UniqueAttributes;
   style: { [key: string]: string };
@@ -37,7 +39,6 @@ export interface AppCreatorStore {
   eventType: EventType;
   widgetIDs: { [key: string]: number };
   template: { [key: string]: any };
-  templateMarkup: string | null;
 }
 
 /**
@@ -60,7 +61,6 @@ const INITIAL_STATE: AppCreatorStore = {
     map: 0,
   },
   template: {},
-  templateMarkup: null,
 };
 
 /**
@@ -73,7 +73,6 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
   state = INITIAL_STATE,
   action
 ): AppCreatorStore => {
-  console.log({ state });
   switch (action.type) {
     case SET_DRAGGING_WIDGET:
       return {
@@ -173,14 +172,25 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
       };
     case SET_SELECTED_TEMPLATE:
       return {
-        ...state,
+        ...INITIAL_STATE,
+        selectedTab: state.selectedTab,
         template: action.payload.template,
-        templateMarkup: action.payload.markup,
       };
     case RESET_DRAGGING_VALUES:
       return {
         ...state,
         ...action.payload,
+      };
+    case UPDATE_WIDGET_CHILDREN:
+      return {
+        ...state,
+        template: {
+          ...state.template,
+          [action.payload.id]: {
+            ...state.template[action.payload.id],
+            children: action.payload.childrenIDs,
+          },
+        },
       };
     default:
       return state;
