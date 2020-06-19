@@ -136,7 +136,7 @@ export class DraggableWidget extends LitElement {
       return;
     }
 
-    this.removeEditingWidgetHighlight();
+    DraggableWidget.removeEditingWidgetHighlight();
 
     store.dispatch(setEditingWidget(widget));
     container.style.borderColor = 'var(--accent-color)';
@@ -145,7 +145,7 @@ export class DraggableWidget extends LitElement {
   /**
    * Sets the editing widget's parent container border color to the default gray color.
    */
-  removeEditingWidgetHighlight() {
+  static removeEditingWidgetHighlight() {
     const editingWidget = store.getState().editingElement;
 
     const editingWidgetParent = editingWidget?.parentElement;

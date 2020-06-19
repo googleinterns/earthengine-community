@@ -15,3 +15,4 @@ app-creator/app.yaml
 app-creator/build
 app-creator/env.js
 app-creator/templates
+app-creator/map-styles
