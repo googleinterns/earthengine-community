@@ -20,6 +20,7 @@ export class TabContainer extends LitElement {
     h5 {
       margin-top: var(--extra-tight);
       margin-bottom: var(--regular);
+      color: var(--accent-color);
     }
   `;
 

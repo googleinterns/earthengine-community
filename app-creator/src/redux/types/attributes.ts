@@ -67,7 +67,7 @@ export const sharedAttributes: AttributeMetaData = {
     type: InputType.text,
   },
   color: {
-    value: 'black',
+    value: 'var(--accent-color)',
     type: InputType.color,
   },
   backgroundColor: {

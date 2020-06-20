@@ -11,6 +11,7 @@ import '@polymer/paper-dialog/paper-dialog.js';
 import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog.js';
 import '@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js';
 import { AppCreatorStore } from '../../redux/reducer';
+import '@polymer/paper-toggle-button/paper-toggle-button.js';
 
 @customElement('tool-bar')
 export class ToolBar extends LitElement {
@@ -26,6 +27,10 @@ export class ToolBar extends LitElement {
       justify-content: space-between;
       border-bottom: var(--light-border);
       background-color: var(--primary-color);
+    }
+
+    #toolbar-actions {
+      display: flex;
     }
 
     #app-title-prefix {
@@ -49,6 +54,17 @@ export class ToolBar extends LitElement {
       border-radius: var(--tight);
       width: 40%;
       max-height: 600px;
+      background-color: var(--primary-color);
+      border: 0.3px solid var(--border-gray);
+    }
+
+    paper-dialog h2 {
+      color: var(--accent-color);
+    }
+
+    paper-dialog-scrollable {
+      background-color: var(--background-color);
+      color: var(--accent-color);
     }
 
     #json-string-container {
@@ -56,7 +72,6 @@ export class ToolBar extends LitElement {
       overflow-y: scroll;
       overflow-x: scroll;
       padding: 16px;
-      background-color: var(--background-color);
       max-height: 400px;
     }
 
@@ -149,8 +164,32 @@ export class ToolBar extends LitElement {
     textArea.remove();
   }
 
+  /**
+   * Switches between light and dark theme by toggling classes on the '<html>' tag
+   * and updating local storage.
+   */
+  handleThemeSwitch() {
+    const root = document.querySelector('html');
+    if (root == null) {
+      return;
+    }
+
+    if (root.classList.contains('dark')) {
+      localStorage.setItem('theme', 'light');
+      (root.classList as DOMTokenList).remove('dark');
+      (root.classList as DOMTokenList).add('light');
+    } else {
+      localStorage.setItem('theme', 'dark');
+      root.classList.remove('light');
+      root.classList.add('dark');
+    }
+  }
+
   render() {
-    const { openDialog, copy } = this;
+    const { openDialog, copy, handleThemeSwitch } = this;
+
+    const currentTheme = localStorage.getItem('theme');
+
     return html`
       <div id="container">
         <h3>
@@ -158,10 +197,16 @@ export class ToolBar extends LitElement {
           <span id="app-title-suffix">${ToolBar.suffix}</span>
         </h3>
 
-        <paper-button id="export-button" @click=${openDialog}
-          >Export</paper-button
-        >
-
+        <div id="toolbar-actions">
+          <paper-toggle-button
+            .checked=${(currentTheme === null || currentTheme === 'light') ??
+            false}
+            @click=${handleThemeSwitch}
+          ></paper-toggle-button>
+          <paper-button id="export-button" @click=${openDialog}
+            >Export</paper-button
+          >
+        </div>
         <paper-dialog>
           <h2>Paste string in EE Code Editor</h2>
           <paper-dialog-scrollable id="json-string-container">

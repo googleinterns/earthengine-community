@@ -19,7 +19,7 @@ p {
   padding: 0px;
 }
 
-:root {
+:root.light {
   /* theme properties */
   --accent-color: #202124;
   --app-title-suffix-color: #5f6368;
@@ -46,21 +46,50 @@ p {
 
   /* utils */
   --raised-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+  /* toggle colors */
+  --paper-toggle-button-checked-bar-color: #202124;
+  --paper-toggle-button-checked-button-color: #202124;
+  --paper-toggle-button-unchecked-bar-color: white;
+  --paper-toggle-button-unchecked-button-color: white;
 }
 
-#editable-view {
-  position: absolute;
-  top: 0;
-  right: 0;
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-}
+:root.dark {
+  /* theme properties */
+  --accent-color: white;
+  --app-title-suffix-color: #80868b;
+  --background-color: #202124;
+  --border-gray: rgba(248, 249, 250, 0.3);
+  --light-border: 0.6px solid var(--border-gray);
+  --light-dashed-border: 0.8px dashed var(--border-gray);
+  --paper-slider-knob-color: var(--accent-color);
+  --paper-slider-active-color: var(--accent-color);
+  --paper-tabs-selection-bar-color: var(--accent-color);
+  --primary-color: #000;
 
-.edit-buttons {
-  background-color: white;
-  border: var(--light-border);
-  border-radius: var(--extra-tight);
-  margin-left: var(--extra-tight);
-  cursor: pointer;
+  /* paper checkbox color */
+  --paper-checkbox-checked-color: var(--accent-color);
+  --paper-checkbox-unchecked-color: var(--accent-color);
+  --paper-checkbox-label-color: var(--accent-color);
+  --paper-checkbox-checkmark-color: var(--primary-color);
+
+  /* spacing */
+  --extra-tight: 4px;
+  --tight: 8px;
+  --regular: 16px;
+  --loose: 24px;
+  --extra-loose: 32px;
+
+  /* sizes */
+  --actions-panel-width: 300px;
+  --regular-border-radius: 16px;
+
+  /* utils */
+  --raised-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+  /* Paper toggle colors */
+  --paper-toggle-button-checked-bar-color: #202124;
+  --paper-toggle-button-checked-button-color: #202124;
+  --paper-toggle-button-unchecked-bar-color: white;
+  --paper-toggle-button-unchecked-button-color: white;
 }

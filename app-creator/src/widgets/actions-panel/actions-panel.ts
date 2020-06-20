@@ -38,7 +38,8 @@ export class ActionsPanel extends connect(store)(LitElement) {
       cursor: pointer;
       top: 16px;
       right: -20px;
-      background-color: white;
+      background-color: var(--primary-color);
+      color: var(--accent-color);
       border: var(--light-border);
       border-left: none;
       z-index: 10;
@@ -56,6 +57,10 @@ export class ActionsPanel extends connect(store)(LitElement) {
       --iron-icon-height: 16px;
       --iron-icon-width: 16px;
       height: 40px;
+    }
+
+    paper-tab {
+      color: var(--accent-color);
     }
   `;
 

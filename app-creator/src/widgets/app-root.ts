@@ -68,6 +68,8 @@ export class AppRoot extends LitElement {
       flex-direction: column;
       align-items: center;
       overflow-y: scroll;
+      background-color: var(--primary-color);
+      border: 0.3px solid var(--border-gray);
     }
 
     #header-content {

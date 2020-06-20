@@ -60,6 +60,7 @@ export class AttributesTab extends connect(store)(LitElement) {
       font-family: inherit;
       background-color: var(--primary-color);
       margin: var(--extra-tight) 0px;
+      color: var(--accent-color);
     }
 
     .attribute-input:focus {
@@ -87,6 +88,7 @@ export class AttributesTab extends connect(store)(LitElement) {
       background-color: var(--primary-color);
       height: 26px;
       margin-top: var(--extra-tight);
+      color: var(--accent-color);
     }
 
     .color-input {

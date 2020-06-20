@@ -36,6 +36,11 @@ export class TemplateCard extends LitElement {
     h4 {
       margin: var(--tight) 0px 0px var(--tight);
       font-weight: 400;
+      color: var(--accent-color);
+    }
+
+    paper-button {
+      color: var(--accent-color);
     }
   `;
 

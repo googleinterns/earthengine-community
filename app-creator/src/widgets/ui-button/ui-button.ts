@@ -14,7 +14,7 @@ export class Button extends LitElement {
   static styles = css`
     paper-button {
       margin: var(--tight);
-      background-color: var(--primary-color);
+      background-color: var(--accent-color);
       color: var(--primary-color);
       height: 30px;
       font-size: 0.8rem;

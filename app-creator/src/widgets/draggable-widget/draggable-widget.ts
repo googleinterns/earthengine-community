@@ -50,7 +50,8 @@ export class DraggableWidget extends LitElement {
     }
 
     .edit-buttons {
-      background-color: white;
+      background-color: var(--primary-color);
+      color: var(--accent-color);
       border: var(--light-border);
       border-radius: var(--extra-tight);
       margin-left: var(--extra-tight);
@@ -58,7 +59,7 @@ export class DraggableWidget extends LitElement {
     }
 
     .edit-buttons:hover {
-      background-color: lightgray;
+      background-color: darkgray;
     }
   `;
 

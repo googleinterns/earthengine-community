@@ -83,6 +83,10 @@ export class Storyboard extends connect(store)(LitElement) {
       width: 150px;
       margin: var(--regular) auto var(--tight) auto;
     }
+
+    paper-tab {
+      color: var(--accent-color);
+    }
   `;
 
   stateChanged(state: AppCreatorStore) {

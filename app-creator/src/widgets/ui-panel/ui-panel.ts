@@ -8,6 +8,7 @@ import { store } from '../../redux/store';
 import { setEditingWidget } from '../../redux/actions';
 import { DraggableWidget } from '../draggable-widget/draggable-widget';
 import { CONTAINER_ID } from '../dropzone-widget/dropzone-widget';
+import { styleMap } from 'lit-html/directives/style-map';
 
 @customElement('ui-panel')
 export class Panel extends LitElement {
@@ -111,12 +112,13 @@ export class Panel extends LitElement {
   }
 
   render() {
-    const { isRaised, layout, padded } = this;
+    const { isRaised, layout, padded, styles } = this;
 
     return html`
       <div
         id="container"
         class="${layout} ${isRaised ? 'raised' : ''} ${padded ? 'padded' : ''}"
+        style=${styleMap(styles)}
       >
         <slot class="${layout}"></slot>
       </div>
@@ -134,6 +136,7 @@ export class Panel extends LitElement {
     // Remove highlight from currently selected widget (if any).
     DraggableWidget.removeEditingWidgetHighlight();
 
+    // Add highlight to dropzone widget.
     const dropzone = this.querySelector(
       'dropzone-widget'
     )?.shadowRoot?.querySelector(`#${CONTAINER_ID}`);
@@ -142,7 +145,6 @@ export class Panel extends LitElement {
       (dropzone as HTMLElement).style.borderColor = 'var(--accent-color)';
     }
 
-    // Check if a widgetRef has been set.
     store.dispatch(setEditingWidget(this));
   }
 
