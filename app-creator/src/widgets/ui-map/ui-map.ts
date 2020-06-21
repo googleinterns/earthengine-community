@@ -177,7 +177,6 @@ export class Map extends LitElement {
       store.dispatch(setEditingWidget(this as Map));
     }
     store.dispatch(setSelectedTab(Tab.attributes));
-    this.updateMap();
   }
 
   /**

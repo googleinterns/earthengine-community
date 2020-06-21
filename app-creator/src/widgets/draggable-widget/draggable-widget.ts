@@ -15,7 +15,8 @@ import {
   incrementWidgetID,
   removeWidgetMetaData,
 } from '../../redux/actions';
-import { EventType } from '../../redux/types/enums';
+import { EventType, WidgetType } from '../../redux/types/enums';
+import { getIdPrefix } from '../../utils/helpers';
 
 @customElement('draggable-widget')
 export class DraggableWidget extends LitElement {
@@ -85,12 +86,28 @@ export class DraggableWidget extends LitElement {
   static removeEditingWidgetHighlight() {
     const editingWidget = store.getState().editingElement;
 
-    const editingWidgetParent = editingWidget?.parentElement;
-    const editingWidgetParentContainer = editingWidgetParent?.shadowRoot?.getElementById(
-      CONTAINER_ID
-    );
-    if (editingWidgetParentContainer != null) {
-      editingWidgetParentContainer.style.borderColor = 'var(--border-gray)';
+    if (editingWidget == null) {
+      return;
+    }
+
+    const type = getIdPrefix(editingWidget.id) as WidgetType;
+
+    if (type === WidgetType.panel) {
+      const dropzone = editingWidget
+        .querySelector('dropzone-widget')
+        ?.shadowRoot?.querySelector(`#${CONTAINER_ID}`);
+
+      if (dropzone != null) {
+        (dropzone as HTMLElement).style.borderColor = 'var(--border-gray)';
+      }
+    } else {
+      const editingWidgetParent = editingWidget?.parentElement;
+      const editingWidgetParentContainer = editingWidgetParent?.shadowRoot?.getElementById(
+        CONTAINER_ID
+      );
+      if (editingWidgetParentContainer != null) {
+        editingWidgetParentContainer.style.borderColor = 'var(--border-gray)';
+      }
     }
   }
 
