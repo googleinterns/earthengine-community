@@ -170,7 +170,6 @@ function generateUI(template: AppCreatorStore['template'], node: HTMLElement) {
   const templateCopy = Object.assign({}, template);
 
   function helper(widgetData: WidgetMetaData): HTMLElement {
-    debugger;
     const { id, children } = widgetData;
     const { element, dropzone } = getHTMLElement(widgetData);
 

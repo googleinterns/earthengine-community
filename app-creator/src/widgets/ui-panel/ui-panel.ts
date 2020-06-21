@@ -4,9 +4,9 @@
  */
 import { css, customElement, html, LitElement, property } from 'lit-element';
 import '../dropzone-widget/dropzone-widget';
-import { nothing } from 'lit-html';
 import { store } from '../../redux/store';
 import { setEditingWidget } from '../../redux/actions';
+import { DraggableWidget } from '../draggable-widget/draggable-widget';
 
 @customElement('ui-panel')
 export class Panel extends LitElement {
@@ -103,20 +103,13 @@ export class Panel extends LitElement {
    */
   @property({ type: Boolean }) editable = false;
 
-  render() {
-    const { isRaised, editable, layout, padded, handleEditWidget } = this;
+  connectedCallback() {
+    super.connectedCallback();
+    this.onclick = this.handleEditWidget;
+  }
 
-    const editableMarkup = editable
-      ? html`
-          <div id="editable-view">
-            <iron-icon
-              class="edit-buttons"
-              icon="create"
-              @click=${handleEditWidget}
-            ></iron-icon>
-          </div>
-        `
-      : nothing;
+  render() {
+    const { isRaised, layout, padded } = this;
 
     return html`
       <div
@@ -124,16 +117,21 @@ export class Panel extends LitElement {
         class="${layout} ${isRaised ? 'raised' : ''} ${padded ? 'padded' : ''}"
       >
         <slot class="${layout}"></slot>
-        ${editableMarkup}
       </div>
     `;
   }
 
   /**
-   * Triggered when the edit icon is clicked. Stores a reference of the selected element in the store and
+   * Triggered when panel is selected is clicked. Stores a reference of the selected element in the store and
    * displays a set of inputs for editing its attributes.
    */
-  handleEditWidget() {
+  handleEditWidget(e: Event) {
+    // Prevent event from reaching the background panel.
+    e.stopPropagation();
+
+    // Remove highlight from currently selected widget (if any).
+    DraggableWidget.removeEditingWidgetHighlight();
+
     // Check if a widgetRef has been set.
     store.dispatch(setEditingWidget(this));
   }
