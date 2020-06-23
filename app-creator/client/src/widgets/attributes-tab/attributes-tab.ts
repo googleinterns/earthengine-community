@@ -5,15 +5,14 @@
 import { html, customElement, css, property, LitElement } from 'lit-element';
 import { nothing, render, TemplateResult } from 'lit-html';
 import { connect } from 'pwa-helpers';
-import { store } from '../../redux/store.js';
-import { AppCreatorStore } from '../../redux/reducer';
 import '../tab-container/tab-container';
 import {
   sharedAttributes,
   AttributeMetaData,
   UniqueAttributes,
 } from '../../redux/types/attributes.js';
-import './../empty-notice/empty-notice';
+import '@polymer/paper-tooltip/paper-tooltip.js';
+import '../empty-notice/empty-notice';
 import { camelCaseToTitleCase, getIdPrefix } from '../../utils/helpers.js';
 import { updateWidgetMetaData } from '../../redux/actions.js';
 import {
@@ -30,6 +29,8 @@ import { Slider } from '../ui-slider/ui-slider.js';
 import { Textbox } from '../ui-textbox/ui-textbox.js';
 import { Chart } from '../ui-chart/ui-chart.js';
 import { Map } from '../ui-map/ui-map.js';
+import { store } from '../../redux/store';
+import { AppCreatorStore } from '../../redux/reducer';
 
 @customElement('attributes-tab')
 export class AttributesTab extends connect(store)(LitElement) {
@@ -92,6 +93,17 @@ export class AttributesTab extends connect(store)(LitElement) {
     .color-input {
       width: 50px;
     }
+
+    .input-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .info-icon {
+      margin: 0;
+      padding: 0;
+    }
   `;
 
   stateChanged(state: AppCreatorStore) {
@@ -136,13 +148,24 @@ export class AttributesTab extends connect(store)(LitElement) {
     key: string,
     title: string,
     value: string,
-    placeholder: string | undefined,
     id: string,
-    attributeType: AttributeType
+    attributeType: AttributeType,
+    placeholder?: string,
+    tooltip?: string
   ): TemplateResult {
+    const tooltipMarkup =
+      tooltip == null
+        ? nothing
+        : html`<p id="${key}-info" class="info-icon">ⓘ</p>
+            <paper-tooltip for="${key}-info" position="top" animation-delay="0"
+              >${tooltip}</paper-tooltip
+            >`;
     return html`
       <div class="attribute-input-container">
-        <p class="input-label">${title}</p>
+      <div class="input-header">
+          <p class="input-label">${title}</p>
+          ${tooltipMarkup}
+        </div>
         <input
           class='attribute-input text-input'
           placeholder="${placeholder ?? ''}"
@@ -165,13 +188,25 @@ export class AttributesTab extends connect(store)(LitElement) {
     key: string,
     title: string,
     value: string,
-    placeholder: string | undefined,
     id: string,
-    attributeType: AttributeType
+    attributeType: AttributeType,
+    placeholder?: string,
+    tooltip?: string
   ): TemplateResult {
+    const tooltipMarkup =
+      tooltip == null
+        ? nothing
+        : html`<p id="${key}-info" class="info-icon">ⓘ</p>
+            <paper-tooltip for="${key}-info" position="top" animation-delay="0"
+              >${tooltip}</paper-tooltip
+            >`;
+
     return html`
       <div class="attribute-input-container">
-        <p class="input-label">${title}</p>
+        <div class="input-header">
+          <p class="input-label">${title}</p>
+          ${tooltipMarkup}
+        </div>
         <textarea
           class="attribute-input text-input"
           placeholder="${placeholder ?? ''}"
@@ -197,11 +232,22 @@ ${value}</textarea
     title: string,
     value: string,
     id: string,
-    attributeType: AttributeType
+    attributeType: AttributeType,
+    tooltip?: string
   ): TemplateResult {
+    const tooltipMarkup =
+      tooltip == null
+        ? nothing
+        : html`<p id="${key}-info" class="info-icon">ⓘ</p>
+            <paper-tooltip for="${key}-info" position="top" animation-delay="0"
+              >${tooltip}</paper-tooltip
+            >`;
     return html`
       <div class='attribute-input-container'>
-        <p class='input-label'>${title}</p>
+        <div class="input-header">
+          <p class='input-label'>${title}</p>
+          ${tooltipMarkup}
+        </div>
         <input
           class='attribute-input color-input'
           type='color'
@@ -225,9 +271,10 @@ ${value}</textarea
     key: string,
     title: string,
     value: string,
-    items: string[] | boolean[] | undefined,
     id: string,
-    attributeType: AttributeType
+    attributeType: AttributeType,
+    tooltip?: string,
+    items?: string[] | boolean[]
   ): TemplateResult | {} {
     if (items == null) {
       return nothing;
@@ -238,9 +285,21 @@ ${value}</textarea
         >${item}</option
       >`);
     }
+
+    const tooltipMarkup =
+      tooltip == null
+        ? nothing
+        : html`<p id="${key}-info" class="info-icon">ⓘ</p>
+            <paper-tooltip for="${key}-info" position="top" animation-delay="0"
+              >${html`${tooltip}`}</paper-tooltip
+            >`;
+
     return html`
       <div class="attribute-input-container">
-        <p class="input-label">${title}</p>
+        <div class="input-header">
+          <p class="input-label">${title}</p>
+          ${tooltipMarkup}
+        </div>
         <select
           name="${title}"
           class="attribute-input"
@@ -265,11 +324,12 @@ ${value}</textarea
     key: string,
     title: string,
     value: string,
-    placeholder: string | undefined,
-    unit: string | undefined,
-    step: number | undefined,
     id: string,
-    attributeType: AttributeType
+    attributeType: AttributeType,
+    placeholder?: string,
+    tooltip?: string,
+    unit?: string,
+    step?: number
   ): TemplateResult {
     let valueUnit = '';
     if (value.endsWith('px')) {
@@ -307,9 +367,20 @@ ${value}</textarea
             </select>
           `;
 
+    const tooltipMarkup =
+      tooltip == null
+        ? nothing
+        : html`<p id="${key}-info" class="info-icon">ⓘ</p>
+            <paper-tooltip for="${key}-info" position="top" animation-delay="0"
+              >${tooltip}</paper-tooltip
+            >`;
+
     return html`
       <div class='attribute-input-container'>
-        <p class='input-label'>${title}</p>
+      <div class="input-header">
+          <p class="input-label">${title}</p>
+          ${tooltipMarkup}
+        </div>
         <div class='input-container'>
         <input
           class='attribute-input'
@@ -347,6 +418,7 @@ ${value}</textarea
       const step = attributesArray[key].step;
       const type = attributesArray[key].type;
       const items = attributesArray[key].items;
+      const tooltip = attributesArray[key].tooltip;
 
       const attributeTitle = camelCaseToTitleCase(key);
 
@@ -356,18 +428,20 @@ ${value}</textarea
             key,
             attributeTitle,
             value,
-            placeholder,
             id,
-            AttributeType.unique
+            AttributeType.unique,
+            placeholder,
+            tooltip
           );
         case InputType.textarea:
           return this.getTextareaInput(
             key,
             attributeTitle,
             value,
-            placeholder,
             id,
-            AttributeType.unique
+            AttributeType.unique,
+            placeholder,
+            tooltip
           );
         case InputType.color:
           return this.getColorInput(
@@ -375,27 +449,30 @@ ${value}</textarea
             attributeTitle,
             value,
             id,
-            AttributeType.unique
+            AttributeType.unique,
+            tooltip
           );
         case InputType.select:
           return this.getSelectInput(
             key,
             attributeTitle,
             value,
-            items,
             id,
-            AttributeType.unique
+            AttributeType.unique,
+            tooltip,
+            items
           );
         case InputType.number:
           return this.getNumberInput(
             key,
             attributeTitle,
             value,
-            placeholder,
-            unit,
-            step,
             id,
-            AttributeType.unique
+            AttributeType.unique,
+            placeholder,
+            tooltip,
+            unit,
+            step
           );
         default:
           return nothing;
@@ -482,6 +559,7 @@ ${value}</textarea
       const step = sharedAttributes[key].step;
       const type = sharedAttributes[key].type;
       const items = sharedAttributes[key].items;
+      const tooltip = sharedAttributes[key].tooltip;
 
       const attributeTitle = camelCaseToTitleCase(key);
 
@@ -491,18 +569,20 @@ ${value}</textarea
             key,
             attributeTitle,
             value,
-            placeholder,
             widget.id,
-            AttributeType.style
+            AttributeType.style,
+            placeholder,
+            tooltip
           );
         case InputType.textarea:
           return this.getTextareaInput(
             key,
             attributeTitle,
             value,
-            placeholder,
             widget.id,
-            AttributeType.style
+            AttributeType.style,
+            placeholder,
+            tooltip
           );
         case InputType.color:
           return this.getColorInput(
@@ -510,27 +590,30 @@ ${value}</textarea
             attributeTitle,
             value,
             widget.id,
-            AttributeType.style
+            AttributeType.style,
+            tooltip
           );
         case InputType.select:
           return this.getSelectInput(
             key,
             attributeTitle,
             value,
-            items,
             widget.id,
-            AttributeType.style
+            AttributeType.style,
+            tooltip,
+            items
           );
         case InputType.number:
           return this.getNumberInput(
             key,
             attributeTitle,
             value,
-            placeholder,
-            unit,
-            step,
             widget.id,
-            AttributeType.style
+            AttributeType.style,
+            placeholder,
+            tooltip,
+            unit,
+            step
           );
         default:
           return nothing;

@@ -32,6 +32,7 @@ export interface AttributeMetaData {
   [key: string]: {
     value: string;
     placeholder?: string;
+    tooltip?: string;
     unit?: string;
     step?: number;
     type: InputType;

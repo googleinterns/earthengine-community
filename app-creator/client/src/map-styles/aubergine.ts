@@ -1,3 +1,6 @@
+/**
+ * @fileoverview map style from https://mapstyle.withgoogle.com.
+ */
 export const aubergine: google.maps.MapTypeStyle[] = [
   {
     elementType: 'geometry',

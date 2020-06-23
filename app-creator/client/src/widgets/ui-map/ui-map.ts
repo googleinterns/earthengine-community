@@ -94,9 +94,9 @@ export class Map extends LitElement {
     },
     customMapStyles: {
       value: '',
-      placeholder:
-        'Paste JSON here. Overwrites Map Style input. Generate style here https://mapstyle.withgoogle.com/.',
+      placeholder: 'Past JSON here',
       type: InputType.textarea,
+      tooltip: 'Create custom map styles at https://mapstyle.withgoogle.com/.',
     },
   };
 
