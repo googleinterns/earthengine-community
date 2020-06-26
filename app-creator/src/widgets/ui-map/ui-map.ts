@@ -1,21 +1,11 @@
 import {} from 'googlemaps';
-import { customElement, html, LitElement, css } from 'lit-element';
-import { InputType, Tab } from '../../redux/types/enums';
+import { customElement, html, LitElement, property, css } from 'lit-element';
+import { InputType } from '../../redux/types/enums';
 import {
   AttributeMetaData,
   DefaultAttributesType,
   getDefaultAttributes,
 } from '../../redux/types/attributes';
-import { store } from '../../redux/store';
-import { setEditingWidget, setSelectedTab } from '../../redux/actions';
-import { aubergine } from '../../map-styles/aubergine';
-import { standard } from '../../map-styles/standard';
-import { silver } from '../../map-styles/silver';
-import { retro } from '../../map-styles/retro';
-import { night } from '../../map-styles/night';
-import { dark } from '../../map-styles/dark';
-import { DraggableWidget } from '../draggable-widget/draggable-widget';
-import { MAP_STYLES } from '../../utils/constants';
 
 declare global {
   interface Window {
@@ -47,85 +37,43 @@ function loadGoogleMaps(apiKey: string) {
 
 @customElement('ui-map')
 export class Map extends LitElement {
-  static styles = css``;
+  static styles = css`
+    #editable-view {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+    }
+
+    .edit-buttons {
+      background-color: white;
+      border: var(--light-border);
+      border-radius: var(--extra-tight);
+      margin-left: var(--extra-tight);
+      cursor: pointer;
+    }
+  `;
 
   static attributes: AttributeMetaData = {
     // Default latitude and longitude is set to Google's Mountain View office.
     latitude: {
-      value: '37.419857',
-      placeholder: '37.419857',
-      step: 0.00000000000001,
-      min: -90,
-      max: 90,
+      value: '39.930546488601294',
+      placeholder: '39.9305464',
+      step: 0.000000000000000000001,
       type: InputType.number,
-      validator: (value: string) => {
-        const float = parseFloat(value);
-        return value === '' || (!isNaN(float) && float >= -90 && float <= 90);
-      },
     },
     longitude: {
-      value: '-122.078827',
-      step: 0.00000000000001,
-      min: -180,
-      max: 180,
-      placeholder: '-122.078827',
+      value: '-100.825',
+      step: 0.000000000000000000001,
+      placeholder: '-100.825',
       type: InputType.number,
-      validator: (value: string) => {
-        const float = parseFloat(value);
-        return value === '' || (!isNaN(float) && float >= -180 && float <= 180);
-      },
     },
     zoom: {
       value: '4',
       placeholder: '4',
       type: InputType.number,
-    },
-    zoomControl: {
-      value: 'false',
-      type: InputType.select,
-      items: ['true', 'false'],
-    },
-    fullscreenControl: {
-      value: 'false',
-      type: InputType.select,
-      items: ['true', 'false'],
-    },
-    streetViewControl: {
-      value: 'false',
-      type: InputType.select,
-      items: ['true', 'false'],
-    },
-    scaleControl: {
-      value: 'false',
-      type: InputType.select,
-      items: ['true', 'false'],
-    },
-    mapTypeControl: {
-      value: 'false',
-      type: InputType.select,
-      items: ['true', 'false'],
-    },
-    mapStyles: {
-      value: 'standard',
-      type: InputType.select,
-      items: MAP_STYLES,
-    },
-    customMapStyles: {
-      value: '',
-      validator: (value: string) => {
-        try {
-          JSON.parse(value);
-          return true;
-        } catch (e) {
-          return false;
-        }
-      },
-      placeholder: 'Paste JSON here',
-      type: InputType.textarea,
-      tooltip: {
-        text: 'Create custom map styles at the following link.',
-        url: 'https://mapstyle.withgoogle.com',
-      },
     },
   };
 
@@ -134,109 +82,61 @@ export class Map extends LitElement {
   );
 
   /**
+   * Additional custom styles for the button.
+   */
+  @property({ type: Object }) styles = {};
+
+  /**
    * Map api key.
    */
-  private apiKey = '';
+  @property({ type: String }) apiKey = '';
 
   /**
    * Sets zoom property on map.
    */
-  private zoom = 4;
+  @property({ type: Number }) zoom = 4;
 
   /**
    * Center position of map.
    */
-  private center = {
-    lat: 37.419857,
-    lng: -122.078827,
+  @property({ type: Object }) center = {
+    lat: 39.930546488601294,
+    lng: -100.825,
   };
-
-  /**
-   * Enables zoom control on map.
-   */
-  private zoomControl = false;
-
-  /**
-   * If set to true, adds full screen button.
-   */
-  private fullscreenControl = false;
-
-  /**
-   * If set to true, adds street view control button.
-   */
-  private streetViewControl = false;
-
-  /**
-   * If set to true, adds map type control.
-   */
-  private mapTypeControl = false;
-
-  /**
-   * If set to true, adds scale control.
-   */
-  private scaleControl = false;
-
-  /**
-   * Sets pre-existing map styling.
-   * Options: aubergine, dark, night, retro, silver, standard.
-   */
-  private mapStyles = standard;
-
-  /**
-   * Sets map styling to custom JSON.
-   * Custom JSON can be generated from https://mapstyle.withgoogle.com/.
-   */
-  private customMapStyles = '';
 
   /**
    * Properties of map. Full list can be found here.
    * https://developers.google.com/maps/documentation/javascript/reference/map#MapOptions.
    */
-  private mapOptions: google.maps.MapOptions = {};
+  @property({ type: Object }) mapOptions: google.maps.MapOptions = {};
 
   /**
    * Sets map element.
    */
   private map: google.maps.Map | null = null;
 
-  connectedCallback() {
-    this.onmousedown = this.handleMouseDown;
-    this.onclick = (e: Event) => e.stopPropagation();
-  }
-
-  handleMouseDown(e: Event) {
-    e.stopPropagation();
-    DraggableWidget.removeEditingWidgetHighlight();
-    if (store.getState().editingElement != this) {
-      store.dispatch(setEditingWidget(this as Map));
-    }
-    store.dispatch(setSelectedTab(Tab.attributes));
-  }
-
   /**
-   * Called on initialization and on property changes. Initial call
-   * creates a new map instance but subsequent ones update the existing object.
+   * Adds edit icon to panel.
    */
-  updateMap() {
+  @property({ type: Boolean }) editable = false;
+
+  connectedCallback() {
+    this.initMap();
+  }
+
+  initMap() {
     loadGoogleMaps(this.apiKey).then(() => {
       this.mapOptions.zoom = this.zoom || 0;
 
       this.mapOptions.center = this.center;
 
-      this.mapOptions.zoomControl = this.zoomControl;
+      this.mapOptions.zoomControl = false;
 
-      this.mapOptions.fullscreenControl = this.fullscreenControl;
+      this.mapOptions.streetViewControl = false;
 
-      this.mapOptions.streetViewControl = this.streetViewControl;
+      this.mapOptions.fullscreenControl = false;
 
-      this.mapOptions.scaleControl = this.scaleControl;
-
-      this.mapOptions.mapTypeControl = this.mapTypeControl;
-
-      this.mapOptions.styles =
-        this.customMapStyles != ''
-          ? JSON.parse(this.customMapStyles)
-          : this.mapStyles;
+      this.mapOptions.mapTypeControl = false;
 
       if (this.map == null) {
         this.map = new google.maps.Map(this, this.mapOptions);
@@ -265,27 +165,6 @@ export class Map extends LitElement {
       case 'zoom':
         this.zoom = parseInt(value);
         break;
-      case 'zoomControl':
-        this.zoomControl = value === 'true';
-        break;
-      case 'scaleControl':
-        this.scaleControl = value === 'true';
-        break;
-      case 'streetViewControl':
-        this.streetViewControl = value === 'true';
-        break;
-      case 'fullscreenControl':
-        this.fullscreenControl = value === 'true';
-        break;
-      case 'mapTypeControl':
-        this.mapTypeControl = value === 'true';
-        break;
-      case 'mapStyles':
-        this.mapStyles = this.getCustomMapStyle(value);
-        break;
-      case 'customMapStyles':
-        this.customMapStyles = value;
-        break;
       case 'center':
         this.center = value;
         break;
@@ -302,30 +181,11 @@ export class Map extends LitElement {
         this.apiKey = value;
         break;
     }
-    this.updateMap();
+    this.initMap();
   }
 
-  getCustomMapStyle(value: string): google.maps.MapTypeStyle[] {
-    switch (value) {
-      case 'standard':
-        return standard;
-      case 'silver':
-        return silver;
-      case 'retro':
-        return retro;
-      case 'night':
-        return night;
-      case 'dark':
-        return dark;
-      case 'aubergine':
-        return aubergine;
-      default:
-        return standard;
-    }
-  }
-
-  getMapStyle(): google.maps.MapTypeStyle[] {
-    return this.mapStyles;
+  getStyle(): { [key: string]: string } {
+    return this.styles;
   }
 
   setStyle(style: { [key: string]: string }) {
