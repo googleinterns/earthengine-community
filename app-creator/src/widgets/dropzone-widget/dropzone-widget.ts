@@ -65,16 +65,13 @@ export class Dropzone extends LitElement {
    */
   @property({ type: Object }) styles = {};
 
-  // createRenderRoot() {
-  //   return this;
-  // }
-
   render() {
-    const { styles, handleDragOver, handleDragenter } = this;
+    const { styles, handleDragOver, handleDragenter, handleDrageleave } = this;
     return html`
       <div
         id="${CONTAINER_ID}"
         @dragenter=${handleDragenter}
+        @dragleave=${handleDrageleave}
         @dragover=${handleDragOver}
         style="${styleMap(styles)}"
       >
@@ -296,19 +293,28 @@ export class Dropzone extends LitElement {
     // We hide the empty notice if it exists.
     this.hideEmptyNotice();
 
-    // // Highlight border and change alignment.
+    // Highlight border and change alignment.
+    container.style.borderColor = 'var(--accent-color)';
     container.style.alignItems = 'flex-start';
     container.style.justifyContent = 'flex-start';
   }
 
   /**
-   * Set individual style properties on the dropzone.
+   * Removes highlighted border on dragleave.
    */
-  setStyleProperty(property: string, value: string): void {
-    const container = this.shadowRoot?.getElementById(CONTAINER_ID);
-    if (container != null) {
-      container.style[property as any] = value;
+  handleDrageleave(e: Event) {
+    // return early if dragleave is called on child widget
+    if ((e.target as HTMLElement).id !== CONTAINER_ID) {
+      return;
     }
+
+    // Remove highlight from container widget.
+    const container = this.shadowRoot?.getElementById(CONTAINER_ID);
+    if (container == null) {
+      return;
+    }
+
+    container.style.borderColor = 'var(--border-gray)';
   }
 
   getStyle(): object {

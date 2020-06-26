@@ -120,7 +120,6 @@ export type AppCreatorAction =
   | SetIsElementAddedAction
   | SetSelectedTabAction
   | SetIsReorderingAction
-  | SetSelectedTemplate
   | IncrementWidgetAction
   | ResetDraggingValuesAction
   | AddWidgetMetaData
