@@ -351,6 +351,10 @@ ${value}</textarea
     attributeType: AttributeType,
     tooltip?: Tooltip
   ): TemplateResult {
+    if (key === 'backgroundColor') {
+      value = value.slice(0, 7);
+    }
+
     return html`
       <div class='attribute-input-container'>
         ${this.getInputHeader(key, title, tooltip)}
