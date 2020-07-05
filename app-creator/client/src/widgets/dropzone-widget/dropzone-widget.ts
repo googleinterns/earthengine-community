@@ -108,7 +108,6 @@ export class Dropzone extends LitElement {
 
     // Update children ordering in store.
     const ids = this.getChildrenIds();
-    console.log({ ids });
     if (parent != null) {
       store.dispatch(updateWidgetChildren(parent.id, ids));
     }
