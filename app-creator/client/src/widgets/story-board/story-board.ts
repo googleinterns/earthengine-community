@@ -21,6 +21,7 @@ import { store } from '../../redux/store';
 import { AppCreatorStore } from '../../redux/reducer';
 import { generateUI } from '../../utils/helpers';
 import { PaperCardElement } from '@polymer/paper-card/paper-card.js';
+import { DraggableWidget } from '../draggable-widget/draggable-widget';
 
 const STORYBOARD_ID = 'storyboard';
 
@@ -175,3 +176,4 @@ export class Storyboard extends connect(store)(LitElement) {
     return this.styles;
   }
 }
+
