@@ -66,7 +66,7 @@ export class Label extends LitElement {
   @property({ type: String }) targetUrl = '';
 
   /**
-   * Sets pre-defined styles for the specified type (ie. paragraph, title).
+   * Sets pre-defined styles for the specified type (i.e. paragraph, title).
    */
   @property({ type: String })
   type = 'paragraph';

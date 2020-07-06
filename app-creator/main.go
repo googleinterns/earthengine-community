@@ -70,7 +70,7 @@ func main() {
 	/**
 	* Registering handlers.
 	*/
-	serverMux.Handle("/templates", templatesHandler)
+	serverMux.Handle("/api/v1/templates", templatesHandler)
 
 	/**
 	* CORS middleware. Default option allows all origins. 

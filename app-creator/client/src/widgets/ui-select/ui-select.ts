@@ -66,7 +66,7 @@ export class Select extends LitElement {
   @property({ type: String }) placeholder = '';
 
   /**
-   * Sets the value of the drop down menu (ie. currently selected item).
+   * Sets the value of the drop down menu (i.e. currently selected item).
    */
   @property({ type: String }) value = '';
 

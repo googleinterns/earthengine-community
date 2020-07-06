@@ -148,7 +148,7 @@ export const setEditingWidget = (
        * This occurs when are dragging a new widget or we are removing the current widget being edited.
        */
       eventType: widget == null ? EventType.none : EventType.editing,
-      // Open attributes tab if we are editing an element (ie. Not clearing state).
+      // Open attributes tab if we are editing an element (i.e. Not clearing state).
       openAttributesTab: widget != null,
     },
   };
@@ -234,7 +234,7 @@ export const incrementWidgetID = (id: string): IncrementWidgetAction => {
 };
 
 /**
- * Returns default values for a specified widget type (ie. label, button, etc).
+ * Returns default values for a specified widget type (i.e. label, button, etc).
  */
 function getUniqueAttributes(type: string): UniqueAttributes {
   switch (type) {

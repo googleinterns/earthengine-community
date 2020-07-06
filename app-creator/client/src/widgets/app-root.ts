@@ -24,6 +24,8 @@ import { store } from '../redux/store';
 import { setSelectedTemplate } from '../redux/actions';
 import { TemplateItem, database } from '../client/fetch-templates';
 import { templatesManager } from '../data/templates';
+import { API_URL, templatesRoute } from '../utils/constants';
+import { generateUI } from '../utils/helpers';
 
 @customElement('app-root')
 export class AppRoot extends LitElement {
@@ -103,6 +105,14 @@ export class AppRoot extends LitElement {
       left: 0;
       margin: 0px;
     }
+
+    .fetching-templates-loading-container {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   `;
 
   /**
@@ -116,9 +126,14 @@ export class AppRoot extends LitElement {
   @property({ type: Array }) templates: TemplateItem[] = [];
 
   /**
-   * Loading state.
+   * Fetching initial templates loading state.
    */
   @property({ type: Boolean }) loading = false;
+
+  /**
+   * Fetching template by ID loading state.
+   */
+  @property({ type: Boolean }) isFetchingTemplate = false;
 
   /**
    * Reference to dialog element.
@@ -129,7 +144,7 @@ export class AppRoot extends LitElement {
     try {
       this.loading = true;
 
-      const response = await fetch('/templates');
+      const response = await fetch(`${API_URL}${templatesRoute}`);
       const templates = await response.json();
 
       templatesManager.setTemplates(templates);
@@ -145,8 +160,45 @@ export class AppRoot extends LitElement {
   }
 
   firstUpdated() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const templateID = urlParams.get('id');
+    if (templateID != null) {
+      this.getTemplateByID(templateID);
+    } else {
+      this.fallback();
+    }
+  }
+
+  fallback() {
     this.fetchTemplates();
     this.showTemplateSelectionModal();
+  }
+
+  async getTemplateByID(id: string) {
+    try {
+      this.isFetchingTemplate = true;
+
+      const response = await fetch(`${API_URL}${templatesRoute}?id=${id}`);
+      const data = await response.json();
+
+      const storyboard = this.shadowRoot?.querySelector(
+        'story-board'
+      ) as HTMLElement;
+      if (storyboard == null) {
+        this.fallback();
+        throw new Error('Storyboard is null');
+      }
+
+      const templateJSON = JSON.parse(data.template);
+
+      generateUI(templateJSON, storyboard);
+
+      this.fetchTemplates();
+    } catch (e) {
+      console.log('Error getting template by ID:', e);
+    } finally {
+      this.isFetchingTemplate = false;
+    }
   }
 
   showTemplateSelectionModal() {
@@ -222,13 +274,19 @@ export class AppRoot extends LitElement {
       ? html`<paper-progress indeterminate></paper-progress>`
       : nothing;
 
+    const isFetchingTemplateMarkup = this.isFetchingTemplate
+      ? html` <paper-progress indeterminate></paper-progress> `
+      : nothing;
+
     return html`
       <div id="app">
         <tool-bar></tool-bar>
         <div id="container">
           <actions-panel></actions-panel>
           <div id="storyboard-container">
-            <story-board id="storyboard"></story-board>
+            <story-board id="storyboard">
+              ${isFetchingTemplateMarkup}
+            </story-board>
           </div>
 
           <paper-dialog with-backdrop no-cancel-on-outside-click>

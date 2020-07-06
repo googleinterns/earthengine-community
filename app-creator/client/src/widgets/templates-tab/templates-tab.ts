@@ -122,7 +122,7 @@ export class TemplatesTab extends LitElement {
     return html`
       <tab-container title="Templates">
         <search-bar
-          placeholder="Search for template (ie. side panel)"
+          placeholder="Search for template (i.e. side panel)"
           @onsearch=${handleSearch}
         ></search-bar>
         <div id="cards-container">

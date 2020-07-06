@@ -5,6 +5,8 @@ import (
 	"net/http"
 	data "modules/data/templates"
 	"cloud.google.com/go/datastore"
+	"io"
+	"fmt"
 )
 
 type Templates struct {
@@ -23,6 +25,14 @@ func NewTemplatesHandler(l *log.Logger, db *datastore.Client) *Templates {
 * Handler called on requests made to "/templates".
 */
 func (t *Templates) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+	queryParams, valid := r.URL.Query()["id"]
+	
+	if valid && len(queryParams[0]) > 1 {
+		id := queryParams[0]; 
+        t.getTemplateByID(id, rw, r)
+        return
+	}
+	
 	if r.Method == http.MethodGet {
 		t.getTemplates(rw, r)
 		return
@@ -38,11 +48,22 @@ func (t *Templates) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 }
 
 /*
-* Helper method called on GET requests to "/templates".
+* Helper method called on GET requests to "/api/v1/templates".
 */
 func (t *Templates) getTemplates(rw http.ResponseWriter, r *http.Request) {
 	templates := data.GetTemplates(t.db, t.l, r.Context())
 	err := templates.ToJSON(rw)
+	if err != nil {
+		http.Error(rw, "Conversion to JSON was unsuccessful", http.StatusInternalServerError)
+	}
+}
+
+/*
+* Helper method called on GET requests to fetch a particular template.
+*/
+func (t *Templates) getTemplateByID(id string, rw http.ResponseWriter, r *http.Request) {
+	template := data.GetTemplateByID(id, rw, t.db, t.l, r.Context())
+	err := template.ToJSON(rw)
 	if err != nil {
 		http.Error(rw, "Conversion to JSON was unsuccessful", http.StatusInternalServerError)
 	}
@@ -59,5 +80,13 @@ func (t *Templates) addTemplate(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	t.l.Printf("Template: %#v", template)
-	data.AddTemplate(template)
+
+	_, err = data.AddTemplate(template, t.db, rw, r.Context())
+	if err != nil {
+		fmt.Printf("%v", err)
+		http.Error(rw, "Failed to save template in the database", http.StatusInternalServerError)
+	}
+
+	io.WriteString(rw, template.Id)
 }
+

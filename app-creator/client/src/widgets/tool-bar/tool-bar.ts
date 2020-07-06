@@ -4,14 +4,16 @@
  *  displaying a serialized template string that the user can copy
  *  and import into the code editor.
  */
-import { LitElement, html, customElement, css } from 'lit-element';
+import { LitElement, html, customElement, css, property } from 'lit-element';
+import { nothing } from 'lit-html';
 import '@polymer/paper-button/paper-button.js';
 import { store } from '../../redux/store';
 import '@polymer/paper-dialog/paper-dialog.js';
 import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog.js';
 import '@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js';
 import { AppCreatorStore } from '../../redux/reducer';
-import { WIDGET_REF } from '../../utils/constants';
+import { WIDGET_REF, API_URL, templatesRoute } from '../../utils/constants';
+import { generateRandomId } from '../../utils/helpers';
 
 @customElement('tool-bar')
 export class ToolBar extends LitElement {
@@ -49,10 +51,11 @@ export class ToolBar extends LitElement {
       padding: var(--tight);
       border-radius: var(--tight);
       width: 40%;
-      max-height: 600px;
+      max-height: 70%;
+      overflow-y: scroll;
     }
 
-    #json-string-container {
+    .json-container {
       margin: 16px;
       overflow-y: scroll;
       overflow-x: scroll;
@@ -61,7 +64,7 @@ export class ToolBar extends LitElement {
       max-height: 400px;
     }
 
-    #json-snippet {
+    .code-snippet {
       font-family: monospace;
     }
 
@@ -71,6 +74,13 @@ export class ToolBar extends LitElement {
 
     #cancel-button {
       color: var(--accent-color);
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     paper-button {
@@ -86,6 +96,16 @@ export class ToolBar extends LitElement {
   `;
 
   /**
+   * Set to true when the template is being saved.
+   */
+  @property({ type: Boolean }) isSavingTemplate = false;
+
+  /**
+   * Generated link that users can use to share their templates.
+   */
+  @property({ type: String }) shareableLink = '';
+
+  /**
    * Triggered when export button is clicked. It displays the paper dialog which
    * contains the serialized template string.
    */
@@ -98,9 +118,45 @@ export class ToolBar extends LitElement {
     if (dialog == null || jsonSnippetContainer == null) {
       return;
     }
-    jsonSnippetContainer.textContent = this.getTemplateString(3);
+
+    this.saveTemplate();
+
+    const templateString = this.getTemplateString(3);
+
+    jsonSnippetContainer.textContent = templateString;
 
     (dialog as PaperDialogElement).open();
+  }
+
+  async saveTemplate() {
+    try {
+      // Set loading state
+      this.isSavingTemplate = true;
+
+      const randomId = generateRandomId();
+
+      const body = JSON.stringify({
+        id: randomId,
+        name: store.getState().template.name,
+        template: this.getTemplateString(),
+      });
+
+      const response = await fetch(`${API_URL}${templatesRoute}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body,
+      });
+
+      await response;
+
+      this.shareableLink = API_URL + '?id=' + randomId;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.isSavingTemplate = false;
+    }
   }
 
   /**
@@ -154,21 +210,42 @@ export class ToolBar extends LitElement {
 
   render() {
     const { openDialog, copy } = this;
+
+    let shareableLinkMarkup = nothing;
+
+    if (this.isSavingTemplate) {
+      shareableLinkMarkup = html`
+        <div class="progress-bar-container">
+          <paper-progress indeterminate></paper-progress>
+        </div>
+      `;
+    } else if (!this.isSavingTemplate && this.shareableLink !== '') {
+      shareableLinkMarkup = html`
+        <h4>Share Link</h4>
+        <paper-dialog-scrollable class="json-container">
+          <pre><code class="code-snippet">${this.shareableLink}</code
+          ></pre>
+        </paper-dialog-scrollable>
+      `;
+    }
+
     return html`
       <div id="container">
         <h3>
           <strong id="app-title-prefix">${ToolBar.prefix}</strong>
           <span id="app-title-suffix">${ToolBar.suffix}</span>
         </h3>
-
         <paper-button id="export-button" @click=${openDialog}
           >Export</paper-button
         >
-
         <paper-dialog>
-          <h2>Paste string in EE Code Editor</h2>
-          <paper-dialog-scrollable id="json-string-container">
-            <pre><code id="json-snippet"></code
+          ${shareableLinkMarkup}
+          <h4>Paste string in EE Code Editor</h4>
+          <paper-dialog-scrollable
+            id="json-string-container"
+            class="json-container"
+          >
+            <pre><code id="json-snippet" class="code-snippet"></code
           ></pre>
           </paper-dialog-scrollable>
           <div class="buttons">

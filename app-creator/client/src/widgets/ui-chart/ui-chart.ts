@@ -133,7 +133,7 @@ export class Chart extends LitElement {
   @property({ type: Boolean }) downloadable = true;
 
   /**
-   * Sets pre-defined styles for the specified type (ie. paragraph, title).
+   * Sets pre-defined styles for the specified type (i.e. paragraph, title).
    */
   @property({ type: String })
   type = 'paragraph';

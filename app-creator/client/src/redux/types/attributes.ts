@@ -68,12 +68,12 @@ export const sharedAttributes: AttributeMetaData = {
   },
   padding: {
     value: '0px',
-    placeholder: "ie. '8px', '8px 8px', '8px 8px 8px 8px'",
+    placeholder: "i.e. '8px', '8px 8px', '8px 8px 8px 8px'",
     type: InputType.text,
   },
   margin: {
     value: '8px',
-    placeholder: "ie. '8px', '8px 8px', '8px 8px 8px 8px'",
+    placeholder: "i.e. '8px', '8px 8px', '8px 8px 8px 8px'",
     type: InputType.text,
   },
   color: {
