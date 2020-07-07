@@ -351,6 +351,8 @@ ${value}</textarea
     attributeType: AttributeType,
     tooltip?: Tooltip
   ): TemplateResult {
+    // Since the color input does not read opacity values, we need to strip off,
+    // the last two hex numbers that represent opacity.
     if (key === 'backgroundColor') {
       value = value.slice(0, 7);
     }

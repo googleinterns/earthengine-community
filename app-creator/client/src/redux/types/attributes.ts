@@ -153,13 +153,17 @@ export const sharedAttributes: AttributeMetaData = {
   },
 };
 
+export const pxAttributes = new Set([
+  'height',
+  'width',
+  'borderWidth',
+  'fontSize',
+]);
+
 export const DEFAULT_SHARED_ATTRIBUTES: DefaultAttributesType = Object.keys(
   sharedAttributes
 ).reduce((attributes: DefaultAttributesType, key) => {
-  if (
-    sharedAttributes[key].type === InputType.number &&
-    key !== 'backgroundOpacity'
-  ) {
+  if (key in pxAttributes) {
     attributes[key] = sharedAttributes[key].value + 'px';
     return attributes;
   }

@@ -220,18 +220,18 @@ function updateUI(widget: HTMLElement, template: { [key: string]: any }) {
   }
 }
 
-function getBackgroundColor(style: { [key: string]: any }) {
+function getBackgroundColor(style: { [key: string]: any }): string {
   // Stringified number from 0 - 100 (only integers) or an empty string.
-  let backgroundOpacity = style.backgroundOpacity;
+  let backgroundOpacityStr = style.backgroundOpacity;
 
   // Empty string case.
-  if (backgroundOpacity === '') {
-    backgroundOpacity = '0';
+  if (backgroundOpacityStr === '') {
+    backgroundOpacityStr = '0';
   }
 
-  const number = parseInt(backgroundOpacity);
+  const backgroundOpacity = parseInt(backgroundOpacityStr);
 
-  const fraction = number / 100;
+  const fraction = backgroundOpacity / 100;
 
   const hexFraction = Math.floor(255 * fraction);
 
@@ -244,5 +244,6 @@ function getBackgroundColor(style: { [key: string]: any }) {
   const newBackgroundColor =
     style.backgroundColor.slice(0, 7) + hexNumberString.toUpperCase();
 
+  // Example: #FFFFFF00, where the last two hex numbers represent the opacity.
   return newBackgroundColor;
 }

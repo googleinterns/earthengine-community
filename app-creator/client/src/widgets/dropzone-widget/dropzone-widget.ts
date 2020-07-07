@@ -134,10 +134,13 @@ export class Dropzone extends LitElement {
     // Return early if the widget has been added to another panel earlier.
     const template = store.getState().template;
     for (const id in template) {
-      if (typeof template[id] === 'object' && !Array.isArray(template[id])) {
-        if (id !== parent!.id && template[id].children.includes(clone.id)) {
-          return;
-        }
+      if (
+        typeof template[id] === 'object' &&
+        !Array.isArray(template[id]) &&
+        id !== parent!.id &&
+        template[id].children.includes(clone.id)
+      ) {
+        return;
       }
     }
 

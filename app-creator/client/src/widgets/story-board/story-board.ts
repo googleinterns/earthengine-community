@@ -176,4 +176,3 @@ export class Storyboard extends connect(store)(LitElement) {
     return this.styles;
   }
 }
-
