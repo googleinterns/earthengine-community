@@ -113,6 +113,7 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
     case UPDATE_WIDGET_META_DATA:
       const { attributeName, value, id, attributeType } = action.payload;
       const updatedTemplate = { ...state.template };
+      const attributeValue = updatedTemplate[id][attributeType][attributeName];
 
       if (attributeName.endsWith('unit')) {
         const attributePrefix = getIdPrefix(attributeName);
@@ -128,9 +129,6 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
           ] = attributeValue.replace('%', value);
         }
       } else {
-        const attributeValue =
-          updatedTemplate[id][attributeType][attributeName];
-
         updatedTemplate[id][attributeType][attributeName] = value;
 
         if (attributeValue.endsWith('px') || attributeValue.endsWith('%')) {

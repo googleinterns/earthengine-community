@@ -98,8 +98,9 @@ export class ToolBar extends LitElement {
     if (dialog == null || jsonSnippetContainer == null) {
       return;
     }
-    jsonSnippetContainer.textContent = this.getTemplateString(3);
-
+    jsonSnippetContainer.textContent = this.getTemplateString(3)
+      .replace(/\\"/g, "'")
+      .replace(/'/g, "\\'");
     (dialog as PaperDialogElement).open();
   }
 
@@ -131,11 +132,38 @@ export class ToolBar extends LitElement {
     return clone;
   }
 
+  listAttributes = new Set(['items', 'color']);
+
+  normalizeAttributes(
+    template: AppCreatorStore['template']
+  ): AppCreatorStore['template'] {
+    for (const key in template) {
+      for (const uniqueAttribute in template[key].uniqueAttributes) {
+        const value = template[key].uniqueAttributes[uniqueAttribute];
+        // Remove whitespace from chart types.
+        if (uniqueAttribute === 'chartType') {
+          template[key].uniqueAttributes[uniqueAttribute] = value.replace(
+            /\s/g,
+            ''
+          );
+        } else if (this.listAttributes.has(uniqueAttribute)) {
+          template[key].uniqueAttributes[uniqueAttribute] = JSON.stringify(
+            value.split(',').map((item: string) => item.trim())
+          );
+        }
+      }
+    }
+
+    return template;
+  }
+
   /**
    * Returns the serialized template string with indentation.
    */
   getTemplateString(space: number = 0) {
-    const template = this.deepCloneTemplate(store.getState().template);
+    const template = this.normalizeAttributes(
+      this.deepCloneTemplate(store.getState().template)
+    );
     return JSON.stringify(template, null, space);
   }
 
@@ -145,7 +173,9 @@ export class ToolBar extends LitElement {
   copy() {
     const textArea = document.createElement('textarea');
     // We get the template string without indentation and with escaped single quotes.
-    textArea.value = this.getTemplateString().replace(/'/g, "\\'");
+    textArea.value = this.getTemplateString()
+      .replace(/\\"/g, "'")
+      .replace(/'/g, "\\'");
     document.body.appendChild(textArea);
     textArea.select();
     document.execCommand('Copy');

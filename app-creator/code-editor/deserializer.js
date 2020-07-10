@@ -17,7 +17,6 @@ app.widgetInterface = {};
 /**
  * Recursively traverses the widget tree starting at panel-template-0 and creates ee ui widgets accordingly.
  */
-
 app.deserializeUI = function (widgetTreeJSON) {
   function helper(nodeObj) {
     var obj = app.createUIElement(nodeObj);
@@ -68,7 +67,7 @@ app.createUIElement = function (nodeObj) {
     case 'chart':
       return app.createChartElement(nodeObj, filteredStyles);
     default:
-      return { node: null };
+      return null;
   }
 };
 
@@ -104,7 +103,7 @@ app.createSliderElement = function (obj, style) {
     style: style,
   });
 
-  return { node: slider };
+  return slider;
 };
 
 /**
@@ -152,7 +151,7 @@ app.createChartElement = function createChartElement(obj, style) {
     downloadable: downloadable,
   });
 
-  return { node: chart };
+  return chart;
 };
 
 /**
@@ -180,7 +179,7 @@ app.createSelectElement = function createSelectElement(obj, style) {
     disabled: disabled,
   });
 
-  return { node: select };
+  return select;
 };
 
 /**
@@ -271,7 +270,7 @@ app.createPanelElement = function (obj, style) {
       ? ui.Panel.Layout.Flow('horizontal')
       : ui.Panel.Layout.Flow('vertical');
 
-  return { node: ui.Panel({ style: style, layout: layout }) };
+  return ui.Panel({ style: style, layout: layout });
 };
 
 /**
@@ -348,7 +347,7 @@ app.createMapElement = function (obj, style) {
       : customMapStylesJSON;
   map.setOptions({ styles: { custom: appliedStyles } });
 
-  return { node: panel, map: map };
+  return panel;
 };
 
 /**
