@@ -100,7 +100,7 @@ export class ToolBar extends LitElement {
     }
     jsonSnippetContainer.textContent = this.getTemplateString(3)
       .replace(/\\"/g, "'")
-      .replace(/'/g, "\\'");
+      .replace(/'/g, '\\\\"');
     (dialog as PaperDialogElement).open();
   }
 
@@ -146,6 +146,14 @@ export class ToolBar extends LitElement {
             /\s/g,
             ''
           );
+        } else if (uniqueAttribute === 'dataTable') {
+          debugger;
+          const normalizedDataTable = value
+            .replace(/\w+(?=:)/g, '"$&"')
+            .replace(/(\t|\n|\s|\r)/g, '')
+            .replace(/'/g, '"');
+
+          template[key].uniqueAttributes[uniqueAttribute] = normalizedDataTable;
         } else if (this.listAttributes.has(uniqueAttribute)) {
           template[key].uniqueAttributes[uniqueAttribute] = JSON.stringify(
             value.split(',').map((item: string) => item.trim())
@@ -175,7 +183,7 @@ export class ToolBar extends LitElement {
     // We get the template string without indentation and with escaped single quotes.
     textArea.value = this.getTemplateString()
       .replace(/\\"/g, "'")
-      .replace(/'/g, "\\'");
+      .replace(/'/g, '\\\\"');
     document.body.appendChild(textArea);
     textArea.select();
     document.execCommand('Copy');

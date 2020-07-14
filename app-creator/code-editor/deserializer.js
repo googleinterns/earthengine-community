@@ -4,15 +4,22 @@ var examples = require('users/msibrahim/app-creator:examples');
 /**
  * The namespace for the application. All the state is kept in here.
  */
-
 var app = {};
+exports.app = app;
 
 /**
  * Allow users to further customize the generated widgets by providing a reference to each element created.
  * Type: {[key: WidgetID]: {node: EEWidget, map?: ui.Map}}, for map widgets, we wrap them with a panel widget and return
  * both elements.
  */
-app.widgetInterface = {};
+app.widgetInterface = ui.data.ActiveDictionary();
+
+/**
+ * Returns reference to the widget interface.
+ */
+app.widgets = function () {
+  return app.widgetInterface;
+};
 
 /**
  * Recursively traverses the widget tree starting at panel-template-0 and creates ee ui widgets accordingly.
@@ -20,25 +27,42 @@ app.widgetInterface = {};
 app.deserializeUI = function (widgetTreeJSON) {
   function helper(nodeObj) {
     var obj = app.createUIElement(nodeObj);
-    var map = obj.map;
-    var node = obj.node;
+    if (!obj) {
+      console.log('Incorrect widget type');
+      throw new Error('Incorrect widget type.');
+    }
 
-    app.widgetInterface[nodeObj.id] = obj;
+    var map = null;
+    if (obj instanceof ui.Panel) {
+      // If the panel is a map wrapper, we want to extract the map itself.
+      var isMapWrapper =
+        obj.widgets().length() === 1 && obj.widgets().get(0) instanceof ui.Map;
+      map = isMapWrapper ? obj.widgets().get(0) : null;
+    }
+
+    var node = map === null ? obj : map;
+    app.widgetInterface.set(nodeObj.id, node);
 
     for (var i = 0; i < nodeObj.children.length; i++) {
       var widget = nodeObj.children[i];
-      if (map !== undefined) {
+      if (map) {
         map.add(helper(widgetTree[widget]));
       } else {
-        node.widgets().add(helper(widgetTree[widget]));
+        obj.widgets().add(helper(widgetTree[widget]));
       }
     }
 
-    return node;
+    return obj;
   }
 
-  var widgetTree = JSON.parse(widgetTreeJSON);
-  return helper(widgetTree['panel-template-0']);
+  try {
+    var widgetTree = JSON.parse(widgetTreeJSON);
+    return helper(widgetTree['panel-template-0']);
+  } catch (e) {
+    print(
+      'Template JSON is incorrectly formatted. Please check that the JSON is formatted correctly.'
+    );
+  }
 };
 
 /**
@@ -89,17 +113,13 @@ app.createSliderElement = function (obj, style) {
   var value = parseFloat(uniqueAttributes.value);
   value = isNaN(value) ? 0 : value;
 
-  var direction = uniqueAttributes.direction;
-
-  var disabled = uniqueAttributes.disabled === 'true';
-
   var slider = ui.Slider({
     min: min,
     max: max,
     value: value,
     step: step,
-    direction: direction,
-    disabled: disabled,
+    direction: uniqueAttributes.direction,
+    disabled: uniqueAttributes.disabled === 'true',
     style: style,
   });
 
@@ -112,43 +132,45 @@ app.createSliderElement = function (obj, style) {
 app.createChartElement = function createChartElement(obj, style) {
   var uniqueAttributes = obj.uniqueAttributes;
 
-  var dataTable = uniqueAttributes.dataTable;
+  var dataTable = {
+    cols: [
+      { id: 'task', label: 'Task', type: 'string' },
+      { id: 'hours', label: 'Hours per Day', type: 'number' },
+    ],
+    rows: [
+      { c: [{ v: 'Eat' }, { v: 2 }] },
+      { c: [{ v: 'Write EE Code' }, { v: 9 }] },
+      { c: [{ v: 'Sleep' }, { v: 7, f: '7.000' }] },
+    ],
+  };
 
-  var chartType = uniqueAttributes.chartType.replace(/\s/g, '');
-
-  var title = uniqueAttributes.title;
-
-  var color = uniqueAttributes.color;
-  color = color.split(',');
-  for (var i = 0; i < color.length; i++) {
-    color[i] = color[i].trim();
+  try {
+    dataTable = JSON.parse(uniqueAttributes.dataTable);
+  } catch (e) {
+    print('Error parsing dataTable for chart element');
   }
 
-  var threeD = uniqueAttributes['3D'];
-
-  var downloadable = uniqueAttributes.downloadable === 'true';
+  var colors = [''];
+  try {
+    colors = JSON.parse(uniqueAttributes.color);
+    colors = colors.map(function (color) {
+      return color.trim();
+    });
+  } catch (e) {
+    print('Error parsing colors for chart element');
+  }
 
   var chart = ui.Chart({
-    dataTable: {
-      cols: [
-        { id: 'task', label: 'Task', type: 'string' },
-        { id: 'hours', label: 'Hours per Day', type: 'number' },
-      ],
-      rows: [
-        { c: [{ v: 'Eat' }, { v: 2 }] },
-        { c: [{ v: 'Write EE Code' }, { v: 9 }] },
-        { c: [{ v: 'Sleep' }, { v: 7, f: '7.000' }] },
-      ],
-    },
+    dataTable: dataTable,
     options: {
-      title: title,
-      color: color,
-      is3D: threeD,
+      title: uniqueAttributes.title,
+      color: colors,
+      is3D: uniqueAttributes['3D'],
       height: style.height,
       width: style.width,
     },
-    chartType: chartType,
-    downloadable: downloadable,
+    chartType: uniqueAttributes.chartType,
+    downloadable: uniqueAttributes.downloadable === 'true',
   });
 
   return chart;
@@ -157,26 +179,24 @@ app.createChartElement = function createChartElement(obj, style) {
 /**
  * Helper function for creating select elements.
  */
-app.createSelectElement = function createSelectElement(obj, style) {
+app.createSelectElement = function (obj, style) {
   var uniqueAttributes = obj.uniqueAttributes;
 
-  var items = uniqueAttributes.items;
-  items = items.split(',');
-  for (var i = 0; i < items.length; i++) {
-    items[i] = items[i].trim();
+  var items = [''];
+  try {
+    items = JSON.parse(uniqueAttributes.items);
+    items = items.map(function (item) {
+      return item.trim();
+    });
+  } catch (e) {
+    console.log('Error parsing items for select element');
   }
-
-  var placeholder = uniqueAttributes.placeholder;
-
-  var value = items.length > 0 ? items[0] : '';
-
-  var disabled = uniqueAttributes.disabled === 'true';
 
   var select = ui.Select({
     items: items,
-    placeholder: placeholder,
-    value: value,
-    disabled: disabled,
+    placeholder: uniqueAttributes.placeholder,
+    value: items.length > 0 ? items[0] : '',
+    disabled: uniqueAttributes.disabled === 'true',
   });
 
   return select;
@@ -188,20 +208,14 @@ app.createSelectElement = function createSelectElement(obj, style) {
 app.createTextboxElement = function (obj, style) {
   var uniqueAttributes = obj.uniqueAttributes;
 
-  var placeholder = uniqueAttributes.placeholder;
-
-  var value = uniqueAttributes.value;
-
-  var disabled = uniqueAttributes.disabled;
-
   var textbox = ui.Textbox({
-    placeholder: placeholder,
-    value: value,
-    disabled: disabled,
+    placeholder: uniqueAttributes.placeholder,
+    value: uniqueAttributes.value,
+    disabled: uniqueAttributes.disabled,
     style: style,
   });
 
-  return { node: textbox };
+  return textbox;
 };
 
 /**
@@ -210,20 +224,14 @@ app.createTextboxElement = function (obj, style) {
 app.createCheckboxElement = function (obj, style) {
   var uniqueAttributes = obj.uniqueAttributes;
 
-  var label = uniqueAttributes.label;
-
-  var value = uniqueAttributes.value === 'true';
-
-  var disabled = uniqueAttributes.disabled === 'true';
-
   var checkbox = ui.Checkbox({
-    label: label,
-    value: value,
-    disabled: disabled,
+    label: uniqueAttributes.label,
+    value: uniqueAttributes.value === 'true',
+    disabled: uniqueAttributes.disabled === 'true',
     style: style,
   });
 
-  return { node: checkbox };
+  return checkbox;
 };
 
 /**
@@ -232,13 +240,13 @@ app.createCheckboxElement = function (obj, style) {
 app.createButtonElement = function (obj, style) {
   var uniqueAttributes = obj.uniqueAttributes;
 
-  var label = uniqueAttributes.label;
+  var button = ui.Button({
+    label: uniqueAttributes.label,
+    disabled: uniqueAttributes.disabled,
+    style: style,
+  });
 
-  var disabled = uniqueAttributes.disabled;
-
-  var button = ui.Button({ label: label, disabled: disabled, style: style });
-
-  return { node: button };
+  return button;
 };
 
 /**
@@ -247,16 +255,14 @@ app.createButtonElement = function (obj, style) {
 app.createLabelElement = function (obj, style) {
   var uniqueAttributes = obj.uniqueAttributes;
 
-  var value = uniqueAttributes.value;
-
-  var label = ui.Label({ value: value, style: style });
+  var label = ui.Label({ value: uniqueAttributes.value, style: style });
 
   var targetUrl = uniqueAttributes.targetUrl;
   if (targetUrl.trim() !== '') {
     label.setUrl(targetUrl);
   }
 
-  return { node: label };
+  return label;
 };
 
 /**
@@ -276,7 +282,6 @@ app.createPanelElement = function (obj, style) {
 /**
  * Helper function for getting the correct position.
  */
-
 app.getPosition = function (style) {
   if ('bottom' in style && 'left' in style) {
     return 'bottom-left';
@@ -353,13 +358,14 @@ app.createMapElement = function (obj, style) {
 /**
  * Since Sets are not supported here, we are using an object for constant time access. The boolean values are meaningless.
  */
-
 var unsupportedKeys = {
   borderWidth: true,
   borderStyle: true,
   borderColor: true,
   boxSizing: true,
   'box-sizing': true,
+  backgroundOpacity: true,
+  zIndex: true,
   top: true,
   left: true,
   right: true,
@@ -369,7 +375,6 @@ var unsupportedKeys = {
 /**
  * Takes in a style object and returns all the unsupported keys.
  */
-
 app.filterStyleObject = function (obj) {
   var clone = {};
 
@@ -398,7 +403,7 @@ app.filterStyleObject = function (obj) {
 /**
  * Create in-memory widget tree.
  */
-app.init = function () {
+app.init = function (template) {
   /**
    * Examples:
    * - leftSidePanel
@@ -408,29 +413,29 @@ app.init = function () {
    * - silverExample
    * - retroExample
    */
-  app.widgetTreeRoot = app.deserializeUI(examples.retroExample);
+  app.root = app.deserializeUI(template);
 };
 
 /**
- * Draw UI to the screen by adding the widgetTreeRoot to ui.Root.
+ * Draw UI to the screen by adding the root to ui.Root.
  */
-app.draw = function () {
-  if (app.widgetTreeRoot === null) {
-    console.log(
-      'No widgetTreeRoot initialized. Perhaps you forgot to call app.init().'
-    );
-    return;
+app.draw = function (template) {
+  if (!app.root) {
+    if (template) {
+      app.init(template);
+    } else {
+      print('No template passed to draw method');
+      return;
+    }
   }
 
-  ui.root.clear();
-  ui.root.widgets().add(app.widgetTreeRoot);
+  ui.root.widgets().reset([app.root]);
 };
 
 /**
- * Create widgets interface and initialize widgetTreeRoot.
+ * Create widgets interface and initialize root.
  */
-
-app.init();
+app.init(examples.example);
 
 /**
  * Add widgets to ui.Root and populate the UI.
