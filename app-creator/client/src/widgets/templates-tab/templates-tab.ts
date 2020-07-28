@@ -11,6 +11,7 @@ import { connect } from 'pwa-helpers';
 import { AppCreatorStore } from '../../redux/reducer';
 import { DeviceType } from '../../redux/types/enums';
 import { classMap } from 'lit-html/directives/class-map';
+import { chips } from '../../utils/helpers';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '../tab-container/tab-container';
@@ -27,7 +28,6 @@ import '../search-bar/search-bar';
 import '../empty-notice/empty-notice';
 import '../template-card/template-card';
 import '@cwmr/paper-chip/paper-chip.js';
-import { chips } from '../../utils/helpers';
 
 export interface TemplatesTabItem {
   id: string;

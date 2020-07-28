@@ -8,8 +8,8 @@ import { setEditingWidget } from '../../redux/actions';
 import { DraggableWidget } from '../draggable-widget/draggable-widget';
 import { Dropzone } from '../dropzone-widget/dropzone-widget';
 import { classMap } from 'lit-html/directives/class-map';
-import '../dropzone-widget/dropzone-widget';
 import { Layout } from '../../redux/types/enums';
+import '../dropzone-widget/dropzone-widget';
 
 @customElement('ui-panel')
 export class Panel extends LitElement {
