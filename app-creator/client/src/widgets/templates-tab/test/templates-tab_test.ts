@@ -88,6 +88,37 @@ suite('templates-tab', () => {
       );
     });
   });
+
+  suite('filter template cards', () => {
+    test('Empty query from all devices', () => {
+      const result = TemplatesTab.filterTemplates(
+        templatesStub,
+        '',
+        DeviceType.all
+      );
+      expect(result.length).to.equal(templatesStub.length);
+    });
+
+    test('Sub query from all devices', () => {
+      const result = TemplatesTab.filterTemplates(
+        templatesStub,
+        'le',
+        DeviceType.all
+      );
+      expect(result.length).to.equal(
+        templatesStub.filter(({ name }) => name.includes('Le')).length
+      );
+    });
+
+    test('Sub query from mobile devices', () => {
+      const result = TemplatesTab.filterTemplates(
+        templatesStub,
+        'le',
+        DeviceType.mobile
+      );
+      expect(result.length).to.equal(1);
+    });
+  });
 });
 
 const templatesStub = [
