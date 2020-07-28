@@ -192,6 +192,10 @@ export class AppRoot extends LitElement {
     };
   }
 
+  handleDeviceFilters(device: DeviceType) {
+    this.deviceFilter = device;
+  }
+
   getTemplateCards(showTitle = false): Array<TemplatesTabItem> {
     return this.templates.map(({ id, name, imageUrl, device, template }) => {
       return {

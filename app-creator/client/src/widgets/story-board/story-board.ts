@@ -143,7 +143,10 @@ export class Storyboard extends connect(store)(LitElement) {
         <paper-card
           id="storyboard"
           style=${styleMap(styles)}
-          class=${classMap({ storyboard: true, 'mobile-storyboard': isMobile })}
+          class=${classMap({
+            storyboard: !isMobile,
+            'mobile-storyboard': isMobile,
+          })}
         ></paper-card>
       </div>
     `;
