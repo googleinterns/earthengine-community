@@ -47,7 +47,7 @@ export const chips = [
   },
 ];
 
-/*
+/**
  * Generates random ids with length 32.
  */
 export function generateRandomId() {

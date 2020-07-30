@@ -380,8 +380,8 @@ export const database: TemplateItem[] = [
             "parentID": "map-with-legend",
             "parentName": "Map with legend",
             "id": "map-with-legend-desktop",
-            "device": "desktop",
-            "name": "Map with legend Desktop"
+            "name": "Map with legend Desktop",
+            "device": "desktop"
         },
         "widgets": {
             "panel-template-0": {
@@ -507,8 +507,8 @@ export const database: TemplateItem[] = [
             "parentID": "two-maps",
             "parentName": "Two Maps",
             "id": "two-maps-desktop",
-            "device": "desktop",
-            "name": "Two Maps Desktop"
+            "name": "Two Maps Desktop",
+            "device": "desktop"
         },
         "widgets": {
             "panel-template-0": {

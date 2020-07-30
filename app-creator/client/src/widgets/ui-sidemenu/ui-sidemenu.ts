@@ -113,7 +113,6 @@ export class SideMenu extends LitElement {
 
   setStyle(style: { [key: string]: string }) {
     const filteredStyles = new Set(['position', 'top', 'left', 'width']);
-
     for (const attr in style) {
       if (!filteredStyles.has(attr)) {
         this.styles[attr] = style[attr];

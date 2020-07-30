@@ -9,8 +9,8 @@ import {
   property,
   query,
 } from 'lit-element';
-import { styleMap } from 'lit-html/directives/style-map';
 import { classMap } from 'lit-html/directives/class-map';
+import { styleMap } from 'lit-html/directives/style-map';
 import { connect } from 'pwa-helpers';
 import { DeviceType, EventType, Palette } from '../../redux/types/enums';
 import { store } from '../../redux/store';
@@ -177,8 +177,9 @@ export class Storyboard extends connect(store)(LitElement) {
      * template id from the current template config.
      */
     if (
-      template.hasOwnProperty('config') &&
-      template.config.id !== state.selectedTemplateID
+      (template.hasOwnProperty('config') &&
+        template.config.id !== state.selectedTemplateID) ||
+      state.eventType === EventType.changingPalette
     ) {
       store.dispatch(setSelectedTemplateID(template.config.id));
 
@@ -196,6 +197,8 @@ export class Storyboard extends connect(store)(LitElement) {
 
       this.renderNewTemplate(template);
     }
+
+    this.requestUpdate();
   }
 
   /**
@@ -241,8 +244,26 @@ export class Storyboard extends connect(store)(LitElement) {
     store.dispatch(setEventType(EventType.changingPalette, true));
   }
 
+  /**
+   * Callback triggered on change palette confirmation dismiss dialog.
+   */
+  handleConfirmationDismiss() {
+    if (this.paletteConfimationDialog) {
+      this.paletteConfimationDialog.close();
+    }
+    if (this.paletteSelect) {
+      this.paletteSelect.value = this.selectedPalette;
+      this.requestedPalette = this.selectedPalette;
+    }
+  }
+
   render() {
-    const { styles, handlePaletteChange, paletteChangeConfirmation } = this;
+    const {
+      styles,
+      handlePaletteChange,
+      paletteChangeConfirmation,
+      handleConfirmationDismiss,
+    } = this;
 
     const isMobile =
       store.getState().template.config?.device === DeviceType.mobile;
@@ -269,16 +290,7 @@ export class Storyboard extends connect(store)(LitElement) {
           Changing the template palette will overwrite any applied styles.
         </p>
         <div class="buttons">
-          <paper-button
-            @click=${() => {
-              if (this.paletteConfimationDialog) {
-                this.paletteConfimationDialog.close();
-              }
-              if (this.paletteSelect) {
-                this.paletteSelect.value = this.selectedPalette;
-                this.requestedPalette = this.selectedPalette;
-              }
-            }}
+          <paper-button @click=${handleConfirmationDismiss}
             >Decline</paper-button
           >
           <paper-button
