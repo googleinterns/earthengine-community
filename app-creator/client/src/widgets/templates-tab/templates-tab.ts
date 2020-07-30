@@ -104,6 +104,7 @@ export class TemplatesTab extends connect(store)(LitElement) {
             title="${name}"
             imageUrl="${imageUrl}"
             ?showTitle=${showTitle}
+            ?selected=${store.getState().template.config.parentID === id}
             .onSelection=${this.createSelectionCallback(template)}
           ></template-card>
         `,

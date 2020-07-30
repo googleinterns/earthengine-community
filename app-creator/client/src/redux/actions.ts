@@ -26,16 +26,24 @@ import {
   SET_SELECTED_TEMPLATE,
   UPDATE_WIDGET_CHILDREN,
   UpdateWidgetChildren,
-  SetIsImportingAction,
-  SET_IMPORTING,
   SetSelectedTemplateIDAction,
   SET_SELECTED_TEMPLATE_ID,
+  SetPalette,
+  SET_PALETTE,
+  SetEventType,
+  SET_EVENT_TYPE,
 } from './types/actions';
 import {
   DEFAULT_SHARED_ATTRIBUTES,
   UniqueAttributes,
 } from './types/attributes';
-import { WidgetType, AttributeType, Tab, EventType } from './types/enums';
+import {
+  WidgetType,
+  AttributeType,
+  Tab,
+  EventType,
+  Palette,
+} from './types/enums';
 import { getWidgetType } from '../utils/helpers';
 import { Label } from '../widgets/ui-label/ui-label';
 import { Button } from '../widgets/ui-button/ui-button';
@@ -95,6 +103,18 @@ export const removeWidgetMetaData = (
     payload: {
       id,
       reordering,
+    },
+  };
+};
+
+/**
+ * Sets the template palette.
+ */
+export const setPalette = (color: Palette): SetPalette => {
+  return {
+    type: SET_PALETTE,
+    payload: {
+      color,
     },
   };
 };
@@ -226,14 +246,16 @@ export const setReordering = (value: boolean): SetIsReorderingAction => {
 };
 
 /**
- * Sets state to true if we are importing widgets and false otherwise. Importing state is used to determine
- * if a widget should be cloned and if we should increment the widget's ID.
- * @param value true if we are importing elements and false otherwise.
+ * Sets event state to a particular value.
  */
-export const setImporting = (value: boolean): SetIsImportingAction => {
+export const setEventType = (
+  eventType: EventType,
+  value: boolean
+): SetEventType => {
   return {
-    type: SET_IMPORTING,
+    type: SET_EVENT_TYPE,
     payload: {
+      eventType,
       value,
     },
   };

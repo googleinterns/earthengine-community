@@ -50,6 +50,7 @@ export class DraggableWidget extends LitElement {
 
     .edit-buttons {
       background-color: white;
+      color: black;
       border: var(--light-border);
       border-radius: var(--extra-tight);
       margin-left: var(--extra-tight);

@@ -27,8 +27,6 @@ export const database: TemplateItem[] = [
             "parentName": "Left Side Panel",
             "id": "left-side-panel-desktop",
             "name": "Left Side Panel Desktop",
-            "textDirection": "left",
-            "language": "en",
             "device": "desktop"
         },
         "widgets": {
@@ -65,7 +63,6 @@ export const database: TemplateItem[] = [
                     "margin": "0px",
                     "backgroundColor": "#dfd2aeFF",
                     "backgroundOpacity": "100",
-                    "borderWidth": "5px",
                     "borderColor": "#e28b59",
                     "boxSizing": "border-box"
                 }
@@ -146,8 +143,6 @@ export const database: TemplateItem[] = [
             "parentName": "Left Drawer Mobile",
             "id": "left-drawer-mobile",
             "name": "Left Side Panel Mobile",
-            "textDirection": "left",
-            "language": "en",
             "device": "mobile"
         },
         "widgets": {
@@ -188,7 +183,7 @@ export const database: TemplateItem[] = [
                     "margin": "0px",
                     "color": "black",
                     "backgroundOpacity": "100",
-                    "backgroundColor": "#FFFFFF00",
+                    "backgroundColor": "#FFFFFF",
                     "box-sizing": "border-box",
                     "position": "absolute",
                     "top":0,
@@ -270,8 +265,6 @@ export const database: TemplateItem[] = [
             "parentName": "Right Side Panel",
             "id": "right-side-panel-desktop",
             "name": "Right Side Panel Desktop",
-            "textDirection": "left",
-            "language": "en",
             "device": "desktop"
         },
         "widgets": {
@@ -387,10 +380,8 @@ export const database: TemplateItem[] = [
             "parentID": "map-with-legend",
             "parentName": "Map with legend",
             "id": "map-with-legend-desktop",
-            "name": "Map with legend Desktop",
-            "textDirection": "left",
-            "language": "en",
-            "device": "desktop"
+            "device": "desktop",
+            "name": "Map with legend Desktop"
         },
         "widgets": {
             "panel-template-0": {
@@ -426,7 +417,6 @@ export const database: TemplateItem[] = [
                     "margin": "0px",
                     "backgroundColor": "#0e1626CC",
                     "backgroundOpacity": "80",
-                    "borderWidth": "5px",
                     "borderStyle": "solid",
                     "borderColor": "#85b7b0",
                     "position": "absolute",
@@ -517,10 +507,8 @@ export const database: TemplateItem[] = [
             "parentID": "two-maps",
             "parentName": "Two Maps",
             "id": "two-maps-desktop",
-            "name": "Two Maps Desktop",
-            "textDirection": "left",
-            "language": "en",
-            "device": "desktop"
+            "device": "desktop",
+            "name": "Two Maps Desktop"
         },
         "widgets": {
             "panel-template-0": {
@@ -556,7 +544,6 @@ export const database: TemplateItem[] = [
                     "margin": "0px",
                     "backgroundColor": "#17263CF2",
                     "backgroundOpacity": "95",
-                    "borderWidth": "5px",
                     "borderStyle": "solid",
                     "borderColor": "#dfd2ae",
                     "position": "absolute",
@@ -581,7 +568,6 @@ export const database: TemplateItem[] = [
                     "margin": "0px",
                     "backgroundColor": "#DFD2AEF2",
                     "backgroundOpacity": "95",
-                    "borderWidth": "5px",
                     "borderStyle": "solid",
                     "borderColor": "#17263c",
                     "position": "absolute",
@@ -736,8 +722,6 @@ export const database: TemplateItem[] = [
             "parentName": "Four Maps",
             "id": "four-maps-desktop",
             "name": "Four Maps Desktop",
-            "textDirection": "left",
-            "language": "en",
             "device": "desktop"
         },
         "widgets": {

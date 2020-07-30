@@ -34,8 +34,8 @@ export enum AttributeType {
 export enum EventType {
   editing = 'editing',
   reordering = 'reordering',
-  importing = 'importing',
   adding = 'adding',
+  changingPalette = 'changingPalette',
   none = 'none',
 }
 
@@ -48,4 +48,13 @@ export enum DeviceType {
 export enum Layout {
   COLUMN = 'COLUMN',
   ROW = 'ROW',
+}
+
+export enum Palette {
+  light = 'light',
+  dark = 'dark',
+  night = 'night',
+  retro = 'retro',
+  silver = 'silver',
+  aubergine = 'aubergine',
 }

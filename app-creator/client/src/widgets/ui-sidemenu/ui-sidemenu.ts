@@ -11,6 +11,7 @@ import {
   query,
 } from 'lit-element';
 import { Panel } from '../ui-panel/ui-panel';
+import { styleMap } from 'lit-html/directives/style-map';
 import { classMap } from 'lit-html/directives/class-map';
 import { Layout } from '../../redux/types/enums';
 import '@polymer/paper-icon-button/paper-icon-button.js';
@@ -77,7 +78,7 @@ export class SideMenu extends LitElement {
   /**
    * Additional custom styles
    */
-  @property({ type: Object }) styles = {};
+  @property({ type: Object }) styles: { [key: string]: string } = {};
 
   /**
    * Sets editable property.
@@ -112,13 +113,13 @@ export class SideMenu extends LitElement {
 
   setStyle(style: { [key: string]: string }) {
     const filteredStyles = new Set(['position', 'top', 'left', 'width']);
-    if (this.panel != null) {
-      for (const attribute in style) {
-        if (!filteredStyles.has(attribute)) {
-          this.panel.style[attribute as any] = style[attribute];
-        }
+
+    for (const attr in style) {
+      if (!filteredStyles.has(attr)) {
+        this.styles[attr] = style[attr];
       }
     }
+
     this.requestUpdate();
   }
 
@@ -136,10 +137,10 @@ export class SideMenu extends LitElement {
   }
 
   render() {
-    const { toggleMenu, layout } = this;
+    const { toggleMenu, layout, styles } = this;
     return html`
       <div id="container">
-        <ui-panel>
+        <ui-panel style=${styleMap(styles)}>
           <slot class=${classMap({ [layout]: true })}></slot>
         </ui-panel>
         <paper-icon-button

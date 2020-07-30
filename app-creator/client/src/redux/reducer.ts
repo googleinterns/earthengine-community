@@ -10,7 +10,6 @@ import {
   RESET_DRAGGING_VALUES,
   SET_SELECTED_TAB,
   SET_REORDERING,
-  SET_IMPORTING,
   AppCreatorAction,
   ADD_WIDGET_META_DATA,
   REMOVE_WIDGET,
@@ -18,11 +17,14 @@ import {
   SET_SELECTED_TEMPLATE,
   UPDATE_WIDGET_CHILDREN,
   SET_SELECTED_TEMPLATE_ID,
+  SET_PALETTE,
+  SET_EVENT_TYPE,
 } from './types/actions';
 import { Reducer, AnyAction } from 'redux';
 import { UniqueAttributes } from './types/attributes';
-import { EventType, Tab } from './types/enums';
+import { EventType, Tab, Palette } from './types/enums';
 import { getWidgetType } from '../utils/helpers';
+import { palette } from '../utils/palettes';
 
 export interface WidgetMetaData {
   id: string;
@@ -91,6 +93,13 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
           ? Tab.attributes
           : state.selectedTab,
       };
+    case SET_PALETTE:
+      const templateCopy = { ...state.template };
+      applyPalette(templateCopy, action.payload.color);
+      return {
+        ...state,
+        template: templateCopy,
+      };
     case SET_SELECTED_TAB:
       return {
         ...state,
@@ -111,10 +120,12 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
         ...state,
         selectedTemplateID: action.payload.id,
       };
-    case SET_IMPORTING:
+    case SET_EVENT_TYPE:
       return {
         ...state,
-        eventType: action.payload.value ? EventType.importing : EventType.none,
+        eventType: action.payload.value
+          ? action.payload.eventType
+          : EventType.none,
       };
     case ADD_WIDGET_META_DATA:
       return {
@@ -234,6 +245,33 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
 };
 
 /**
+ * Sets new panel on template by overwritting background and color properties.
+ */
+function applyPalette(template: any, color: Palette) {
+  const widgets = template.widgets;
+  for (const widgetID in widgets) {
+    // Set the background color of panel elements. None panel elements start with a transparent background.
+    if (
+      widgetID.startsWith('panel') ||
+      widgetID.startsWith('button') ||
+      widgetID.startsWith('sidemenu')
+    ) {
+      widgets[widgetID].style.backgroundColor = palette[color].backgroundColor;
+    }
+
+    // Apply color property on none panel elements.
+    if (!widgetID.startsWith('panel')) {
+      widgets[widgetID].style.color = palette[color].color;
+    }
+
+    // Apply map styling.
+    if (widgetID.startsWith('map')) {
+      widgets[widgetID].uniqueAttributes.mapStyles = palette[color].map;
+    }
+  }
+}
+
+/**
  * Adds default styles to all widgets.
  */
 function addDefaultStyles(template: { [key: string]: any }) {
@@ -301,6 +339,7 @@ const DEFAULT_STYLES = {
   borderColor: 'black',
   fontSize: '12px',
   color: 'black',
+  backgroundColor: 'white',
   backgroundOpacity: '0',
   fontWeight: '300',
   fontFamily: 'Roboto',
