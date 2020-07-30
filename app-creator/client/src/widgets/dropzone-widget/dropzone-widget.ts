@@ -83,10 +83,9 @@ export class Dropzone extends LitElement {
   }
 
   /**
-   * Takes in an html element (usually a dropzone) and returns the children ids without the empty-notice.
+   * Return children IDs for a given dropzone.
    */
   getChildrenIds(): string[] {
-    // We slice the first child because it is always the empty notice.
     return Array.from(this.children).map((el) => {
       return el.firstElementChild!.id;
     });
@@ -131,16 +130,21 @@ export class Dropzone extends LitElement {
     const clone = widget.cloneNode(true) as HTMLElement;
     clone.id += `-${store.getState().widgetIDs[widget.id]}`;
 
-    // Return early if the widget has been added to another panel earlier.
-    const template = store.getState().template.widgets;
-    for (const id in template) {
+    // If a widget exists in another panel, remove it.
+    const widgets = store.getState().template.widgets;
+    for (const id in widgets) {
       if (
-        typeof template[id] === 'object' &&
-        !Array.isArray(template[id]) &&
+        typeof widgets[id] === 'object' &&
+        !Array.isArray(widgets[id]) &&
         id !== parent!.id &&
-        template[id].children.includes(clone.id)
+        widgets[id].children.includes(clone.id)
       ) {
-        return;
+        const widget = widgets[clone.id].widgetRef;
+        const draggable = widget.parentElement as DraggableWidget;
+        const dropzone = draggable.parentElement as Dropzone;
+        dropzone.removeChild(draggable);
+        const childrenIds = dropzone.getChildrenIds();
+        store.dispatch(updateWidgetChildren(id, childrenIds));
       }
     }
 

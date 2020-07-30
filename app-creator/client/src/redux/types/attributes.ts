@@ -77,11 +77,11 @@ export const sharedAttributes: AttributeMetaData = {
     type: InputType.text,
   },
   color: {
-    value: 'black',
+    value: '#000000',
     type: InputType.color,
   },
   backgroundColor: {
-    value: '#FFFFFF00',
+    value: '#FFFFFF',
     type: InputType.color,
   },
   backgroundOpacity: {

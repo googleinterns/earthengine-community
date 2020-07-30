@@ -10,7 +10,6 @@ import {
   RESET_DRAGGING_VALUES,
   SET_SELECTED_TAB,
   SET_REORDERING,
-  SET_IMPORTING,
   AppCreatorAction,
   ADD_WIDGET_META_DATA,
   REMOVE_WIDGET,
@@ -18,11 +17,18 @@ import {
   SET_SELECTED_TEMPLATE,
   UPDATE_WIDGET_CHILDREN,
   SET_SELECTED_TEMPLATE_ID,
+  SET_PALETTE,
+  SET_EVENT_TYPE,
 } from './types/actions';
 import { Reducer, AnyAction } from 'redux';
 import { UniqueAttributes } from './types/attributes';
-import { EventType, Tab } from './types/enums';
+import { EventType, Tab, PaletteNames } from './types/enums';
 import { getWidgetType } from '../utils/helpers';
+import {
+  Palette,
+  PalettePicker,
+} from '../widgets/palette-picker/palette-picker';
+import { EEWidget } from './types/types';
 
 export interface WidgetMetaData {
   id: string;
@@ -37,6 +43,7 @@ export interface AppCreatorStore {
   editingElement: Element | null;
   draggingElement: Element | null;
   selectedTemplateID: string;
+  selectedPalette: Palette;
   selectedTab: Tab;
   eventType: EventType;
   widgetIDs: { [key: string]: number };
@@ -51,6 +58,7 @@ const INITIAL_STATE: AppCreatorStore = {
   draggingElement: null,
   selectedTab: Tab.widgets,
   selectedTemplateID: '',
+  selectedPalette: PalettePicker.palette[PaletteNames.light],
   eventType: EventType.none,
   widgetIDs: {
     label: 0,
@@ -91,6 +99,15 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
           ? Tab.attributes
           : state.selectedTab,
       };
+    case SET_PALETTE:
+      const templateWithPalette = Object.assign({}, state.template);
+      applyPalette(templateWithPalette.widgets, action.payload.palette);
+      return {
+        ...state,
+        selectedPalette:
+          PalettePicker.palette[action.payload.palette as PaletteNames],
+        template: templateWithPalette,
+      };
     case SET_SELECTED_TAB:
       return {
         ...state,
@@ -111,19 +128,24 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
         ...state,
         selectedTemplateID: action.payload.id,
       };
-    case SET_IMPORTING:
+    case SET_EVENT_TYPE:
       return {
         ...state,
-        eventType: action.payload.value ? EventType.importing : EventType.none,
+        eventType: action.payload.value
+          ? action.payload.eventType
+          : EventType.none,
       };
     case ADD_WIDGET_META_DATA:
+      const widgetWithPalette = Object.assign({}, action.payload);
+      applyPalette(widgetWithPalette, state.selectedPalette.name);
+
       return {
         ...state,
         template: {
           ...state.template,
           widgets: {
             ...state.template.widgets,
-            ...action.payload,
+            ...widgetWithPalette,
           },
         },
       };
@@ -166,6 +188,7 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
       );
 
       widgetRef.setStyle(updatedTemplate.widgets[id].style);
+
       updateUI(widgetRef, updatedTemplate);
 
       return {
@@ -203,8 +226,14 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
       };
     case SET_SELECTED_TEMPLATE:
       addDefaultStyles(action.payload.template);
+      applyPalette(action.payload.template.widgets, state.selectedPalette.name);
       return {
         ...INITIAL_STATE,
+        widgetIDs:
+          state.eventType === EventType.changingPalette
+            ? state.widgetIDs
+            : INITIAL_STATE.widgetIDs,
+        selectedPalette: state.selectedPalette,
         selectedTemplateID: state.selectedTemplateID,
         selectedTab: state.selectedTab,
         template: action.payload.template,
@@ -232,6 +261,45 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
       return state;
   }
 };
+
+/**
+ * Takes in a template object and applies a selected color palette to it.
+ */
+export function applyPalette(
+  widgets: { [id: string]: WidgetMetaData },
+  color: PaletteNames
+) {
+  for (const widgetId in widgets) {
+    // Set the background color of panel elements. Non-panel elements start with a transparent background.
+    if (widgetId.startsWith('panel') || widgetId.startsWith('sidemenu')) {
+      widgets[widgetId].style.backgroundColor =
+        PalettePicker.palette[color].backgroundColor;
+      widgets[widgetId].style.backgroundOpacity = '100';
+    } else if (widgetId.startsWith('map')) {
+      // Apply map styling.
+      widgets[widgetId].uniqueAttributes.mapStyles =
+        PalettePicker.palette[color].map;
+    } else if (
+      !widgetId.startsWith('panel') &&
+      !widgetId.startsWith('button')
+    ) {
+      // Apply color property on non-panel elements.
+      widgets[widgetId].style.color = PalettePicker.palette[color].color;
+      // Setting transparent background.
+      widgets[widgetId].style.backgroundColor = '#FFFFFF00';
+    } else if (widgetId.startsWith('button')) {
+      // Apply styles for button elements.
+      widgets[widgetId].style.backgroundColor =
+        PalettePicker.palette[color].color;
+      widgets[widgetId].style.color =
+        PalettePicker.palette[color].backgroundColor;
+      widgets[widgetId].style.backgroundOpacity = '100';
+    }
+    (widgets[widgetId].widgetRef as EEWidget)?.setStyle(
+      widgets[widgetId].style
+    );
+  }
+}
 
 /**
  * Adds default styles to all widgets.
@@ -298,9 +366,10 @@ const DEFAULT_STYLES = {
   margin: '8px',
   borderWidth: '0px',
   borderStyle: 'solid',
-  borderColor: 'black',
+  borderColor: '#000000',
   fontSize: '12px',
-  color: 'black',
+  color: '#000000',
+  backgroundColor: '#FFFFFF',
   backgroundOpacity: '0',
   fontWeight: '300',
   fontFamily: 'Roboto',

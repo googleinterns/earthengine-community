@@ -4,7 +4,6 @@
 import { LitElement, html, customElement, css, property } from 'lit-element';
 import { nothing } from 'lit-html';
 import { noop } from '../../utils/helpers';
-import { store } from '../../redux/store';
 import '@polymer/paper-card/paper-card.js';
 import '@polymer/paper-button/paper-button.js';
 
@@ -70,8 +69,7 @@ export class TemplateCard extends LitElement {
   @property({ type: Boolean }) showTitle = false;
 
   render() {
-    const { id, imageUrl, title, showTitle, onSelection } = this;
-    const selected = store.getState().template.config?.parentID === id;
+    const { imageUrl, title, showTitle, selected, onSelection } = this;
     const buttonLabel = selected ? 'Selected' : 'Select';
 
     const titleMarkup = showTitle ? html`<h4>${title}</h4>` : nothing;

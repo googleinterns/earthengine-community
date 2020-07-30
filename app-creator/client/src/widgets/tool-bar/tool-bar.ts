@@ -4,17 +4,17 @@
  *  displaying a serialized template string that the user can copy
  *  and import into the code editor.
  */
-import '@polymer/paper-button/paper-button.js';
-import '@polymer/paper-dialog/paper-dialog.js';
-import '@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js';
-import '@polymer/paper-toast/paper-toast.js';
 import { LitElement, html, customElement, css, query } from 'lit-element';
 import { store } from '../../redux/store';
 import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog.js';
 import { AppCreatorStore } from '../../redux/reducer';
 import { WIDGET_REF, ROOT_ID } from '../../utils/constants';
-import { setSelectedTemplate, setImporting } from '../../redux/actions';
+import { setSelectedTemplate } from '../../redux/actions';
 import { PaperToastElement } from '@polymer/paper-toast/paper-toast.js';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-dialog/paper-dialog.js';
+import '@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js';
+import '@polymer/paper-toast/paper-toast.js';
 
 @customElement('tool-bar')
 export class ToolBar extends LitElement {
@@ -233,7 +233,6 @@ export class ToolBar extends LitElement {
 
       // Update the store with the new template.
       store.dispatch(setSelectedTemplate(templateJSON));
-      store.dispatch(setImporting(true));
 
       this.importDialog.close();
 
@@ -249,6 +248,7 @@ export class ToolBar extends LitElement {
     }
   }
 
+  // Empties text area input.
   clearTextArea(id: string) {
     const textarea = this.shadowRoot?.querySelector(
       `#${id}`

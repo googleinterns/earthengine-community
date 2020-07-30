@@ -46,3 +46,12 @@ export const chips = [
     device: DeviceType.mobile,
   },
 ];
+
+/*
+ * Generates random ids with length 32.
+ */
+export function generateRandomId() {
+  return [...Array(32)]
+    .map((_) => (~~(Math.random() * 36)).toString(36))
+    .join('');
+}
