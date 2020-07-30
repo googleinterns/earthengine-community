@@ -12,6 +12,7 @@ import '@polymer/paper-progress/paper-progress.js';
 import '@polymer/paper-toast/paper-toast.js';
 import '@cwmr/paper-chip/paper-chip.js';
 import './template-wizard/template-wizard';
+import './scratch-panel/scratch-panel';
 
 @customElement('app-root')
 export class AppRoot extends LitElement {
@@ -53,6 +54,7 @@ export class AppRoot extends LitElement {
           <div id="storyboard-container">
             <story-board id="storyboard"></story-board>
           </div>
+          <scratch-panel></scratch-panel>
           <template-wizard></template-wizard>
         </div>
       </div>

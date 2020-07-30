@@ -120,6 +120,7 @@ export class Storyboard extends connect(store)(LitElement) {
       position: absolute;
       top: -36px;
       right: 0px;
+      margin: var(--tight) 0px;
     }
 
     #select-palette {

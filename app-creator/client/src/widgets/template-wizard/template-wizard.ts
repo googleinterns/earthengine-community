@@ -238,14 +238,14 @@ export class TemplateWizard extends LitElement {
   /**
    * ID of the currently selected template.
    */
-  @property({ type: String }) selectedTemplateID = '';
+  @property({ type: String }) selectedTemplateID = 'left-side-panel';
 
   /**
    * Configuration object that stores metadata about a template.
    */
   @property({ type: Object }) config: { [key: string]: string } = {
     id: generateRandomId(),
-    name: '',
+    name: 'test app',
     palette: Palette.light,
   };
 
