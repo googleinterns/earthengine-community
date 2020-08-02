@@ -54,7 +54,7 @@ export class AppRoot extends LitElement {
           <div id="storyboard-container">
             <story-board id="storyboard"></story-board>
           </div>
-          <scratch-panel></scratch-panel>
+          <!-- <scratch-panel></scratch-panel> -->
           <template-wizard></template-wizard>
         </div>
       </div>

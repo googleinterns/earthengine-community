@@ -1,4 +1,6 @@
 import { DeviceType } from '../redux/types/enums';
+import { AppCreatorStore } from '../redux/reducer';
+import { WIDGET_REF } from './constants';
 
 /**
  * Converts camel case to title case.
@@ -54,4 +56,32 @@ export function generateRandomId() {
   return [...Array(32)]
     .map((_) => (~~(Math.random() * 36)).toString(36))
     .join('');
+}
+
+/**
+ * Returns a deep clone of template without widgetRefs.
+ */
+export function deepCloneTemplate(
+  template: AppCreatorStore['template']
+): AppCreatorStore['template'] {
+  const clone: AppCreatorStore['template'] = {};
+  for (const key in template) {
+    /**
+     * Widget refs are only needed in the context of the app creator. Once we serialize the data,
+     * we no longer need to keep the refs. As a result, we skip over them when we are producing the
+     * output string.
+     */
+    if (key === WIDGET_REF) {
+      continue;
+    }
+    if (typeof template[key] === 'object' && !Array.isArray(template[key])) {
+      clone[key] = deepCloneTemplate(template[key]);
+    } else if (Array.isArray(template[key])) {
+      clone[key] = template[key].slice();
+    } else {
+      clone[key] = template[key];
+    }
+  }
+
+  return clone;
 }

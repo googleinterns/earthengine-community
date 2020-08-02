@@ -124,7 +124,9 @@ export const setPalette = (color: Palette): SetPalette => {
  */
 export const addWidgetMetaData = (
   id: string,
-  widget: Element
+  widget: Element,
+  uniqueAttributes?: UniqueAttributes,
+  style?: { [key: string]: string }
 ): AddWidgetMetaData => {
   return {
     type: ADD_WIDGET_META_DATA,
@@ -133,10 +135,10 @@ export const addWidgetMetaData = (
         id,
         widgetRef: widget as HTMLElement,
         children: [],
-        uniqueAttributes: {
+        uniqueAttributes: uniqueAttributes ?? {
           ...getUniqueAttributes(getWidgetType(id)),
         },
-        style: { ...DEFAULT_SHARED_ATTRIBUTES },
+        style: style ?? { ...DEFAULT_SHARED_ATTRIBUTES },
       },
     },
   };
