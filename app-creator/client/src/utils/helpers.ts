@@ -1,6 +1,7 @@
 import { DeviceType } from '../redux/types/enums';
 import { AppCreatorStore } from '../redux/reducer';
 import { WIDGET_REF } from './constants';
+import { store } from '../redux/store';
 
 /**
  * Converts camel case to title case.
@@ -84,4 +85,22 @@ export function deepCloneTemplate(
   }
 
   return clone;
+}
+
+/**
+ * Takes a snapshot of the current template and stores it in localStorage.
+ */
+export function storeTemplateInLocalStorage() {
+  try {
+    /**
+     * Saving current template string in localStorage so we can transfer data across.
+     * */
+    const currentTemplate = JSON.stringify(
+      deepCloneTemplate(store.getState().template)
+    );
+
+    localStorage.setItem('previousTemplate', currentTemplate);
+  } catch (e) {
+    throw e;
+  }
 }

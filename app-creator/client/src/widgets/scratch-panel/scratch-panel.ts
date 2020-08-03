@@ -42,9 +42,9 @@ export class ScratchPanel extends LitElement {
 
     paper-tabs {
       border-bottom: var(--light-border);
+      height: 40px;
       --iron-icon-height: 18px;
       --iron-icon-width: 18px;
-      height: 40px;
     }
   `;
 
@@ -71,8 +71,8 @@ export class ScratchPanel extends LitElement {
     return html`
       <div id="container">
         <div id="panel">
-          <paper-tabs noink>
-            <paper-tab>
+          <paper-tabs disabled noink>
+            <paper-tab disabled>
               <iron-icon icon="icons:select-all"></iron-icon>
             </paper-tab>
           </paper-tabs>
@@ -81,7 +81,6 @@ export class ScratchPanel extends LitElement {
             id="toggle-side-panel"
             icon="icons:chevron-right"
           ></iron-icon>
-
           <tab-container title="Shared Widgets">
             <dropzone-widget></dropzone-widget>
           </tab-container>

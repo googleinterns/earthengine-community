@@ -5,12 +5,18 @@
 import { AppCreatorStore, WidgetMetaData } from '../redux/reducer';
 import { ROOT_ID } from './constants';
 import { store } from '../redux/store';
-import { setSelectedTemplate } from '../redux/actions';
+import {
+  setSelectedTemplate,
+  addWidgetMetaData,
+  updateWidgetChildren,
+  setEventType,
+  updateWidgetIDs,
+} from '../redux/actions';
 import { Dropzone } from '../widgets/dropzone-widget/dropzone-widget';
 import { DraggableWidget } from '../widgets/draggable-widget/draggable-widget';
 import { getWidgetType } from './helpers';
 import { EEWidget } from '../redux/types/types';
-import { WidgetType } from '../redux/types/enums';
+import { WidgetType, EventType } from '../redux/types/enums';
 import { Panel } from '../widgets/ui-panel/ui-panel';
 import { Map } from '../widgets/ui-map/ui-map';
 import { SideMenu } from '../widgets/ui-sidemenu/ui-sidemenu';
@@ -24,7 +30,6 @@ export function generateUI(
   node: HTMLElement
 ) {
   const templateCopy = Object.assign({}, template);
-
   // Recursively creates ui widgets and returns the root of the tree.
   function getWidgetTree(widgetData: WidgetMetaData): HTMLElement {
     const { id, children } = widgetData;
@@ -134,4 +139,95 @@ export function getWidgetElement({
   }
 
   return { element, dropzone, map, draggable };
+}
+
+/**
+ * Retrieves previous template from store and populates user added widgets.
+ */
+export function transferData() {
+  try {
+    const template = localStorage.getItem('previousTemplate');
+
+    if (template) {
+      const templateJSON = JSON.parse(template);
+      const widgets = templateJSON.widgets;
+      const panelIDs = [];
+
+      // Get all panels that are not the root and that exist in the new and old template.
+      for (const widgetID in widgets) {
+        if (
+          widgetID !== ROOT_ID &&
+          (widgetID.startsWith('panel') || widgetID.startsWith('sidemenu')) &&
+          store.getState().template.widgets.hasOwnProperty(widgetID)
+        ) {
+          panelIDs.push(widgetID);
+        }
+      }
+
+      /**
+       * Populating store with widgets that share the same IDs.
+       */
+      for (const panelID of panelIDs) {
+        for (const child of widgets[panelID].children) {
+          const childMetaData: WidgetMetaData = widgets[child];
+          const { id, uniqueAttributes, style } = childMetaData;
+
+          const { element } = getWidgetElement(childMetaData);
+          store.dispatch(
+            addWidgetMetaData(id, element, uniqueAttributes, style)
+          );
+
+          store.dispatch(
+            updateWidgetChildren(panelID, [
+              ...store.getState().template.widgets[panelID].children,
+              id,
+            ])
+          );
+        }
+      }
+
+      /**
+       * Getting remainding widgets that have not been added.
+       */
+      const remainingWidgetIDs: string[] = [];
+      for (const id in widgets) {
+        if (
+          !id.startsWith('panel') &&
+          !id.startsWith('sidemenu') &&
+          !(id in store.getState().template.widgets)
+        ) {
+          remainingWidgetIDs.push(id);
+        }
+      }
+
+      store.dispatch(setEventType(EventType.changingTemplate, true));
+    }
+  } catch (e) {
+    throw e;
+  }
+}
+
+/**
+ * Updates widget IDs. Since we pre-populate the template by widgets from the previous template,
+ * we need to increment the widget IDs in our store to match the new widgets.
+ */
+export function incrementWidgetIDs(widgets: { [key: string]: WidgetMetaData }) {
+  const updatedIDs: AppCreatorStore['widgetIDs'] = {};
+  for (const key in store.getState().widgetIDs) {
+    let largest = -Infinity;
+    for (const widgetID in widgets) {
+      const type = getWidgetType(widgetID);
+      if (type === key) {
+        const idCount = parseInt(widgetID.slice(widgetID.lastIndexOf('-') + 1));
+        largest = Math.max(largest, idCount);
+      }
+    }
+    if (largest !== -Infinity) {
+      updatedIDs[key] = largest + 1;
+    }
+  }
+
+  store.dispatch(updateWidgetIDs(updatedIDs));
+
+  localStorage.removeItem('previousTemplate');
 }

@@ -12,21 +12,18 @@ import {
 import { nothing, TemplateResult } from 'lit-html';
 import { onSearchEvent } from '../search-bar/search-bar';
 import { store } from '../../redux/store';
-import {
-  setSelectedTemplate,
-  updateWidgetMetaData,
-  addWidgetMetaData,
-  updateWidgetChildren,
-  setEventType,
-} from '../../redux/actions';
+import { setSelectedTemplate } from '../../redux/actions';
 import { templatesManager } from '../../data/templates';
 import { connect } from 'pwa-helpers';
-import { AppCreatorStore, WidgetMetaData } from '../../redux/reducer';
-import { DeviceType, EventType } from '../../redux/types/enums';
+import { AppCreatorStore } from '../../redux/reducer';
+import { DeviceType } from '../../redux/types/enums';
 import { classMap } from 'lit-html/directives/class-map';
-import { chips, deepCloneTemplate } from '../../utils/helpers';
+import { chips, storeTemplateInLocalStorage } from '../../utils/helpers';
+import { PaperDialogElement } from '@polymer/paper-dialog';
+import { transferData } from '../../utils/template-generation';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/iron-icon/iron-icon.js';
+import '@cwmr/paper-chip/paper-chip.js';
 import '../tab-container/tab-container';
 import '../draggable-widget/draggable-widget';
 import '../ui-label/ui-label';
@@ -40,10 +37,6 @@ import '../ui-chart/ui-chart';
 import '../search-bar/search-bar';
 import '../empty-notice/empty-notice';
 import '../template-card/template-card';
-import '@cwmr/paper-chip/paper-chip.js';
-import { PaperDialogElement } from '@polymer/paper-dialog';
-import { ROOT_ID } from '../../utils/constants';
-import { getWidgetElement } from '../../utils/template-generation';
 
 export interface TemplatesTabItem {
   id: string;
@@ -213,17 +206,13 @@ export class TemplatesTab extends connect(store)(LitElement) {
 
     if (template) {
       try {
-        // Saving current template string in localStorage so we can transfer data across.
-        const currentTemplate = JSON.stringify(
-          deepCloneTemplate(store.getState().template)
-        );
-        localStorage.setItem('previousTemplate', currentTemplate);
+        storeTemplateInLocalStorage();
 
         // Replace the redux store with the new template and trigger a re-render.
         const templateJSON = JSON.parse(template);
         store.dispatch(setSelectedTemplate(templateJSON));
 
-        this.transferData();
+        transferData();
       } catch (e) {
         console.error(e);
       }
@@ -234,58 +223,6 @@ export class TemplatesTab extends connect(store)(LitElement) {
     }
 
     this.requestUpdate();
-  }
-
-  /**
-   * Retrieves previous template from store and populates user added widgets.
-   */
-  transferData() {
-    try {
-      const template = localStorage.getItem('previousTemplate');
-
-      if (template) {
-        const widgets = JSON.parse(template).widgets;
-        const panelIDs = [];
-
-        // Get all panels that are not the root and that exists in the new and old template.
-        for (const widgetID in widgets) {
-          if (
-            widgetID !== ROOT_ID &&
-            (widgetID.startsWith('panel') || widgetID.startsWith('sidemenu')) &&
-            store.getState().template.widgets.hasOwnProperty(widgetID)
-          ) {
-            panelIDs.push(widgetID);
-          }
-        }
-
-        /**
-         * Populating store with widgets that share the same IDs.
-         */
-        for (const panelID of panelIDs) {
-          for (const child of widgets[panelID].children) {
-            const childMetaData: WidgetMetaData = widgets[child];
-            const { id, uniqueAttributes, style } = childMetaData;
-
-            const { element } = getWidgetElement(childMetaData);
-            const newID = id.split('-').join('-template-');
-            store.dispatch(
-              addWidgetMetaData(newID, element, uniqueAttributes, style)
-            );
-
-            store.dispatch(
-              updateWidgetChildren(panelID, [
-                ...store.getState().template.widgets[panelID].children,
-                newID,
-              ])
-            );
-          }
-        }
-
-        store.dispatch(setEventType(EventType.changingPalette, true));
-      }
-    } catch (e) {
-      throw e;
-    }
   }
 
   render() {

@@ -19,10 +19,11 @@ import { TemplatesTabItem, TemplatesTab } from '../templates-tab/templates-tab';
 import { onSearchEvent } from '../search-bar/search-bar';
 import { generateRandomId } from '../../utils/helpers';
 import { palette } from '../../utils/palettes';
-import '@polymer/paper-progress/paper-progress';
-import '@cwmr/paper-chip/paper-chip.js';
 import { store } from '../../redux/store';
 import { setSelectedTemplate } from '../../redux/actions';
+import { transferData } from '../../utils/template-generation';
+import '@polymer/paper-progress/paper-progress';
+import '@cwmr/paper-chip/paper-chip.js';
 
 @customElement('template-wizard')
 export class TemplateWizard extends LitElement {
@@ -448,6 +449,8 @@ export class TemplateWizard extends LitElement {
 
         // Set new template in store.
         store.dispatch(setSelectedTemplate(templateJSON));
+
+        transferData();
 
         // Close dialog.
         const { dialog } = this;

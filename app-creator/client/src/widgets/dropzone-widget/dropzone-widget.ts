@@ -3,9 +3,7 @@
  */
 import { css, customElement, html, LitElement, property } from 'lit-element';
 import { styleMap } from 'lit-html/directives/style-map';
-import '@polymer/iron-icon/iron-icon.js';
 import { DraggableWidget } from '../draggable-widget/draggable-widget';
-import '../empty-notice/empty-notice';
 import { EMPTY_NOTICE_ID } from '../empty-notice/empty-notice';
 import { store } from '../../redux/store';
 import {
@@ -16,6 +14,8 @@ import {
   updateWidgetChildren,
 } from '../../redux/actions';
 import { EventType } from '../../redux/types/enums';
+import '@polymer/iron-icon/iron-icon.js';
+import '../empty-notice/empty-notice';
 
 export const CONTAINER_ID = 'container';
 

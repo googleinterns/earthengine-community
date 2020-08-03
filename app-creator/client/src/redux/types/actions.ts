@@ -19,6 +19,7 @@ export const UPDATE_WIDGET_CHILDREN = 'UPDATE_WIDGET_CHILDREN';
 export const SET_SELECTED_TEMPLATE_ID = 'SET_SELECTED_TEMPLATE_ID';
 export const SET_PALETTE = 'SET_PALETTE';
 export const SET_EVENT_TYPE = 'SET_EVENT_TYPE';
+export const UPDATE_WIDGET_IDS = 'UPDATE_WIDGET_IDS';
 
 export interface UpdateWidgetChildren {
   type: typeof UPDATE_WIDGET_CHILDREN;
@@ -33,6 +34,13 @@ export interface RemoveWidget {
   payload: {
     id: string;
     reordering: boolean;
+  };
+}
+
+export interface UpdateWidgetIDs {
+  type: typeof UPDATE_WIDGET_IDS;
+  payload: {
+    updatedIDs: AppCreatorStore['widgetIDs'];
   };
 }
 

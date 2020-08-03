@@ -16,7 +16,10 @@ import { DeviceType, EventType, Palette } from '../../redux/types/enums';
 import { store } from '../../redux/store';
 import { AppCreatorStore } from '../../redux/reducer';
 import { PaperCardElement } from '@polymer/paper-card/paper-card.js';
-import { generateUI } from '../../utils/template-generation';
+import {
+  generateUI,
+  incrementWidgetIDs,
+} from '../../utils/template-generation';
 import {
   setSelectedTemplateID,
   setEventType,
@@ -185,16 +188,27 @@ export class Storyboard extends connect(store)(LitElement) {
       this.clearSelectedPalette();
 
       this.renderNewTemplate(template);
-    }
-
-    /**
-     * We want to Re-render the storyboard when we switch the template color palette.
-     * We do this by checking if the changingPalette event has been emitted.
-     */
-    if (state.eventType === EventType.changingPalette) {
+    } else if (
+      /**
+       * We want to Re-render the storyboard when we switch the template color palette.
+       * We do this by checking if the changingPalette event has been emitted.
+       */
+      state.eventType === EventType.changingPalette ||
+      state.eventType === EventType.changingTemplate
+    ) {
       store.dispatch(setEventType(EventType.none, true));
 
       this.renderNewTemplate(template);
+
+      try {
+        const template = localStorage.getItem('previousTemplate');
+        if (template) {
+          const widgets = JSON.parse(template).widgets;
+          incrementWidgetIDs(widgets);
+        }
+      } catch (e) {
+        console.error(e);
+      }
     }
   }
 

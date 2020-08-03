@@ -19,6 +19,7 @@ import {
   SET_SELECTED_TEMPLATE_ID,
   SET_PALETTE,
   SET_EVENT_TYPE,
+  UPDATE_WIDGET_IDS,
 } from './types/actions';
 import { Reducer, AnyAction } from 'redux';
 import { UniqueAttributes } from './types/attributes';
@@ -119,6 +120,14 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
       return {
         ...state,
         selectedTemplateID: action.payload.id,
+      };
+    case UPDATE_WIDGET_IDS:
+      return {
+        ...state,
+        widgetIDs: {
+          ...state.widgetIDs,
+          ...action.payload.updatedIDs,
+        },
       };
     case SET_EVENT_TYPE:
       return {

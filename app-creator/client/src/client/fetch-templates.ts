@@ -112,7 +112,7 @@ export const database: TemplateItem[] = [
                 "id": "panel-template-0",
                 "editable": false,
                 "hasDropzone": false,
-                "children": ["map-template-0", "sidemenu-template-0"],
+                "children": ["map-template-0", "sidemenu-template-1"],
                 "uniqueAttributes": {
                     "layout": "row"
                 },
@@ -126,8 +126,8 @@ export const database: TemplateItem[] = [
                     "box-sizing": "border-box"
                 }
             },
-            "sidemenu-template-0": {
-                "id": "sidemenu-template-0",
+            "sidemenu-template-1": {
+                "id": "sidemenu-template-1",
                 "editable": true,
                 "hasDropzone": true,
                 "children": [],
@@ -482,7 +482,7 @@ export const database: TemplateItem[] = [
                 "id": "panel-template-0",
                 "editable": false,
                 "hasDropzone": false,
-                "children": ["panel-template-1", "panel-template-2"],
+                "children": ["panel-layout-1", "panel-layout-2"],
                 "uniqueAttributes": {
                     "layout": "column"
                 },
@@ -496,8 +496,8 @@ export const database: TemplateItem[] = [
                     "boxSizing": "border-box"
                 }
             },
-            "panel-template-1": {
-                "id": "panel-template-1",
+            "panel-layout-1": {
+                "id": "panel-layout-1",
                 "editable": true,
                 "hasDropzone": true,
                 "children": [],
@@ -514,11 +514,11 @@ export const database: TemplateItem[] = [
                     "boxSizing": "border-box"
                 }
             },
-            "panel-template-2": {
-                "id": "panel-template-2",
+            "panel-layout-2": {
+                "id": "panel-layout-2",
                 "editable": false,
                 "hasDropzone": false,
-                "children": ["panel-template-3", "panel-template-4"],
+                "children": ["panel-layout-3", "panel-layout-4"],
                 "uniqueAttributes": {
                     "layout": "column"
                 },
@@ -531,8 +531,8 @@ export const database: TemplateItem[] = [
                     "boxSizing": "border-box"
                 }
             },
-            "panel-template-3": {
-                "id": "panel-template-3",
+            "panel-layout-3": {
+                "id": "panel-layout-3",
                 "editable": false,
                 "hasDropzone": false,
                 "children": ["map-template-0", "map-template-1"],
@@ -550,7 +550,7 @@ export const database: TemplateItem[] = [
             },
             "map-template-0": {
                 "id": "map-template-0",
-                "children": ["panel-template-5"],
+                "children": ["panel-template-1"],
                 "uniqueAttributes": {
                     "zoom": "10",
                     "latitude": "37.419857",
@@ -573,7 +573,7 @@ export const database: TemplateItem[] = [
             },
             "map-template-1": {
                 "id": "map-template-1",
-                "children": ["panel-template-6"],
+                "children": ["panel-template-2"],
                 "uniqueAttributes": {
                     "zoom": "10",
                     "latitude": "37.419857",
@@ -594,8 +594,8 @@ export const database: TemplateItem[] = [
                     "boxSizing": "border-box"
                 }
             },
-            "panel-template-4": {
-                "id": "panel-template-4",
+            "panel-layout-4": {
+                "id": "panel-layout-4",
                 "editable": false,
                 "hasDropzone": false,
                 "children": ["map-template-2", "map-template-3"],
@@ -613,7 +613,7 @@ export const database: TemplateItem[] = [
             },
             "map-template-2": {
                 "id": "map-template-2",
-                "children": ["panel-template-7"],
+                "children": ["panel-template-3"],
                 "uniqueAttributes": {
                     "zoom": "10",
                     "latitude": "37.419857",
@@ -636,7 +636,7 @@ export const database: TemplateItem[] = [
             },
             "map-template-3": {
                 "id": "map-template-3",
-                "children": ["panel-template-8"],
+                "children": ["panel-template-4"],
                 "uniqueAttributes": {
                     "zoom": "10",
                     "latitude": "37.419857",
@@ -657,8 +657,8 @@ export const database: TemplateItem[] = [
                     "boxSizing": "border-box"
                 }
             },
-            "panel-template-5": {
-                "id": "panel-template-5",
+            "panel-template-1": {
+                "id": "panel-template-1",
                 "editable": true,
                 "hasDropzone": true,
                 "children": [],
@@ -678,8 +678,8 @@ export const database: TemplateItem[] = [
                     "zIndex": "1"
                 }
             },
-            "panel-template-6": {
-                "id": "panel-template-6",
+            "panel-template-2": {
+                "id": "panel-template-2",
                 "editable": true,
                 "hasDropzone": true,
                 "children": [],
@@ -699,8 +699,8 @@ export const database: TemplateItem[] = [
                     "zIndex": "1"
                 }
             },
-            "panel-template-7": {
-                "id": "panel-template-7",
+            "panel-template-3": {
+                "id": "panel-template-3",
                 "editable": true,
                 "hasDropzone": true,
                 "children": [],
@@ -720,8 +720,8 @@ export const database: TemplateItem[] = [
                     "zIndex": "1"
                 }
             },
-            "panel-template-8": {
-                "id": "panel-template-8",
+            "panel-template-4": {
+                "id": "panel-template-4",
                 "editable": true,
                 "hasDropzone": true,
                 "children": [],

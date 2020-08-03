@@ -32,6 +32,8 @@ import {
   SET_PALETTE,
   SetEventType,
   SET_EVENT_TYPE,
+  UpdateWidgetIDs,
+  UPDATE_WIDGET_IDS,
 } from './types/actions';
 import {
   DEFAULT_SHARED_ATTRIBUTES,
@@ -103,6 +105,20 @@ export const removeWidgetMetaData = (
     payload: {
       id,
       reordering,
+    },
+  };
+};
+
+/**
+ * Updates widget IDs with new values. This is used after a template change to prevent id conflicts.
+ */
+export const updateWidgetIDs = (
+  updatedIDs: AppCreatorStore['widgetIDs']
+): UpdateWidgetIDs => {
+  return {
+    type: UPDATE_WIDGET_IDS,
+    payload: {
+      updatedIDs,
     },
   };
 };

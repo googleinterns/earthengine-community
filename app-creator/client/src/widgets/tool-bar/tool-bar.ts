@@ -7,15 +7,18 @@
 import { LitElement, html, customElement, css, query } from 'lit-element';
 import { store } from '../../redux/store';
 import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog.js';
-import { AppCreatorStore } from '../../redux/reducer';
-import { WIDGET_REF, ROOT_ID } from '../../utils/constants';
+import { ROOT_ID } from '../../utils/constants';
 import { setSelectedTemplate } from '../../redux/actions';
 import { PaperToastElement } from '@polymer/paper-toast/paper-toast.js';
+import {
+  deepCloneTemplate,
+  storeTemplateInLocalStorage,
+} from '../../utils/helpers';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-dialog/paper-dialog.js';
 import '@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js';
 import '@polymer/paper-toast/paper-toast.js';
-import { deepCloneTemplate } from '../../utils/helpers';
+import { incrementWidgetIDs } from '../../utils/template-generation';
 
 @customElement('tool-bar')
 export class ToolBar extends LitElement {
@@ -212,6 +215,8 @@ export class ToolBar extends LitElement {
       // Update the store with the new template.
       store.dispatch(setSelectedTemplate(templateJSON));
 
+      incrementWidgetIDs(templateJSON.widgets);
+
       this.importDialog.close();
 
       this.clearTextArea('import-textarea');
@@ -239,12 +244,28 @@ export class ToolBar extends LitElement {
     textarea.value = '';
   }
 
+  /**
+   * Callback triggered when duplicate button is clicked.
+   */
+  handleDuplicateButtonAction() {
+    try {
+      storeTemplateInLocalStorage();
+
+      let url = location.href;
+
+      window.open(url);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   render() {
     const {
       openExportDialog,
       openImportDialog,
       importTemplate,
       clearTextArea,
+      handleDuplicateButtonAction,
       copy,
     } = this;
 
@@ -302,7 +323,7 @@ export class ToolBar extends LitElement {
         </h3>
 
         <div>
-          <paper-button id="import-button" @click=${openImportDialog}
+          <paper-button id="import-button" @click=${handleDuplicateButtonAction}
             >Duplicate</paper-button
           >
           <paper-button id="import-button" @click=${openImportDialog}
