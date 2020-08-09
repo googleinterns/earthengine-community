@@ -440,6 +440,7 @@ export const database: TemplateItem[] = [
                     "boxSizing": "border-box"
                 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
             },
             "label-template-0": {
@@ -795,6 +796,8 @@ export const database: TemplateItem[] = [
                    "shown": "true"
                 }
 >>>>>>> added tests for redux helpers
+=======
+>>>>>>> added duplication and widget sharing
             }
         }
     }`,
