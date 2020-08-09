@@ -192,7 +192,7 @@ export class AttributesTab extends connect(store)(LitElement) {
       ? store.getState().editingElement
       : null;
 
-  openTooltipBy(e: Event, key: string) {
+  private openTooltipBy(e: Event, key: string) {
     const tooltip = this.shadowRoot?.getElementById(
       key + '-tooltip'
     ) as PaperDialogElement;
@@ -202,7 +202,7 @@ export class AttributesTab extends connect(store)(LitElement) {
     }
   }
 
-  getInputHeader(key: string, title: string, tooltip?: Tooltip) {
+  private getInputHeader(key: string, title: string, tooltip?: Tooltip) {
     const tooltipMarkup =
       tooltip == null
         ? nothing
@@ -238,7 +238,7 @@ export class AttributesTab extends connect(store)(LitElement) {
     `;
   }
 
-  handleInputKeyup(
+  private handleInputKeyup(
     e: Event,
     dispatcher: (value: string) => void,
     validator?: AttributeMetaData['key']['validator']
@@ -258,7 +258,7 @@ export class AttributesTab extends connect(store)(LitElement) {
     }
   }
 
-  getTextInput(
+  private getTextInput(
     key: string,
     title: string,
     value: string,
@@ -290,7 +290,7 @@ export class AttributesTab extends connect(store)(LitElement) {
     `;
   }
 
-  handleTextAreaKeyup(
+  private handleTextAreaKeyup(
     e: Event,
     dispatcher: (value: string) => void,
     validator?: Function
@@ -308,7 +308,7 @@ export class AttributesTab extends connect(store)(LitElement) {
     }
   }
 
-  getTextareaInput(
+  private getTextareaInput(
     key: string,
     title: string,
     value: string,
@@ -342,7 +342,7 @@ ${value}</textarea
     `;
   }
 
-  getColorInput(
+  private getColorInput(
     key: string,
     title: string,
     value: string,
@@ -378,7 +378,7 @@ ${value}</textarea
     `;
   }
 
-  getSelectInput(
+  private getSelectInput(
     key: string,
     title: string,
     value: string,
@@ -420,7 +420,7 @@ ${value}</textarea
     `;
   }
 
-  getNumberInput(
+  private getNumberInput(
     key: string,
     title: string,
     value: string,
@@ -494,7 +494,7 @@ ${value}</textarea
     `;
   }
 
-  getUniqueAttributeMarkup(
+  private getUniqueAttributeMarkup(
     attributesArray: AttributeMetaData,
     uniqueAttributes: UniqueAttributes,
     id: string
@@ -576,7 +576,7 @@ ${value}</textarea
     });
   }
 
-  getUniqueAttributes(): Array<TemplateResult | {}> | {} {
+  private getUniqueAttributes(): Array<TemplateResult | {}> | {} {
     const widget = this.editingWidget;
     if (widget == null) {
       return nothing;
@@ -641,7 +641,7 @@ ${value}</textarea
     }
   }
 
-  getStyleAttributes(): Array<TemplateResult | {}> | {} {
+  private getStyleAttributes(): Array<TemplateResult | {}> | {} {
     const widget = this.editingWidget;
     if (widget == null) {
       return nothing;

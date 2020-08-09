@@ -10,7 +10,12 @@ import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog.js';
 import { ROOT_ID } from '../../utils/constants';
 import { setSelectedTemplate } from '../../redux/actions';
 import { PaperToastElement } from '@polymer/paper-toast/paper-toast.js';
-import { deepCloneTemplate } from '../../utils/helpers';
+import {
+  deepCloneTemplate,
+  storeTemplateInLocalStorage,
+  createToastMessage,
+} from '../../utils/helpers';
+import { incrementWidgetIDs } from '../../utils/template-generation';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-dialog/paper-dialog.js';
 import '@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js';
@@ -123,10 +128,21 @@ export class ToolBar extends LitElement {
   @query('#import-textarea') importTextArea!: HTMLTextAreaElement;
 
   /**
+   * Reference to invalid JSON toast widget.
+   */
+  @query('#invalid-json-toast') invalidJSONToast!: PaperToastElement;
+
+  /**
+   * Reference to local storage failure toast widget.
+   */
+  @query('#failed-local-storage-toast')
+  localStorageFailureToast!: PaperToastElement;
+
+  /**
    * Triggered when export button is clicked. It displays the paper dialog which
    * contains the serialized template string.
    */
-  openExportDialog() {
+  private openExportDialog() {
     const jsonSnippetContainer = this.shadowRoot?.getElementById(
       'json-snippet'
     );
@@ -144,7 +160,7 @@ export class ToolBar extends LitElement {
    * Triggered when import button is clicked. It displays the paper dialog which
    * allows users to paste a template string.
    */
-  openImportDialog() {
+  private openImportDialog() {
     if (this.importDialog == null) {
       return;
     }
@@ -155,7 +171,7 @@ export class ToolBar extends LitElement {
   /**
    * Returns the serialized template string with indentation.
    */
-  getTemplateString(space: number = 0) {
+  private getTemplateString(space: number = 0) {
     const template = deepCloneTemplate(store.getState().template);
     return JSON.stringify(template, null, space);
   }
@@ -163,7 +179,7 @@ export class ToolBar extends LitElement {
   /**
    * Adds template string to clipboard.
    */
-  copy() {
+  private copy() {
     const textArea = document.createElement('textarea');
     // We get the template string without indentation and with escaped single quotes.
     textArea.value = this.getTemplateString().replace(/'/g, "\\'");
@@ -176,7 +192,7 @@ export class ToolBar extends LitElement {
   /**
    * Imports template from JSON provided by the user.
    */
-  importTemplate() {
+  private importTemplate() {
     // Get textarea input element.
     if (this.importTextArea == null) {
       return;
@@ -206,22 +222,18 @@ export class ToolBar extends LitElement {
       // Update the store with the new template.
       store.dispatch(setSelectedTemplate(templateJSON));
 
+      incrementWidgetIDs(templateJSON.widgets);
+
       this.importDialog.close();
 
       this.clearTextArea('import-textarea');
     } catch (e) {
-      const fetchErrorToast = this.shadowRoot?.getElementById(
-        'invalid-json-toast'
-      ) as PaperToastElement;
-
-      if (fetchErrorToast != null) {
-        fetchErrorToast.open();
-      }
+      this.invalidJSONToast.open();
     }
   }
 
   // Empties text area input.
-  clearTextArea(id: string) {
+  private clearTextArea(id: string) {
     const textarea = this.shadowRoot?.querySelector(
       `#${id}`
     ) as HTMLTextAreaElement;
@@ -233,12 +245,28 @@ export class ToolBar extends LitElement {
     textarea.value = '';
   }
 
+  /**
+   * Callback triggered when duplicate button is clicked.
+   */
+  private handleDuplicateButtonAction() {
+    try {
+      storeTemplateInLocalStorage();
+
+      const url = location.href;
+
+      window.open(url);
+    } catch (e) {
+      this.localStorageFailureToast.open();
+    }
+  }
+
   render() {
     const {
       openExportDialog,
       openImportDialog,
       importTemplate,
       clearTextArea,
+      handleDuplicateButtonAction,
       copy,
     } = this;
 
@@ -288,6 +316,16 @@ export class ToolBar extends LitElement {
       </paper-dialog>
     `;
 
+    const invalidJSONToast = createToastMessage(
+      'invalid-json-toast',
+      'Failed to duplicate template.'
+    );
+
+    const localStorageFailureToast = createToastMessage(
+      'failed-local-storage-toast',
+      'Failed to duplicate template.'
+    );
+
     return html`
       <div id="container">
         <h3>
@@ -296,6 +334,9 @@ export class ToolBar extends LitElement {
         </h3>
 
         <div>
+          <paper-button id="import-button" @click=${handleDuplicateButtonAction}
+            >Duplicate</paper-button
+          >
           <paper-button id="import-button" @click=${openImportDialog}
             >Import</paper-button
           >
@@ -304,11 +345,8 @@ export class ToolBar extends LitElement {
           >
         </div>
 
-        ${importDialog} ${exportDialog}
-        <paper-toast
-          id="invalid-json-toast"
-          text="Invalid template string."
-        ></paper-toast>
+        ${importDialog} ${exportDialog} ${invalidJSONToast}
+        ${localStorageFailureToast}
       </div>
     `;
   }

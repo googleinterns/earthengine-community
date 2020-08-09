@@ -150,7 +150,7 @@ export class WidgetsTab extends LitElement {
   /**
    * Returns widgets with names and ids that include the search query.
    */
-  filterWidgets(query: string): WidgetItem[] {
+  private filterWidgets(query: string): WidgetItem[] {
     return WidgetsTab.widgets.filter(({ id, name }) => {
       const lowerCasedQuery = query.toLowerCase();
       return (
@@ -164,7 +164,7 @@ export class WidgetsTab extends LitElement {
    * Sets the query property when an onsearch event is dispatched from the
    * searchbar widget.
    */
-  handleSearch({ detail: { query } }: onSearchEvent) {
+  private handleSearch({ detail: { query } }: onSearchEvent) {
     this.query = query;
   }
 }

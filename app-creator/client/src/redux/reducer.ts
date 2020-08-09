@@ -20,6 +20,7 @@ import {
   SET_PALETTE,
   SET_EVENT_TYPE,
   RemoveWidget,
+  UPDATE_WIDGET_IDS,
 } from './types/actions';
 import { Reducer, AnyAction } from 'redux';
 import { UniqueAttributes } from './types/attributes';
@@ -224,6 +225,14 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
         widgetIDs: {
           ...state.widgetIDs,
           [action.payload.id]: state.widgetIDs[action.payload.id] + 1,
+        },
+      };
+    case UPDATE_WIDGET_IDS:
+      return {
+        ...state,
+        widgetIDs: {
+          ...state.widgetIDs,
+          ...action.payload.updatedIDs,
         },
       };
     case SET_SELECTED_TEMPLATE:

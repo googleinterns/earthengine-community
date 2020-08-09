@@ -1,6 +1,9 @@
 import { DeviceType } from '../redux/types/enums';
 import { AppCreatorStore } from '../redux/reducer';
 import { WIDGET_REF } from './constants';
+import { store } from '../redux/store';
+import { html, TemplateResult } from 'lit-element';
+import '@polymer/paper-toast/paper-toast';
 
 /**
  * Converts camel case to title case.
@@ -61,6 +64,17 @@ export const chips = [
   },
 ];
 
+export function createToastMessage(
+  id: string,
+  message: string
+): TemplateResult {
+  return html`<paper-toast
+    id=${id}
+    text=${message}
+    duration="10000"
+  ></paper-toast> `;
+}
+
 /*
  * Generates random ids with length 32.
  */
@@ -98,4 +112,18 @@ export function deepCloneTemplate(
   }
 
   return clone;
+}
+
+/**
+ * Takes a snapshot of the current template and stores it in localStorage.
+ */
+export function storeTemplateInLocalStorage() {
+  /**
+   * Saving current template string in localStorage so we can transfer data across.
+   * */
+  const currentTemplate = JSON.stringify(
+    deepCloneTemplate(store.getState().template)
+  );
+
+  localStorage.setItem('previousTemplate', currentTemplate);
 }

@@ -35,6 +35,7 @@ export enum EventType {
   REORDERING = 'reordering',
   ADDING = 'adding',
   CHANGINGPALETTE = 'changingPalette',
+  CHANGINGTEMPLATE = 'changingTemplate',
   NONE = 'none',
 }
 

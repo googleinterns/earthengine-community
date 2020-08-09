@@ -97,7 +97,7 @@ export class SideMenu extends LitElement {
     }
   }
 
-  toggleMenu(e: Event) {
+  private toggleMenu(e: Event) {
     e.stopPropagation();
 
     const { panel } = this;
@@ -107,6 +107,7 @@ export class SideMenu extends LitElement {
 
     const isZeroWidth = panel.style.width.match(/^\s*0(px|%)?/);
     panel.style.width = isZeroWidth ? '80%' : '0%';
+    panel.style.display = isZeroWidth ? 'block' : 'none';
   }
 
   setStyle(style: { [key: string]: string }) {

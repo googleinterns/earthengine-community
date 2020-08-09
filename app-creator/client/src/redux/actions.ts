@@ -32,6 +32,8 @@ import {
   SET_PALETTE,
   SetEventType,
   SET_EVENT_TYPE,
+  UpdateWidgetIDs,
+  UPDATE_WIDGET_IDS,
 } from './types/actions';
 import {
   DEFAULT_SHARED_ATTRIBUTES,
@@ -124,7 +126,9 @@ export const setPalette = (palette: PaletteNames): SetPalette => {
  */
 export const addWidgetMetaData = (
   id: string,
-  widget: Element
+  widget: Element,
+  uniqueAttributes?: UniqueAttributes,
+  style?: { [key: string]: string }
 ): AddWidgetMetaData => {
   return {
     type: ADD_WIDGET_META_DATA,
@@ -133,11 +137,25 @@ export const addWidgetMetaData = (
         id,
         widgetRef: widget as HTMLElement,
         children: [],
-        uniqueAttributes: {
+        uniqueAttributes: uniqueAttributes ?? {
           ...getUniqueAttributes(getWidgetType(id)),
         },
-        style: { ...DEFAULT_SHARED_ATTRIBUTES },
+        style: style ?? { ...DEFAULT_SHARED_ATTRIBUTES },
       },
+    },
+  };
+};
+
+/**
+ * Updates widget IDs with new values. This is used after a template change to prevent id conflicts.
+ */
+export const updateWidgetIDs = (
+  updatedIDs: AppCreatorStore['widgetIDs']
+): UpdateWidgetIDs => {
+  return {
+    type: UPDATE_WIDGET_IDS,
+    payload: {
+      updatedIDs,
     },
   };
 };
