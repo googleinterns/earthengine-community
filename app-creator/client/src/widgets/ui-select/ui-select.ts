@@ -27,21 +27,21 @@ export class Select extends LitElement {
     items: {
       value: '',
       placeholder: 'Item 1, Item 2',
-      type: InputType.text,
+      type: InputType.TEXT,
     },
     placeholder: {
       value: 'Select Item',
       placeholder: 'Enter placeholder',
-      type: InputType.text,
+      type: InputType.TEXT,
     },
     value: {
       value: 'Item 1',
       placeholder: 'Enter value',
-      type: InputType.text,
+      type: InputType.TEXT,
     },
     disabled: {
       value: 'false',
-      type: InputType.select,
+      type: InputType.SELECT,
       items: ['true', 'false'],
     },
   };

@@ -140,7 +140,7 @@ export class Storyboard extends connect(store)(LitElement) {
    * Used for setting template palette.
    */
   @property({ type: String }) selectedPalette: PaletteNames =
-    PaletteNames.light;
+    PaletteNames.LIGHT;
 
   /**
    * Reference to storyboard element.
@@ -175,9 +175,9 @@ export class Storyboard extends connect(store)(LitElement) {
 
     /**
      * We want to re-render the storyboard when we switch the template color palette.
-     * We do this by checking if the changingPalette event has been emitted.
+     * We do this by checking if the CHANGINGPALETTE event has been emitted.
      */
-    if (state.eventType === EventType.changingPalette) {
+    if (state.eventType === EventType.CHANGINGPALETTE) {
       this.renderNewTemplate(template);
     }
   }
@@ -210,7 +210,7 @@ export class Storyboard extends connect(store)(LitElement) {
    */
   paletteChangeConfirmation() {
     store.dispatch(setPalette(this.selectedPalette));
-    store.dispatch(setEventType(EventType.changingPalette, true));
+    store.dispatch(setEventType(EventType.CHANGINGPALETTE, true));
     this.requestUpdate();
   }
 
@@ -235,7 +235,7 @@ export class Storyboard extends connect(store)(LitElement) {
     } = this;
 
     const isMobile =
-      store.getState().template.config?.device === DeviceType.mobile;
+      store.getState().template.config?.device === DeviceType.MOBILE;
 
     const paletteSelectInput = html`
       <div id="palette-select-container">

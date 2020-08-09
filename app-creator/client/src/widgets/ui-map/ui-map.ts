@@ -57,7 +57,7 @@ export class Map extends LitElement {
       step: 0.00000000000001,
       min: -90,
       max: 90,
-      type: InputType.number,
+      type: InputType.NUMBER,
       validator: (value: string) => {
         const float = parseFloat(value);
         return value === '' || (!isNaN(float) && float >= -90 && float <= 90);
@@ -69,7 +69,7 @@ export class Map extends LitElement {
       min: -180,
       max: 180,
       placeholder: '-122.078827',
-      type: InputType.number,
+      type: InputType.NUMBER,
       validator: (value: string) => {
         const float = parseFloat(value);
         return value === '' || (!isNaN(float) && float >= -180 && float <= 180);
@@ -78,36 +78,36 @@ export class Map extends LitElement {
     zoom: {
       value: '4',
       placeholder: '4',
-      type: InputType.number,
+      type: InputType.NUMBER,
     },
     zoomControl: {
       value: 'false',
-      type: InputType.select,
+      type: InputType.SELECT,
       items: ['true', 'false'],
     },
     fullscreenControl: {
       value: 'false',
-      type: InputType.select,
+      type: InputType.SELECT,
       items: ['true', 'false'],
     },
     streetViewControl: {
       value: 'false',
-      type: InputType.select,
+      type: InputType.SELECT,
       items: ['true', 'false'],
     },
     scaleControl: {
       value: 'false',
-      type: InputType.select,
+      type: InputType.SELECT,
       items: ['true', 'false'],
     },
     mapTypeControl: {
       value: 'false',
-      type: InputType.select,
+      type: InputType.SELECT,
       items: ['true', 'false'],
     },
     mapStyles: {
       value: 'standard',
-      type: InputType.select,
+      type: InputType.SELECT,
       items: MAP_STYLES,
     },
     customMapStyles: {
@@ -121,7 +121,7 @@ export class Map extends LitElement {
         }
       },
       placeholder: 'Paste JSON here',
-      type: InputType.textarea,
+      type: InputType.TEXTAREA,
       tooltip: {
         text: 'Create custom map styles at the following link.',
         url: 'https://mapstyle.withgoogle.com',
@@ -210,7 +210,7 @@ export class Map extends LitElement {
     if (store.getState().editingElement != this) {
       store.dispatch(setEditingWidget(this as Map));
     }
-    store.dispatch(setSelectedTab(Tab.attributes));
+    store.dispatch(setSelectedTab(Tab.ATTRIBUTES));
   }
 
   /**

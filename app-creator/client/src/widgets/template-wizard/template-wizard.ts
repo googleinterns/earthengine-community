@@ -212,7 +212,7 @@ export class TemplateWizard extends LitElement {
   /**
    * Sets device filter.
    */
-  @property({ type: String }) deviceFilter: DeviceType = DeviceType.all;
+  @property({ type: String }) deviceFilter: DeviceType = DeviceType.ALL;
 
   /**
    * Array of templates.
@@ -245,7 +245,7 @@ export class TemplateWizard extends LitElement {
   @property({ type: Object }) config: { [key: string]: string } = {
     id: generateRandomId(),
     name: '',
-    palette: PaletteNames.light,
+    palette: PaletteNames.LIGHT,
   };
 
   async firstUpdated() {
@@ -480,25 +480,25 @@ export class TemplateWizard extends LitElement {
       <div id="chips-container">
         <paper-chip
           selectable
-          class="${this.deviceFilter === DeviceType.all
+          class="${this.deviceFilter === DeviceType.ALL
             ? 'selected-paper-chip'
             : ''}"
-          @click=${() => handleDeviceFilters.call(this, DeviceType.all)}
+          @click=${() => handleDeviceFilters.call(this, DeviceType.ALL)}
           >All</paper-chip
         >
         <paper-chip
           selectable
-          class="${this.deviceFilter === DeviceType.desktop
+          class="${this.deviceFilter === DeviceType.DESKTOP
             ? 'selected-paper-chip'
             : ''}"
-          @click=${() => handleDeviceFilters.call(this, DeviceType.desktop)}
+          @click=${() => handleDeviceFilters.call(this, DeviceType.DESKTOP)}
           >Web</paper-chip
         ><paper-chip
           selectable
-          class="${this.deviceFilter === DeviceType.mobile
+          class="${this.deviceFilter === DeviceType.MOBILE
             ? 'selected-paper-chip'
             : ''}"
-          @click=${() => handleDeviceFilters.call(this, DeviceType.mobile)}
+          @click=${() => handleDeviceFilters.call(this, DeviceType.MOBILE)}
           >Mobile</paper-chip
         >
       </div>

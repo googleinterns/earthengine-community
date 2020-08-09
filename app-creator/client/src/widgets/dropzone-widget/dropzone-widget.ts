@@ -3,9 +3,7 @@
  */
 import { css, customElement, html, LitElement, property } from 'lit-element';
 import { styleMap } from 'lit-html/directives/style-map';
-import '@polymer/iron-icon/iron-icon.js';
 import { DraggableWidget } from '../draggable-widget/draggable-widget';
-import '../empty-notice/empty-notice';
 import { EMPTY_NOTICE_ID } from '../empty-notice/empty-notice';
 import { store } from '../../redux/store';
 import {
@@ -16,6 +14,8 @@ import {
   updateWidgetChildren,
 } from '../../redux/actions';
 import { EventType } from '../../redux/types/enums';
+import '@polymer/iron-icon/iron-icon.js';
+import '../empty-notice/empty-notice';
 
 export const CONTAINER_ID = 'container';
 
@@ -112,7 +112,7 @@ export class Dropzone extends LitElement {
     }
 
     // set the global reordering state to true so we know that we don't increment the current widget id
-    if (store.getState().eventType !== EventType.reordering) {
+    if (store.getState().eventType !== EventType.REORDERING) {
       store.dispatch(setReordering(true));
     }
     return;
@@ -172,7 +172,7 @@ export class Dropzone extends LitElement {
     }
 
     // We use this to correctly increment the widget id.
-    if (store.getState().eventType !== EventType.adding) {
+    if (store.getState().eventType !== EventType.ADDING) {
       store.dispatch(setElementAdded(true));
     }
 

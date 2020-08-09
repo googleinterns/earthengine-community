@@ -35,11 +35,11 @@ export class Button extends LitElement {
     label: {
       value: 'Button',
       placeholder: 'Enter label',
-      type: InputType.text,
+      type: InputType.TEXT,
     },
     disabled: {
       value: 'false',
-      type: InputType.select,
+      type: InputType.SELECT,
       items: ['true', 'false'],
     },
   };

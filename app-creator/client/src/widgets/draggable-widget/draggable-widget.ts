@@ -92,7 +92,7 @@ export class DraggableWidget extends LitElement {
 
     const type = getWidgetType(editingWidget.id) as WidgetType;
 
-    if (type === WidgetType.panel || type === WidgetType.sidemenu) {
+    if (type === WidgetType.PANEL || type === WidgetType.SIDEMENU) {
       let dropzone = editingWidget.querySelector('dropzone-widget');
 
       if (dropzone == null) {
@@ -256,13 +256,13 @@ export class DraggableWidget extends LitElement {
    */
   handleDragend() {
     const addedElement =
-      store.getState().eventType === EventType.adding
+      store.getState().eventType === EventType.ADDING
         ? store.getState().draggingElement
         : null;
 
     // We only need to increment the widget id when adding a new widget.
     if (
-      store.getState().eventType === EventType.adding &&
+      store.getState().eventType === EventType.ADDING &&
       addedElement != null
     ) {
       store.dispatch(incrementWidgetID(addedElement.id));

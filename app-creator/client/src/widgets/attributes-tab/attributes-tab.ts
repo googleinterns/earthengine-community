@@ -188,7 +188,7 @@ export class AttributesTab extends connect(store)(LitElement) {
    * Widget currently being edited.
    */
   editingWidget: Element | null =
-    store.getState().eventType === EventType.editing
+    store.getState().eventType === EventType.EDITING
       ? store.getState().editingElement
       : null;
 
@@ -514,54 +514,54 @@ ${value}</textarea
       const attributeTitle = camelCaseToTitleCase(key);
 
       switch (type) {
-        case InputType.text:
+        case InputType.TEXT:
           return this.getTextInput(
             key,
             attributeTitle,
             value,
             id,
-            AttributeType.unique,
+            AttributeType.UNIQUE,
             placeholder,
             tooltip,
             validator
           );
-        case InputType.textarea:
+        case InputType.TEXTAREA:
           return this.getTextareaInput(
             key,
             attributeTitle,
             value,
             id,
-            AttributeType.unique,
+            AttributeType.UNIQUE,
             placeholder,
             tooltip,
             validator
           );
-        case InputType.color:
+        case InputType.COLOR:
           return this.getColorInput(
             key,
             attributeTitle,
             value,
             id,
-            AttributeType.unique,
+            AttributeType.UNIQUE,
             tooltip
           );
-        case InputType.select:
+        case InputType.SELECT:
           return this.getSelectInput(
             key,
             attributeTitle,
             value,
             id,
-            AttributeType.unique,
+            AttributeType.UNIQUE,
             tooltip,
             items
           );
-        case InputType.number:
+        case InputType.NUMBER:
           return this.getNumberInput(
             key,
             attributeTitle,
             value,
             id,
-            AttributeType.unique,
+            AttributeType.UNIQUE,
             placeholder,
             tooltip,
             validator,
@@ -588,49 +588,49 @@ ${value}</textarea
     const widgetType = getWidgetType(widget.id);
 
     switch (widgetType) {
-      case WidgetType.label:
+      case WidgetType.LABEL:
         return this.getUniqueAttributeMarkup(
           Label.attributes,
           uniqueAttributes,
           widget.id
         );
-      case WidgetType.button:
+      case WidgetType.BUTTON:
         return this.getUniqueAttributeMarkup(
           Button.attributes,
           uniqueAttributes,
           widget.id
         );
-      case WidgetType.checkbox:
+      case WidgetType.CHECKBOX:
         return this.getUniqueAttributeMarkup(
           Checkbox.attributes,
           uniqueAttributes,
           widget.id
         );
-      case WidgetType.select:
+      case WidgetType.SELECT:
         return this.getUniqueAttributeMarkup(
           Select.attributes,
           uniqueAttributes,
           widget.id
         );
-      case WidgetType.slider:
+      case WidgetType.SLIDER:
         return this.getUniqueAttributeMarkup(
           Slider.attributes,
           uniqueAttributes,
           widget.id
         );
-      case WidgetType.textbox:
+      case WidgetType.TEXTBOX:
         return this.getUniqueAttributeMarkup(
           Textbox.attributes,
           uniqueAttributes,
           widget.id
         );
-      case WidgetType.chart:
+      case WidgetType.CHART:
         return this.getUniqueAttributeMarkup(
           Chart.attributes,
           uniqueAttributes,
           widget.id
         );
-      case WidgetType.map:
+      case WidgetType.MAP:
         return this.getUniqueAttributeMarkup(
           Map.attributes,
           uniqueAttributes,
@@ -663,54 +663,54 @@ ${value}</textarea
       const attributeTitle = camelCaseToTitleCase(key);
 
       switch (type) {
-        case InputType.text:
+        case InputType.TEXT:
           return this.getTextInput(
             key,
             attributeTitle,
             value,
             widget.id,
-            AttributeType.style,
+            AttributeType.STYLE,
             placeholder,
             tooltip,
             validator
           );
-        case InputType.textarea:
+        case InputType.TEXTAREA:
           return this.getTextareaInput(
             key,
             attributeTitle,
             value,
             widget.id,
-            AttributeType.style,
+            AttributeType.STYLE,
             placeholder,
             tooltip,
             validator
           );
-        case InputType.color:
+        case InputType.COLOR:
           return this.getColorInput(
             key,
             attributeTitle,
             value,
             widget.id,
-            AttributeType.style,
+            AttributeType.STYLE,
             tooltip
           );
-        case InputType.select:
+        case InputType.SELECT:
           return this.getSelectInput(
             key,
             attributeTitle,
             value,
             widget.id,
-            AttributeType.style,
+            AttributeType.STYLE,
             tooltip,
             items
           );
-        case InputType.number:
+        case InputType.NUMBER:
           return this.getNumberInput(
             key,
             attributeTitle,
             value,
             widget.id,
-            AttributeType.style,
+            AttributeType.STYLE,
             placeholder,
             tooltip,
             validator,

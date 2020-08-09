@@ -14,6 +14,14 @@ module.exports = (config) => {
           pattern: config.grep ? config.grep : 'widgets/**/*_test.js',
           type: 'module',
         },
+        {
+          pattern: config.grep ? config.grep : 'redux/**/*_test.js',
+          type: 'module',
+        },
+        {
+          pattern: config.grep ? config.grep : 'utils/**/*_test.js',
+          type: 'module',
+        },
       ],
       // See the karma-esm docs for all options
       esm: {

@@ -7,10 +7,10 @@
 import { LitElement, html, customElement, css, query } from 'lit-element';
 import { store } from '../../redux/store';
 import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog.js';
-import { AppCreatorStore } from '../../redux/reducer';
-import { WIDGET_REF, ROOT_ID } from '../../utils/constants';
+import { ROOT_ID } from '../../utils/constants';
 import { setSelectedTemplate } from '../../redux/actions';
 import { PaperToastElement } from '@polymer/paper-toast/paper-toast.js';
+import { deepCloneTemplate } from '../../utils/helpers';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-dialog/paper-dialog.js';
 import '@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js';
@@ -153,38 +153,10 @@ export class ToolBar extends LitElement {
   }
 
   /**
-   * Returns a deep clone of template without widgetRefs.
-   */
-  deepCloneTemplate(
-    template: AppCreatorStore['template']
-  ): AppCreatorStore['template'] {
-    const clone: AppCreatorStore['template'] = {};
-    for (const key in template) {
-      /**
-       * Widget refs are only needed in the context of the app creator. Once we serialize the data,
-       * we no longer need to keep the refs. As a result, we skip over them when we are producing the
-       * output string.
-       */
-      if (key === WIDGET_REF) {
-        continue;
-      }
-      if (typeof template[key] === 'object' && !Array.isArray(template[key])) {
-        clone[key] = this.deepCloneTemplate(template[key]);
-      } else if (Array.isArray(template[key])) {
-        clone[key] = template[key].slice();
-      } else {
-        clone[key] = template[key];
-      }
-    }
-
-    return clone;
-  }
-
-  /**
    * Returns the serialized template string with indentation.
    */
   getTemplateString(space: number = 0) {
-    const template = this.deepCloneTemplate(store.getState().template);
+    const template = deepCloneTemplate(store.getState().template);
     return JSON.stringify(template, null, space);
   }
 

@@ -20,7 +20,7 @@ export const database: TemplateItem[] = [
     name: 'Left Side Panel',
     imageUrl:
       'https://storage.cloud.google.com/ee-app-creator.appspot.com/left-panel.png',
-    device: DeviceType.desktop,
+    device: DeviceType.DESKTOP,
     template: `{
         "config": {
             "parentID": "left-side-panel",
@@ -124,7 +124,7 @@ export const database: TemplateItem[] = [
     name: 'Left Drawer Mobile',
     imageUrl:
       'https://storage.googleapis.com/ee-app-creator.appspot.com/left-drawer-mobile.png',
-    device: DeviceType.mobile,
+    device: DeviceType.MOBILE,
     template: `{
         "config": {
             "parentID": "left-drawer-mobile",
@@ -239,7 +239,7 @@ export const database: TemplateItem[] = [
     name: 'Right Side Panel',
     imageUrl:
       'https://storage.cloud.google.com/ee-app-creator.appspot.com/right-panel.png',
-    device: DeviceType.desktop,
+    device: DeviceType.DESKTOP,
     template: `{
         "config": {
             "parentID": "right-side-panel",
@@ -349,7 +349,7 @@ export const database: TemplateItem[] = [
     name: 'Map With Legend',
     imageUrl:
       'https://storage.cloud.google.com/ee-app-creator.appspot.com/legend-example.png',
-    device: DeviceType.desktop,
+    device: DeviceType.DESKTOP,
     template: `{
         "config": {
             "parentID": "map-with-legend",
@@ -463,7 +463,7 @@ export const database: TemplateItem[] = [
     name: 'Two Maps',
     imageUrl:
       'https://storage.cloud.google.com/ee-app-creator.appspot.com/two-map.png',
-    device: DeviceType.desktop,
+    device: DeviceType.DESKTOP,
     template: `{
         "config": {
             "parentID": "two-maps",
@@ -666,7 +666,7 @@ export const database: TemplateItem[] = [
     name: 'Four Maps',
     imageUrl:
       'https://storage.cloud.google.com/ee-app-creator.appspot.com/four-maps.png',
-    device: DeviceType.desktop,
+    device: DeviceType.DESKTOP,
     template: `{
         "config": {
             "parentID": "four-maps",

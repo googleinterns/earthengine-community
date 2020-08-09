@@ -38,7 +38,7 @@ suite('palette-picker', () => {
     // Get showTitle property.
     const showTitle = picker.showTitle;
 
-    expect(showTitle).to.equal(true);
+    expect(showTitle).to.be.true;
     expect(inputHeader).to.exist;
   });
 
@@ -53,7 +53,7 @@ suite('palette-picker', () => {
     // Get showTitle property.
     const showTitle = picker.showTitle;
 
-    expect(showTitle).to.equal(false);
+    expect(showTitle).to.be.false;
     expect(inputHeader).to.not.exist;
   });
 
@@ -69,7 +69,7 @@ suite('palette-picker', () => {
     }
 
     // Set value to new palette and dispatch change event.
-    select.value = PaletteNames.aubergine;
+    select.value = PaletteNames.AUBERGINE;
     setTimeout(() => select.dispatchEvent(new Event('change')));
 
     // Listen to palette-change custom event triggered by picker.
@@ -78,8 +78,8 @@ suite('palette-picker', () => {
     } = await oneEvent(picker, 'palette-change');
 
     // assert that the selectedPalette property and the event detail match the correct template.
-    expect(selectedPalette).to.equal(PaletteNames.aubergine);
-    expect(picker.selectedPalette).to.equal(PaletteNames.aubergine);
+    expect(selectedPalette).to.equal(PaletteNames.AUBERGINE);
+    expect(picker.selectedPalette).to.equal(PaletteNames.AUBERGINE);
   });
 
   test('palette selection with invalid palette', async () => {
@@ -129,7 +129,7 @@ suite('palette-picker', () => {
     } = await oneEvent(picker, 'palette-change');
 
     // assert that the selectedPalette property and the event detail match the correct template.
-    expect(selectedPalette).to.equal(PaletteNames.light);
-    expect(picker.selectedPalette).to.equal(PaletteNames.light);
+    expect(selectedPalette).to.equal(PaletteNames.LIGHT);
+    expect(picker.selectedPalette).to.equal(PaletteNames.LIGHT);
   });
 });

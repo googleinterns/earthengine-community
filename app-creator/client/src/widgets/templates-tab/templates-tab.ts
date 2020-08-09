@@ -88,7 +88,7 @@ export class TemplatesTab extends connect(store)(LitElement) {
   /**
    * Sets device filter.
    */
-  @property({ type: String }) deviceFilter = DeviceType.all;
+  @property({ type: String }) deviceFilter = DeviceType.ALL;
 
   getTemplateCards(showTitle = false) {
     const templates = templatesManager.getTemplates();
@@ -128,7 +128,7 @@ export class TemplatesTab extends connect(store)(LitElement) {
 
       // And matches the device type (or all).
       const deviceMatch =
-        deviceFilter === DeviceType.all || device === deviceFilter;
+        deviceFilter === DeviceType.ALL || device === deviceFilter;
 
       return queryMatch && deviceMatch;
     });

@@ -16,7 +16,7 @@ suite('templates-tab', () => {
       const result = TemplatesTab.filterTemplates(
         templatesStub,
         '',
-        DeviceType.all
+        DeviceType.ALL
       );
       expect(result.length).to.equal(templatesStub.length);
     });
@@ -26,7 +26,7 @@ suite('templates-tab', () => {
       const result = TemplatesTab.filterTemplates(
         templatesStub,
         query,
-        DeviceType.all
+        DeviceType.ALL
       );
       expect(result.length).to.equal(
         templatesStub.filter(({ name }) => name.toLowerCase().includes(query))
@@ -38,10 +38,10 @@ suite('templates-tab', () => {
       const result = TemplatesTab.filterTemplates(
         templatesStub,
         '',
-        DeviceType.mobile
+        DeviceType.MOBILE
       );
       expect(result.length).to.equal(
-        templatesStub.filter(({ device }) => device === DeviceType.mobile)
+        templatesStub.filter(({ device }) => device === DeviceType.MOBILE)
           .length
       );
     });
@@ -51,12 +51,12 @@ suite('templates-tab', () => {
       const result = TemplatesTab.filterTemplates(
         templatesStub,
         query,
-        DeviceType.mobile
+        DeviceType.MOBILE
       );
       expect(result.length).to.equal(
         templatesStub.filter(
           ({ device, name }) =>
-            name.toLowerCase().includes(query) && device === DeviceType.mobile
+            name.toLowerCase().includes(query) && device === DeviceType.MOBILE
         ).length
       );
     });
@@ -65,10 +65,10 @@ suite('templates-tab', () => {
       const result = TemplatesTab.filterTemplates(
         templatesStub,
         '',
-        DeviceType.desktop
+        DeviceType.DESKTOP
       );
       expect(result.length).to.equal(
-        templatesStub.filter(({ device }) => device === DeviceType.desktop)
+        templatesStub.filter(({ device }) => device === DeviceType.DESKTOP)
           .length
       );
     });
@@ -78,12 +78,12 @@ suite('templates-tab', () => {
       const result = TemplatesTab.filterTemplates(
         templatesStub,
         query,
-        DeviceType.desktop
+        DeviceType.DESKTOP
       );
       expect(result.length).to.equal(
         templatesStub.filter(
           ({ device, name }) =>
-            name.toLowerCase().includes(query) && device === DeviceType.desktop
+            name.toLowerCase().includes(query) && device === DeviceType.DESKTOP
         ).length
       );
     });
@@ -94,7 +94,7 @@ suite('templates-tab', () => {
       const result = TemplatesTab.filterTemplates(
         templatesStub,
         '',
-        DeviceType.all
+        DeviceType.ALL
       );
       expect(result.length).to.equal(templatesStub.length);
     });
@@ -103,7 +103,7 @@ suite('templates-tab', () => {
       const result = TemplatesTab.filterTemplates(
         templatesStub,
         'le',
-        DeviceType.all
+        DeviceType.ALL
       );
       expect(result.length).to.equal(
         templatesStub.filter(({ name }) => name.includes('Le')).length
@@ -114,7 +114,7 @@ suite('templates-tab', () => {
       const result = TemplatesTab.filterTemplates(
         templatesStub,
         'le',
-        DeviceType.mobile
+        DeviceType.MOBILE
       );
       expect(result.length).to.equal(1);
     });
@@ -126,18 +126,18 @@ const templatesStub = [
     id: '0',
     name: 'Left Side Panel',
     markup: html``,
-    device: DeviceType.desktop,
+    device: DeviceType.DESKTOP,
   },
   {
     id: '1',
     name: 'Left Drawer Mobile',
     markup: html``,
-    device: DeviceType.mobile,
+    device: DeviceType.MOBILE,
   },
   {
     id: '2',
     name: 'Right Side Panel',
     markup: html``,
-    device: DeviceType.desktop,
+    device: DeviceType.DESKTOP,
   },
 ];

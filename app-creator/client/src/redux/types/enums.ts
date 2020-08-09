@@ -1,60 +1,59 @@
-// TODO: Convert all enum properties to uppercase.
 export enum InputType {
-  text = 'text',
-  textarea = 'textarea',
-  number = 'number',
-  color = 'color',
-  select = 'select',
+  TEXT = 'text',
+  TEXTAREA = 'textarea',
+  NUMBER = 'number',
+  COLOR = 'color',
+  SELECT = 'select',
 }
 
 export enum WidgetType {
-  label = 'label',
-  button = 'button',
-  checkbox = 'checkbox',
-  select = 'select',
-  slider = 'slider',
-  textbox = 'textbox',
-  panel = 'panel',
-  map = 'map',
-  chart = 'chart',
-  sidemenu = 'sidemenu',
+  LABEL = 'label',
+  BUTTON = 'button',
+  CHECKBOX = 'checkbox',
+  SELECT = 'select',
+  SLIDER = 'slider',
+  TEXTBOX = 'textbox',
+  PANEL = 'panel',
+  MAP = 'map',
+  CHART = 'chart',
+  SIDEMENU = 'sidemenu',
 }
 
 export enum Tab {
-  templates = 0,
-  widgets = 1,
-  attributes = 2,
+  TEMPLATES = 0,
+  WIDGETS = 1,
+  ATTRIBUTES = 2,
 }
 
 export enum AttributeType {
-  unique = 'uniqueAttributes',
-  style = 'style',
+  UNIQUE = 'uniqueAttributes',
+  STYLE = 'style',
 }
 
 export enum EventType {
-  editing = 'editing',
-  reordering = 'reordering',
-  adding = 'adding',
-  changingPalette = 'changingPalette',
-  none = 'none',
+  EDITING = 'editing',
+  REORDERING = 'reordering',
+  ADDING = 'adding',
+  CHANGINGPALETTE = 'changingPalette',
+  NONE = 'none',
 }
 
 export enum DeviceType {
-  desktop = 'desktop',
-  mobile = 'mobile',
-  all = 'all',
+  DESKTOP = 'desktop',
+  MOBILE = 'mobile',
+  ALL = 'all',
 }
 
 export enum Layout {
-  COLUMN = 'COLUMN',
-  ROW = 'ROW',
+  COLUMN = 'column',
+  ROW = 'row',
 }
 
 export enum PaletteNames {
-  light = 'light',
-  dark = 'dark',
-  night = 'night',
-  retro = 'retro',
-  silver = 'silver',
-  aubergine = 'aubergine',
+  LIGHT = 'light',
+  DARK = 'dark',
+  NIGHT = 'night',
+  RETRO = 'retro',
+  SILVER = 'silver',
+  AUBERGINE = 'aubergine',
 }

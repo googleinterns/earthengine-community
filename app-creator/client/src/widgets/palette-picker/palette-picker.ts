@@ -50,39 +50,39 @@ export class PalettePicker extends LitElement {
 
   static readonly palette: Record<PaletteNames, Palette> = {
     light: {
-      name: PaletteNames.light,
-      backgroundColor: '#FFFFFF',
+      name: PaletteNames.LIGHT,
+      backgroundColor: '#ffffff',
       color: '#000000',
       map: 'standard',
     },
     silver: {
-      name: PaletteNames.silver,
-      backgroundColor: '#FFFFFF',
+      name: PaletteNames.SILVER,
+      backgroundColor: '#ffffff',
       color: '#000000',
       map: 'silver',
     },
     dark: {
-      name: PaletteNames.dark,
+      name: PaletteNames.DARK,
       backgroundColor: '#000000',
-      color: '#FFFFFF',
+      color: '#ffffff',
       map: 'dark',
     },
     night: {
-      name: PaletteNames.night,
-      backgroundColor: '#17263C',
-      color: '#FFFFFF',
+      name: PaletteNames.NIGHT,
+      backgroundColor: '#17263c',
+      color: '#ffffff',
       map: 'night',
     },
     retro: {
-      name: PaletteNames.retro,
-      backgroundColor: '#DFD2AE',
+      name: PaletteNames.RETRO,
+      backgroundColor: '#dfd2ae',
       color: '#000000',
       map: 'retro',
     },
     aubergine: {
-      name: PaletteNames.aubergine,
-      backgroundColor: '#0E1626',
-      color: '#FFFFFF',
+      name: PaletteNames.AUBERGINE,
+      backgroundColor: '#0e1626',
+      color: '#ffffff',
       map: 'aubergine',
     },
   };
@@ -101,7 +101,7 @@ export class PalettePicker extends LitElement {
    * Selected palette.
    */
   @property({ type: String }) selectedPalette: PaletteNames =
-    PaletteNames.light;
+    PaletteNames.LIGHT;
 
   /**
    * Callback triggered on new palette selection.
@@ -125,13 +125,14 @@ export class PalettePicker extends LitElement {
     const { selectedPalette, showTitle, handlePaletteSelection, styles } = this;
 
     const optionList = html`
-      ${Object.keys(PaletteNames).map(
-        (palette) => html`<option
-          value="${palette}"
-          ?selected=${this.selectedPalette === palette}
-          >${palette}</option
-        >`
-      )}
+      ${Object.keys(PaletteNames).map((palette) => {
+        const paletteLowerCase = palette.toLowerCase();
+        return html`<option
+          value="${paletteLowerCase}"
+          ?selected=${this.selectedPalette === paletteLowerCase}
+          >${paletteLowerCase}</option
+        >`;
+      })}
     `;
 
     const header = showTitle

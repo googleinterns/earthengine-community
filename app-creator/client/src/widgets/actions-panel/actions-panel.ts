@@ -6,6 +6,11 @@
 import { LitElement, html, customElement, css, property } from 'lit-element';
 import { nothing } from 'lit-html';
 import { IronIconElement } from '@polymer/iron-icon';
+import { store } from '../../redux/store';
+import { connect } from 'pwa-helpers';
+import { AppCreatorStore } from '../../redux/reducer';
+import { setSelectedTab } from '../../redux/actions';
+import { Tab } from '../../redux/types/enums';
 import '@polymer/paper-tabs/paper-tabs.js';
 import '@polymer/paper-tabs/paper-tab.js';
 import '@polymer/iron-icon/iron-icon.js';
@@ -15,11 +20,6 @@ import '@polymer/iron-icons/image-icons.js';
 import '../widgets-tab/widgets-tab';
 import '../attributes-tab/attributes-tab';
 import '../templates-tab/templates-tab';
-import { store } from '../../redux/store';
-import { connect } from 'pwa-helpers';
-import { AppCreatorStore } from '../../redux/reducer';
-import { setSelectedTab } from '../../redux/actions';
-import { Tab } from '../../redux/types/enums';
 
 @customElement('actions-panel')
 export class ActionsPanel extends connect(store)(LitElement) {
@@ -67,7 +67,7 @@ export class ActionsPanel extends connect(store)(LitElement) {
    * Sets the currently selected tab.
    */
   @property({ type: Number })
-  selectedTab = Tab.templates;
+  selectedTab = Tab.TEMPLATES;
 
   handleTabSwitch(index: Tab) {
     store.dispatch(setSelectedTab(index));
@@ -97,13 +97,13 @@ export class ActionsPanel extends connect(store)(LitElement) {
 
     let renderedTab = nothing;
     switch (selectedTab) {
-      case Tab.templates:
+      case Tab.TEMPLATES:
         renderedTab = html`<templates-tab></templates-tab>`;
         break;
-      case Tab.widgets:
+      case Tab.WIDGETS:
         renderedTab = html`<widgets-tab></widgets-tab>`;
         break;
-      case Tab.attributes:
+      case Tab.ATTRIBUTES:
         renderedTab = html`<attributes-tab></attributes-tab>`;
         break;
     }
@@ -112,13 +112,13 @@ export class ActionsPanel extends connect(store)(LitElement) {
       <div id="container">
         <div id="panel">
           <paper-tabs selected="${selectedTab}" noink>
-            <paper-tab @click=${() => this.handleTabSwitch(Tab.templates)}>
+            <paper-tab @click=${() => this.handleTabSwitch(Tab.TEMPLATES)}>
               <iron-icon icon="image:filter-none"></iron-icon>
             </paper-tab>
-            <paper-tab @click=${() => this.handleTabSwitch(Tab.widgets)}>
+            <paper-tab @click=${() => this.handleTabSwitch(Tab.WIDGETS)}>
               <iron-icon icon="device:widgets"></iron-icon>
             </paper-tab>
-            <paper-tab @click=${() => this.handleTabSwitch(Tab.attributes)}>
+            <paper-tab @click=${() => this.handleTabSwitch(Tab.ATTRIBUTES)}>
               <iron-icon icon="image:tune"></iron-icon>
             </paper-tab>
           </paper-tabs>

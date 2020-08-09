@@ -152,4 +152,7 @@ export type AppCreatorAction =
   | AddWidgetMetaData
   | RemoveWidget
   | UpdateWidgetMetaData
-  | UpdateWidgetChildren;
+  | UpdateWidgetChildren
+  | SetSelectedTemplateIDAction
+  | SetPalette
+  | SetEventType;

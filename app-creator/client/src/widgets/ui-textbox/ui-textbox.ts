@@ -25,12 +25,12 @@ export class Textbox extends LitElement {
     value: {
       value: '',
       placeholder: 'Enter value',
-      type: InputType.text,
+      type: InputType.TEXT,
     },
     placeholder: {
       value: 'Enter text',
       placeholder: 'Enter placeholder',
-      type: InputType.text,
+      type: InputType.TEXT,
     },
   };
 

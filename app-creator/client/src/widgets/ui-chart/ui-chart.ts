@@ -38,11 +38,11 @@ export class Chart extends LitElement {
         url:
           'https://developers.google.com/chart/interactive/docs/reference#DataTable',
       },
-      type: InputType.textarea,
+      type: InputType.TEXTAREA,
     },
     chartType: {
       value: 'ScatterChart',
-      type: InputType.select,
+      type: InputType.SELECT,
       items: [
         'GeoChart',
         'ScatterChart',
@@ -71,21 +71,21 @@ export class Chart extends LitElement {
     title: {
       value: '',
       placeholder: 'Enter title',
-      type: InputType.text,
+      type: InputType.TEXT,
     },
     color: {
       value: '',
       placeholder: '#ffffff, #000000, ...',
-      type: InputType.text,
+      type: InputType.TEXT,
     },
     '3D': {
       value: 'false',
-      type: InputType.select,
+      type: InputType.SELECT,
       items: ['true', 'false'],
     },
     downloadable: {
       value: 'false',
-      type: InputType.select,
+      type: InputType.SELECT,
       items: ['true', 'false'],
     },
   };

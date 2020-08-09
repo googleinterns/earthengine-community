@@ -25,16 +25,16 @@ export class Checkbox extends LitElement {
     label: {
       value: 'Item',
       placeholder: 'Enter label',
-      type: InputType.text,
+      type: InputType.TEXT,
     },
     value: {
       value: 'false',
-      type: InputType.select,
+      type: InputType.SELECT,
       items: ['true', 'false'],
     },
     disabled: {
       value: 'false',
-      type: InputType.select,
+      type: InputType.SELECT,
       items: ['true', 'false'],
     },
   };
