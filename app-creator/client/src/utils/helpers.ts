@@ -110,7 +110,7 @@ export function deepCloneTemplate(
 
     if (Array.isArray(template[key])) {
       clone[key] = template[key].slice();
-    } else if (typeof template[key] === 'object' && key !== WIDGET_REF) {
+    } else if (typeof template[key] === 'object' && !WIDGET_REF_KEYS.has(key)) {
       clone[key] = deepCloneTemplate(template[key], skipRefs);
     } else {
       clone[key] = template[key];

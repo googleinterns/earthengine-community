@@ -23,6 +23,8 @@ import {
   setPalette,
 } from '../../redux/actions';
 import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog';
+import { createToastMessage } from '../../utils/helpers';
+import { PaperToastElement } from '@polymer/paper-toast';
 import '@polymer/paper-card/paper-card.js';
 import '@polymer/iron-icons/hardware-icons.js';
 import '@polymer/paper-tabs/paper-tabs';
@@ -31,8 +33,6 @@ import '../dropzone-widget/dropzone-widget';
 import '../ui-map/ui-map';
 import '../ui-panel/ui-panel';
 import '@polymer/paper-dialog/paper-dialog';
-import { createToastMessage } from '../../utils/helpers';
-import { PaperToastElement } from '@polymer/paper-toast';
 
 const STORYBOARD_ID = 'storyboard';
 
