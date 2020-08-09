@@ -20,10 +20,7 @@ import {
   SET_PALETTE,
   SET_EVENT_TYPE,
   RemoveWidget,
-<<<<<<< HEAD
   UPDATE_WIDGET_IDS,
-=======
->>>>>>> added tests for redux helpers
 } from './types/actions';
 import { Reducer, AnyAction } from 'redux';
 import { UniqueAttributes } from './types/attributes';

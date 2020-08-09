@@ -72,12 +72,13 @@ export const chips = [
 
 export function createToastMessage(
   id: string,
-  message: string
+  message: string,
+  duration?: number
 ): TemplateResult {
   return html`<paper-toast
     id=${id}
     text=${message}
-    duration="10000"
+    duration=${duration ?? 10000}
   ></paper-toast> `;
 }
 

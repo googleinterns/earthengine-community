@@ -16,7 +16,10 @@ import { DeviceType, EventType, PaletteNames } from '../../redux/types/enums';
 import { store } from '../../redux/store';
 import { AppCreatorStore } from '../../redux/reducer';
 import { PaperCardElement } from '@polymer/paper-card/paper-card.js';
-import { generateUI } from '../../utils/template-generation';
+import {
+  generateUI,
+  incrementWidgetIDs,
+} from '../../utils/template-generation';
 import {
   setSelectedTemplateID,
   setEventType,
@@ -195,6 +198,19 @@ export class Storyboard extends connect(store)(LitElement) {
       store.dispatch(setEventType(EventType.NONE, true));
 
       this.renderNewTemplate(template);
+
+      try {
+        const template = localStorage.getItem('previousTemplate');
+        if (template) {
+          const widgets = JSON.parse(template).widgets;
+          incrementWidgetIDs(widgets);
+        }
+
+        localStorage.removeItem('previousTemplate');
+      } catch (e) {
+        console.error(e);
+        this.localStorageFailureToast.open();
+      }
     }
   }
 

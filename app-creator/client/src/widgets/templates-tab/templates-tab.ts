@@ -25,6 +25,7 @@ import {
 } from '../../utils/helpers';
 import { transferData } from '../../utils/template-generation';
 import { PaperDialogElement } from '@polymer/paper-dialog';
+import { TEMPLATE_TIMESTAMP } from '../../utils/constants';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '../tab-container/tab-container';
@@ -41,7 +42,6 @@ import '../search-bar/search-bar';
 import '../empty-notice/empty-notice';
 import '../template-card/template-card';
 import '@cwmr/paper-chip/paper-chip.js';
-import { TEMPLATE_TIMESTAMP } from '../../utils/constants';
 
 export interface TemplatesTabItem {
   id: string;
