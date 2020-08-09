@@ -231,6 +231,21 @@ export function transferData() {
         }
       }
 
+      /**
+       * Getting remainding widgets that have not been added. We will populate the scratch panel
+       * with these widgets so that the user can add them later on.
+       */
+      const remainingWidgetIds: string[] = [];
+      for (const id in widgets) {
+        if (
+          !id.startsWith('panel') &&
+          !id.startsWith('sidemenu') &&
+          !(id in store.getState().template.widgets)
+        ) {
+          remainingWidgetIds.push(id);
+        }
+      }
+
       store.dispatch(setEventType(EventType.CHANGINGTEMPLATE, true));
 
       incrementWidgetIDs(widgets);
