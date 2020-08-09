@@ -3,9 +3,9 @@ import { AppCreatorStore } from '../redux/reducer';
 import { WIDGET_REF, TEMPLATE_SNAPSHOTS } from './constants';
 import { store } from '../redux/store';
 import { html, TemplateResult } from 'lit-element';
-import '@polymer/paper-toast/paper-toast';
 import { EEWidget } from '../redux/types/types';
 import { sharedAttributes } from '../redux/types/attributes';
+import '@polymer/paper-toast/paper-toast';
 
 const WIDGET_REF_KEYS = new Set([
   'draggingElement',
