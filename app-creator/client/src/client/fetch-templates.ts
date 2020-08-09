@@ -795,9 +795,6 @@ export const database: TemplateItem[] = [
                    "whiteSpace": "normal",
                    "shown": "true"
                 }
->>>>>>> added tests for redux helpers
-=======
->>>>>>> added duplication and widget sharing
             }
         }
     }`,
