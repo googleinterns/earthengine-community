@@ -45,6 +45,9 @@ export function applyPalette(
   color: PaletteNames
 ) {
   for (const widgetId in widgets) {
+    if (widgets[widgetId].shared) {
+      continue;
+    }
     // Set the background color of panel elements. Non-panel elements start with a transparent background.
     if (
       widgetId.startsWith(WidgetType.PANEL) ||

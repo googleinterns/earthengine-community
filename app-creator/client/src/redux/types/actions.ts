@@ -71,6 +71,7 @@ export interface AddWidgetMetaData {
   payload: {
     [id: string]: {
       id: string;
+      shared: boolean;
       widgetRef: HTMLElement;
       children: string[];
       uniqueAttributes: {};

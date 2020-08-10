@@ -394,6 +394,7 @@ export class TemplateWizard extends LitElement {
         }
       }
     } catch (e) {
+      console.error(e);
       if (this.parsingErrorToast) {
         this.parsingErrorToast.open();
       }

@@ -36,6 +36,7 @@ export enum EventType {
   ADDING = 'adding',
   CHANGINGPALETTE = 'changingPalette',
   CHANGINGTEMPLATE = 'changingTemplate',
+  SHAREDWIDGETS = 'sharedWidgets',
   NONE = 'none',
 }
 

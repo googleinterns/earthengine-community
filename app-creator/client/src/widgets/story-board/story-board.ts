@@ -32,6 +32,7 @@ import '@polymer/paper-card/paper-card.js';
 import '@polymer/iron-icons/hardware-icons.js';
 import '@polymer/paper-tabs/paper-tabs';
 import '@polymer/paper-tabs/paper-tab';
+import '@polymer/paper-dialog/paper-dialog';
 import '../dropzone-widget/dropzone-widget';
 import '../ui-map/ui-map';
 import '../ui-panel/ui-panel';

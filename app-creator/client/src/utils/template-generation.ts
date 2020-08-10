@@ -232,20 +232,35 @@ export function transferData() {
       }
 
       /**
-       * Getting remainding widgets that have not been added. We will populate the scratch panel
+       * Getting remaining widgets that have not been added. We will populate the scratch panel
        * with these widgets so that the user can add them later on.
        */
-      const remainingWidgetIds: string[] = [];
       for (const id in widgets) {
         if (
           !id.startsWith('panel') &&
           !id.startsWith('sidemenu') &&
-          !(id in store.getState().template.widgets)
+          !(id in store.getState().template.widgets) &&
+          id !== ''
         ) {
-          remainingWidgetIds.push(id);
+          const { id: widgetId, uniqueAttributes, style } = widgets[id];
+          const styleCopy = Object.assign({}, style);
+          styleCopy.color = '#000000';
+
+          const { element } = getWidgetElement(widgets[id]);
+
+          store.dispatch(
+            addWidgetMetaData(
+              widgetId,
+              element,
+              uniqueAttributes,
+              styleCopy,
+              true
+            )
+          );
         }
       }
 
+      store.dispatch(setEventType(EventType.SHAREDWIDGETS, true));
       store.dispatch(setEventType(EventType.CHANGINGTEMPLATE, true));
 
       incrementWidgetIDs(widgets);

@@ -128,13 +128,15 @@ export const addWidgetMetaData = (
   id: string,
   widget: Element,
   uniqueAttributes?: UniqueAttributes,
-  style?: { [key: string]: string }
+  style?: { [key: string]: string },
+  shared?: boolean
 ): AddWidgetMetaData => {
   return {
     type: ADD_WIDGET_META_DATA,
     payload: {
       [id]: {
         id,
+        shared: shared ?? false,
         widgetRef: widget as HTMLElement,
         children: [],
         uniqueAttributes: uniqueAttributes ?? {

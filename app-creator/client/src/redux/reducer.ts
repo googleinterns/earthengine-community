@@ -42,6 +42,7 @@ import {
 export interface WidgetMetaData {
   id: string;
   editable?: boolean;
+  shared?: boolean;
   widgetRef?: HTMLElement;
   children: string[];
   uniqueAttributes: UniqueAttributes;
