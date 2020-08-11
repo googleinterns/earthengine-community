@@ -20,12 +20,21 @@ export const SET_SELECTED_TEMPLATE_ID = 'SET_SELECTED_TEMPLATE_ID';
 export const SET_PALETTE = 'SET_PALETTE';
 export const SET_EVENT_TYPE = 'SET_EVENT_TYPE';
 export const UPDATE_WIDGET_IDS = 'UPDATE_WIDGET_IDS';
+export const UPDATE_WIDGET_SHARED_STATUS = 'UPDATE_WIDGET_SHARED_STATUS';
 
 export interface UpdateWidgetChildren {
   type: typeof UPDATE_WIDGET_CHILDREN;
   payload: {
     id: string;
     childrenIDs: string[];
+  };
+}
+
+export interface UpdateWidgetSharedStatus {
+  type: typeof UPDATE_WIDGET_SHARED_STATUS;
+  payload: {
+    id: string;
+    isShared: boolean;
   };
 }
 

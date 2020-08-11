@@ -12,10 +12,12 @@ import {
   addWidgetMetaData,
   removeWidgetMetaData,
   updateWidgetChildren,
+  updateWidgetSharedStatus,
 } from '../../redux/actions';
 import { EventType } from '../../redux/types/enums';
 import '@polymer/iron-icon/iron-icon.js';
 import '../empty-notice/empty-notice';
+import { SCRATCH_PANEL } from '../../utils/constants';
 
 export const CONTAINER_ID = 'container';
 
@@ -97,24 +99,31 @@ export class Dropzone extends LitElement {
   private handleReorderingWidget(
     parent: Element | null,
     widget: Element,
+    widgetWrapper: Element,
     nextElement: Element | null
   ) {
     if (nextElement == null) {
-      this.appendChild(widget);
+      this.appendChild(widgetWrapper);
     } else {
-      this.insertBefore(widget, nextElement);
+      this.insertBefore(widgetWrapper, nextElement);
     }
 
     // Update children ordering in store.
     const ids = this.getChildrenIds();
     if (parent != null) {
       store.dispatch(updateWidgetChildren(parent.id, ids));
+      if (parent.id === SCRATCH_PANEL) {
+        store.dispatch(updateWidgetSharedStatus(widget.id, true));
+      } else {
+        store.dispatch(updateWidgetSharedStatus(widget.id, false));
+      }
     }
 
     // set the global reordering state to true so we know that we don't increment the current widget id
     if (store.getState().eventType !== EventType.REORDERING) {
       store.dispatch(setReordering(true));
     }
+
     return;
   }
 
@@ -137,6 +146,7 @@ export class Dropzone extends LitElement {
         typeof widgets[id] === 'object' &&
         !Array.isArray(widgets[id]) &&
         id !== parent!.id &&
+        id !== SCRATCH_PANEL &&
         widgets[id].children.includes(clone.id)
       ) {
         const widget = widgets[clone.id].widgetRef;
@@ -176,7 +186,8 @@ export class Dropzone extends LitElement {
       store.dispatch(setElementAdded(true));
     }
 
-    store.dispatch(addWidgetMetaData(clone.id, clone));
+    const isShared = parent!.id === SCRATCH_PANEL;
+    store.dispatch(addWidgetMetaData(clone.id, clone, isShared));
   }
 
   /**
@@ -204,6 +215,7 @@ export class Dropzone extends LitElement {
     if (isReordering) {
       this.handleReorderingWidget(
         this.parentElement,
+        widget,
         widgetWrapper,
         nextElement
       );

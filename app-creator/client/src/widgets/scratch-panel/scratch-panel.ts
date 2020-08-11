@@ -47,6 +47,10 @@ export class ScratchPanel extends connect(store)(LitElement) {
       overflow-x: hidden;
     }
 
+    #scratch-panel {
+      height: 95%;
+    }
+
     paper-tabs {
       border-bottom: var(--light-border);
       height: 40px;
@@ -73,7 +77,13 @@ export class ScratchPanel extends connect(store)(LitElement) {
   /**
    * Populates dropzone with shared widgets from the store.
    */
-  populateDropzone(widgets: { [key: string]: WidgetMetaData }) {
+  private populateDropzone(widgets: { [key: string]: WidgetMetaData }) {
+    /*
+     * We need to clear the dropzone because we lose widget references
+     * when we serialize and deserialize the template. As a result, we
+     * create new DOM elements and append them to the dropzone.
+     */
+    this.dropzone.innerHTML = '';
     for (const id in widgets) {
       const widget = widgets[id];
       if (widget.shared) {
@@ -94,7 +104,7 @@ export class ScratchPanel extends connect(store)(LitElement) {
   /**
    * Collapses/Expands the actions panel.
    */
-  togglePanel({ target }: { target: EventTarget }) {
+  private togglePanel({ target }: { target: EventTarget }) {
     const panel = this.shadowRoot?.getElementById('container');
 
     if (panel == null) {
@@ -125,7 +135,9 @@ export class ScratchPanel extends connect(store)(LitElement) {
             icon="icons:chevron-right"
           ></iron-icon>
           <tab-container title="Shared Widgets">
-            <dropzone-widget></dropzone-widget>
+            <div id="scratch-panel">
+              <dropzone-widget id="shared-dropzone"></dropzone-widget>
+            </div>
           </tab-container>
         </div>
       </div>

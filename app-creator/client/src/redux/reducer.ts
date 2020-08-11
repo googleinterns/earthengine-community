@@ -21,6 +21,7 @@ import {
   SET_EVENT_TYPE,
   RemoveWidget,
   UPDATE_WIDGET_IDS,
+  UPDATE_WIDGET_SHARED_STATUS,
 } from './types/actions';
 import { Reducer, AnyAction } from 'redux';
 import { UniqueAttributes } from './types/attributes';
@@ -153,7 +154,6 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
       };
     case ADD_WIDGET_META_DATA:
       const widgetWithPalette = Object.assign({}, action.payload);
-
       /**
        * When we add widgets for the first time into the DOM, we want
        * to apply the correct styling so it matches the currently selected palette.
@@ -182,7 +182,7 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
       const { id } = action.payload;
 
       // Set the widget's backgroundColor style property with the appropriate value
-      // (i.e. #FFFFFF00) with the appropriate opacity.
+      // (i.e. #ffffff00) with the appropriate opacity.
       templateToBeUpdated.widgets[
         id
       ].style.backgroundColor = getBackgroundColor(
@@ -202,6 +202,20 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
       return {
         ...state,
         template: templateToBeUpdated,
+      };
+    case UPDATE_WIDGET_SHARED_STATUS:
+      return {
+        ...state,
+        template: {
+          ...state.template,
+          widgets: {
+            ...state.template.widgets,
+            [action.payload.id]: {
+              ...state.template.widgets[action.payload.id],
+              shared: action.payload.isShared,
+            },
+          },
+        },
       };
     case REMOVE_WIDGET:
       // Create template copy.

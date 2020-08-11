@@ -6,7 +6,7 @@ import { PaletteNames, WidgetType } from './types/enums';
 import { PalettePicker } from '../widgets/palette-picker/palette-picker';
 import { EEWidget } from './types/types';
 import { UpdateWidgetMetaData } from './types/actions';
-import { ROOT_ID } from '../utils/constants';
+import { ROOT_ID, SCRATCH_PANEL } from '../utils/constants';
 
 /**
  * Removes widget meta data from the current template.
@@ -45,9 +45,10 @@ export function applyPalette(
   color: PaletteNames
 ) {
   for (const widgetId in widgets) {
-    if (widgets[widgetId].shared) {
+    if (widgetId === SCRATCH_PANEL || widgets[widgetId].shared) {
       continue;
     }
+
     // Set the background color of panel elements. Non-panel elements start with a transparent background.
     if (
       widgetId.startsWith(WidgetType.PANEL) ||

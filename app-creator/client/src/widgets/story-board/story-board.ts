@@ -197,7 +197,6 @@ export class Storyboard extends connect(store)(LitElement) {
        * template with widgets from the previous one.
        */
       store.dispatch(setEventType(EventType.NONE, true));
-
       this.renderNewTemplate(template);
 
       try {
