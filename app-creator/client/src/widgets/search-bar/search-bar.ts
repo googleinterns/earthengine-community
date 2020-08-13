@@ -5,6 +5,7 @@
 import { css, customElement, html, LitElement, property } from 'lit-element';
 import { styleMap } from 'lit-html/directives/style-map';
 import { debounce } from '../../utils/debounce';
+import '@polymer/iron-icon/iron-icon';
 
 export interface onSearchEvent {
   detail: {
@@ -22,7 +23,7 @@ export class Searchbar extends LitElement {
   static styles = css`
     #container {
       width: calc(100% - 2 * var(--tight));
-      border: 0.7px solid rgba(0, 0, 0, 0.3);
+      border: 0.7px solid var(--border-gray);
       padding: var(--tight);
       border-radius: var(--regular-border-radius);
       height: 15px;

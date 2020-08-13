@@ -10,7 +10,6 @@ import {
   RESET_DRAGGING_VALUES,
   SET_SELECTED_TAB,
   SET_REORDERING,
-  SET_IMPORTING,
   AppCreatorAction,
   ADD_WIDGET_META_DATA,
   REMOVE_WIDGET,
@@ -18,11 +17,26 @@ import {
   SET_SELECTED_TEMPLATE,
   UPDATE_WIDGET_CHILDREN,
   SET_SELECTED_TEMPLATE_ID,
+  SET_PALETTE,
+  SET_EVENT_TYPE,
+  RemoveWidget,
 } from './types/actions';
 import { Reducer, AnyAction } from 'redux';
 import { UniqueAttributes } from './types/attributes';
-import { EventType, Tab } from './types/enums';
-import { getWidgetType } from '../utils/helpers';
+import { EventType, Tab, PaletteNames } from './types/enums';
+import { deepCloneTemplate } from '../utils/helpers';
+import {
+  Palette,
+  PalettePicker,
+} from '../widgets/palette-picker/palette-picker';
+import {
+  applyPalette,
+  updateWidgetAttribute,
+  getBackgroundColor,
+  updateUniqueAttributesInDOM,
+  removeWidgetHelper,
+  addDefaultStyles,
+} from './helpers';
 
 export interface WidgetMetaData {
   id: string;
@@ -37,6 +51,7 @@ export interface AppCreatorStore {
   editingElement: Element | null;
   draggingElement: Element | null;
   selectedTemplateID: string;
+  selectedPalette: Palette;
   selectedTab: Tab;
   eventType: EventType;
   widgetIDs: { [key: string]: number };
@@ -49,9 +64,10 @@ export interface AppCreatorStore {
 const INITIAL_STATE: AppCreatorStore = {
   editingElement: null,
   draggingElement: null,
-  selectedTab: Tab.widgets,
+  selectedTab: Tab.WIDGETS,
   selectedTemplateID: '',
-  eventType: EventType.none,
+  selectedPalette: PalettePicker.palette[PaletteNames.LIGHT],
+  eventType: EventType.NONE,
   widgetIDs: {
     label: 0,
     button: 0,
@@ -88,8 +104,23 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
         editingElement: action.payload.editingElement,
         eventType: action.payload.eventType,
         selectedTab: action.payload.openAttributesTab
-          ? Tab.attributes
+          ? Tab.ATTRIBUTES
           : state.selectedTab,
+      };
+    case SET_PALETTE:
+      const templateWithPalette = deepCloneTemplate(state.template, false);
+
+      /**
+       * We want to restyle the current template, so we make a wipe over all widgets
+       * and update the color, backgroundColor, and map styling properties.
+       */
+      applyPalette(templateWithPalette.widgets, action.payload.palette);
+
+      return {
+        ...state,
+        selectedPalette:
+          PalettePicker.palette[action.payload.palette as PaletteNames],
+        template: templateWithPalette,
       };
     case SET_SELECTED_TAB:
       return {
@@ -99,99 +130,93 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
     case SET_ELEMENT_ADDED:
       return {
         ...state,
-        eventType: action.payload.value ? EventType.adding : EventType.none,
+        eventType: action.payload.value ? EventType.ADDING : EventType.NONE,
       };
     case SET_REORDERING:
       return {
         ...state,
-        eventType: action.payload.value ? EventType.reordering : EventType.none,
+        eventType: action.payload.value ? EventType.REORDERING : EventType.NONE,
       };
     case SET_SELECTED_TEMPLATE_ID:
       return {
         ...state,
         selectedTemplateID: action.payload.id,
       };
-    case SET_IMPORTING:
+    case SET_EVENT_TYPE:
       return {
         ...state,
-        eventType: action.payload.value ? EventType.importing : EventType.none,
+        eventType: action.payload.value
+          ? action.payload.eventType
+          : EventType.NONE,
       };
     case ADD_WIDGET_META_DATA:
+      const widgetWithPalette = Object.assign({}, action.payload);
+
+      /**
+       * When we add widgets for the first time into the DOM, we want
+       * to apply the correct styling so it matches the currently selected palette.
+       * For example, if we have a dark palette, we want to add text with a white color,
+       * while for a light palette, we want to add text with a black color.
+       */
+      applyPalette(widgetWithPalette, state.selectedPalette.name);
+
       return {
         ...state,
         template: {
           ...state.template,
           widgets: {
             ...state.template.widgets,
-            ...action.payload,
+            ...widgetWithPalette,
           },
         },
       };
     case UPDATE_WIDGET_META_DATA:
-      const { attributeName, value, id, attributeType } = action.payload;
-      const updatedTemplate = { ...state.template };
+      const templateToBeUpdated = deepCloneTemplate(state.template, false);
 
-      if (attributeName.endsWith('unit')) {
-        const attributePrefix = getWidgetType(attributeName);
-        const attributeValue =
-          updatedTemplate.widgets[id][attributeType][attributePrefix];
-        if (attributeValue.endsWith('px')) {
-          updatedTemplate.widgets[id][attributeType][
-            attributePrefix
-          ] = attributeValue.replace('px', value);
-        } else {
-          updatedTemplate.widgets[id][attributeType][
-            attributePrefix
-          ] = attributeValue.replace('%', value);
-        }
-      } else {
-        const attributeValue =
-          updatedTemplate.widgets[id][attributeType][attributeName];
+      // Update widget attribute with the new value.
+      updateWidgetAttribute(templateToBeUpdated, action.payload);
 
-        updatedTemplate.widgets[id][attributeType][attributeName] = value;
+      // Get widget id from payload.
+      const { id } = action.payload;
 
-        if (attributeValue.endsWith('px') || attributeValue.endsWith('%')) {
-          if (!value.endsWith('px') && !value.endsWith('%')) {
-            updatedTemplate.widgets[id][attributeType][
-              attributeName
-            ] += attributeValue.endsWith('px') ? 'px' : '%';
-          }
-        }
-      }
-
-      const { widgetRef } = updatedTemplate.widgets[id];
-
-      updatedTemplate.widgets[id].style.backgroundColor = getBackgroundColor(
-        updatedTemplate.widgets[id].style
+      // Set the widget's backgroundColor style property with the appropriate value
+      // (i.e. #FFFFFF00) with the appropriate opacity.
+      templateToBeUpdated.widgets[
+        id
+      ].style.backgroundColor = getBackgroundColor(
+        templateToBeUpdated.widgets[id].style
       );
 
-      widgetRef.setStyle(updatedTemplate.widgets[id].style);
-      updateUI(widgetRef, updatedTemplate);
+      // Get widgetRef from template and set styles to the DOM element. This step
+      // is necessary to have the changes reflected in the UI.
+      const { widgetRef } = templateToBeUpdated.widgets[id];
+
+      // Update the css styling on the element.
+      widgetRef.setStyle(templateToBeUpdated.widgets[id].style);
+
+      // Update unique attributes (i.e. label, disabled, mapstyles, etc...).
+      updateUniqueAttributesInDOM(widgetRef, templateToBeUpdated);
 
       return {
         ...state,
-        template: updatedTemplate,
+        template: templateToBeUpdated,
       };
     case REMOVE_WIDGET:
-      const newTemplate = { ...state.template };
-      if (!action.payload.reordering) {
-        delete newTemplate.widgets[action.payload.id];
-      }
-      for (const key in newTemplate.widgets) {
-        const widget = newTemplate.widgets[key];
-        if (
-          typeof widget === 'object' &&
-          !Array.isArray(widget) &&
-          'children' in widget
-        ) {
-          widget.children = widget.children.filter(
-            (id: string) => id !== action.payload.id
-          );
-        }
-      }
+      // Create template copy.
+      const templateBeforeRemoval = deepCloneTemplate(state.template, false);
+
+      // Get payload properties.
+      const {
+        reordering,
+        id: widgetToRemoveId,
+      }: RemoveWidget['payload'] = action.payload;
+
+      // Remove widget from template and filter corresponding children.
+      removeWidgetHelper(templateBeforeRemoval, reordering, widgetToRemoveId);
+
       return {
         ...state,
-        template: newTemplate,
+        template: templateBeforeRemoval,
       };
     case INCREMENT_WIDGET_ID:
       return {
@@ -202,9 +227,20 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
         },
       };
     case SET_SELECTED_TEMPLATE:
+      // Apply default styles to the template, this is necessary because
+      // the template JSON string might not declare all the required style properties.
       addDefaultStyles(action.payload.template);
+
+      // Apply palette properties (i.e. backgroundColor, color, and map styles) to the template.
+      applyPalette(action.payload.template.widgets, state.selectedPalette.name);
+
       return {
         ...INITIAL_STATE,
+        widgetIDs:
+          state.eventType === EventType.CHANGINGPALETTE
+            ? state.widgetIDs
+            : INITIAL_STATE.widgetIDs,
+        selectedPalette: state.selectedPalette,
         selectedTemplateID: state.selectedTemplateID,
         selectedTab: state.selectedTab,
         template: action.payload.template,
@@ -231,80 +267,4 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
     default:
       return state;
   }
-};
-
-/**
- * Adds default styles to all widgets.
- */
-function addDefaultStyles(template: { [key: string]: any }) {
-  for (const id in template.widgets) {
-    const styleCopy: { [key: string]: string } = Object.assign(
-      {},
-      DEFAULT_STYLES
-    );
-    for (const attribute in template.widgets[id].style) {
-      styleCopy[attribute] = template.widgets[id].style[attribute];
-    }
-    template.widgets[id].style = styleCopy;
-  }
-}
-
-/**
- * Updates DOM element with attributes.
- */
-function updateUI(widget: HTMLElement, template: { [key: string]: any }) {
-  for (const attr of Object.keys(
-    template.widgets[widget.id].uniqueAttributes
-  )) {
-    widget.setAttribute(
-      attr,
-      template.widgets[widget.id].uniqueAttributes[attr]
-    );
-  }
-}
-
-function getBackgroundColor(style: { [key: string]: any }): string {
-  // Stringified number from 0 - 100 (only integers) or an empty string.
-  let backgroundOpacityStr = style.backgroundOpacity;
-
-  // Empty string case.
-  if (backgroundOpacityStr === '') {
-    backgroundOpacityStr = '100';
-  }
-
-  const backgroundOpacity = parseInt(backgroundOpacityStr);
-
-  const fraction = backgroundOpacity / 100;
-
-  const hexFraction = Math.floor(255 * fraction);
-
-  // Ensure that the hex number is at least two digits.
-  let hexNumberString = ('0' + hexFraction.toString(16)).slice(-2);
-
-  const newBackgroundColor =
-    style.backgroundColor.slice(0, 7) + hexNumberString.toUpperCase();
-
-  // Example: #FFFFFF00, where the last two hex numbers represent the opacity.
-  return newBackgroundColor;
-}
-
-/**
- * List of default styles shared across all widgets.
- */
-const DEFAULT_STYLES = {
-  height: 'px',
-  width: 'px',
-  padding: '0px',
-  margin: '8px',
-  borderWidth: '0px',
-  borderStyle: 'solid',
-  borderColor: 'black',
-  fontSize: '12px',
-  color: 'black',
-  backgroundOpacity: '0',
-  fontWeight: '300',
-  fontFamily: 'Roboto',
-  textAlign: 'left',
-  whiteSpace: 'normal',
-  shown: 'true',
 };

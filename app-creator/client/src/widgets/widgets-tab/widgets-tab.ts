@@ -11,6 +11,7 @@ import {
   property,
 } from 'lit-element';
 import { nothing } from 'lit-html';
+import { onSearchEvent } from '../search-bar/search-bar';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '../tab-container/tab-container';
@@ -26,7 +27,6 @@ import '../ui-chart/ui-chart';
 import '../search-bar/search-bar';
 import '../empty-notice/empty-notice';
 import '../ui-map/ui-map';
-import { onSearchEvent } from '../search-bar/search-bar';
 
 interface WidgetItem {
   id: string;

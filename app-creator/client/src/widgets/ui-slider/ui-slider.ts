@@ -24,31 +24,31 @@ export class Slider extends LitElement {
     min: {
       value: '0',
       placeholder: '0',
-      type: InputType.number,
+      type: InputType.NUMBER,
     },
     max: {
       value: '100',
       placeholder: '100',
-      type: InputType.number,
+      type: InputType.NUMBER,
     },
     value: {
       value: '50',
       placeholder: '50',
-      type: InputType.number,
+      type: InputType.NUMBER,
     },
     step: {
       value: '5',
       placeholder: '5',
-      type: InputType.number,
+      type: InputType.NUMBER,
     },
     direction: {
       value: 'horizontal',
-      type: InputType.select,
+      type: InputType.SELECT,
       items: ['horizontal', 'vertical'],
     },
     disabled: {
       value: 'false',
-      type: InputType.select,
+      type: InputType.SELECT,
       items: ['true', 'false'],
     },
   };

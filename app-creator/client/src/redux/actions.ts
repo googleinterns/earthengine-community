@@ -26,16 +26,24 @@ import {
   SET_SELECTED_TEMPLATE,
   UPDATE_WIDGET_CHILDREN,
   UpdateWidgetChildren,
-  SetIsImportingAction,
-  SET_IMPORTING,
   SetSelectedTemplateIDAction,
   SET_SELECTED_TEMPLATE_ID,
+  SetPalette,
+  SET_PALETTE,
+  SetEventType,
+  SET_EVENT_TYPE,
 } from './types/actions';
 import {
   DEFAULT_SHARED_ATTRIBUTES,
   UniqueAttributes,
 } from './types/attributes';
-import { WidgetType, AttributeType, Tab, EventType } from './types/enums';
+import {
+  WidgetType,
+  AttributeType,
+  Tab,
+  EventType,
+  PaletteNames,
+} from './types/enums';
 import { getWidgetType } from '../utils/helpers';
 import { Label } from '../widgets/ui-label/ui-label';
 import { Button } from '../widgets/ui-button/ui-button';
@@ -100,6 +108,18 @@ export const removeWidgetMetaData = (
 };
 
 /**
+ * Sets the template palette.
+ */
+export const setPalette = (palette: PaletteNames): SetPalette => {
+  return {
+    type: SET_PALETTE,
+    payload: {
+      palette,
+    },
+  };
+};
+
+/**
  * Adds widget meta data to the store's template representation.
  */
 export const addWidgetMetaData = (
@@ -151,7 +171,7 @@ export const setEditingWidget = (
        * If widget is null, then we want to clear the editing state.
        * This occurs when are dragging a new widget or we are removing the current widget being edited.
        */
-      eventType: widget == null ? EventType.none : EventType.editing,
+      eventType: widget == null ? EventType.NONE : EventType.EDITING,
       // Open attributes tab if we are editing an element (ie. Not clearing state).
       openAttributesTab: widget != null,
     },
@@ -192,7 +212,7 @@ export const resetDraggingValues = (): ResetDraggingValuesAction => {
     type: RESET_DRAGGING_VALUES,
     payload: {
       draggingElement: null,
-      eventType: EventType.none,
+      eventType: EventType.NONE,
     },
   };
 };
@@ -226,14 +246,16 @@ export const setReordering = (value: boolean): SetIsReorderingAction => {
 };
 
 /**
- * Sets state to true if we are importing widgets and false otherwise. Importing state is used to determine
- * if a widget should be cloned and if we should increment the widget's ID.
- * @param value true if we are importing elements and false otherwise.
+ * Sets event state to a particular value.
  */
-export const setImporting = (value: boolean): SetIsImportingAction => {
+export const setEventType = (
+  eventType: EventType,
+  value: boolean = true
+): SetEventType => {
   return {
-    type: SET_IMPORTING,
+    type: SET_EVENT_TYPE,
     payload: {
+      eventType,
       value,
     },
   };
@@ -270,21 +292,21 @@ export const setSelectedTemplateID = (
  */
 function getUniqueAttributes(type: string): UniqueAttributes {
   switch (type) {
-    case WidgetType.label:
+    case WidgetType.LABEL:
       return Label.DEFAULT_LABEL_ATTRIBUTES;
-    case WidgetType.button:
+    case WidgetType.BUTTON:
       return Button.DEFAULT_BUTTON_ATTRIBUTES;
-    case WidgetType.checkbox:
+    case WidgetType.CHECKBOX:
       return Checkbox.DEFAULT_CHECKBOX_ATTRIBUTES;
-    case WidgetType.select:
+    case WidgetType.SELECT:
       return Select.DEFAULT_SELECT_ATTRIBUTES;
-    case WidgetType.slider:
+    case WidgetType.SLIDER:
       return Slider.DEFAULT_SLIDER_ATTRIBUTES;
-    case WidgetType.textbox:
+    case WidgetType.TEXTBOX:
       return Textbox.DEFAULT_TEXTBOX_ATTRIBUTES;
-    case WidgetType.chart:
+    case WidgetType.CHART:
       return Chart.DEFAULT_CHART_ATTRIBUTES;
-    case WidgetType.map:
+    case WidgetType.MAP:
       return Map.DEFAULT_MAP_ATTRIBUTES;
     default:
       return {};

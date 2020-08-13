@@ -11,6 +11,7 @@ import { connect } from 'pwa-helpers';
 import { AppCreatorStore } from '../../redux/reducer';
 import { DeviceType } from '../../redux/types/enums';
 import { classMap } from 'lit-html/directives/class-map';
+import { chips } from '../../utils/helpers';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '../tab-container/tab-container';
@@ -27,7 +28,6 @@ import '../search-bar/search-bar';
 import '../empty-notice/empty-notice';
 import '../template-card/template-card';
 import '@cwmr/paper-chip/paper-chip.js';
-import { chips } from '../../utils/helpers';
 
 export interface TemplatesTabItem {
   id: string;
@@ -88,7 +88,7 @@ export class TemplatesTab extends connect(store)(LitElement) {
   /**
    * Sets device filter.
    */
-  @property({ type: String }) deviceFilter = DeviceType.all;
+  @property({ type: String }) deviceFilter = DeviceType.ALL;
 
   getTemplateCards(showTitle = false) {
     const templates = templatesManager.getTemplates();
@@ -104,6 +104,7 @@ export class TemplatesTab extends connect(store)(LitElement) {
             title="${name}"
             imageUrl="${imageUrl}"
             ?showTitle=${showTitle}
+            ?selected=${store.getState().template.config.parentID === id}
             .onSelection=${this.createSelectionCallback(template)}
           ></template-card>
         `,
@@ -127,7 +128,7 @@ export class TemplatesTab extends connect(store)(LitElement) {
 
       // And matches the device type (or all).
       const deviceMatch =
-        deviceFilter === DeviceType.all || device === deviceFilter;
+        deviceFilter === DeviceType.ALL || device === deviceFilter;
 
       return queryMatch && deviceMatch;
     });

@@ -8,7 +8,7 @@ import { store } from '../redux/store';
 import { setSelectedTemplate } from '../redux/actions';
 import { Dropzone } from '../widgets/dropzone-widget/dropzone-widget';
 import { DraggableWidget } from '../widgets/draggable-widget/draggable-widget';
-import { getWidgetType } from './helpers';
+import { getWidgetType, deepCloneTemplate } from './helpers';
 import { EEWidget } from '../redux/types/types';
 import { WidgetType } from '../redux/types/enums';
 import { Panel } from '../widgets/ui-panel/ui-panel';
@@ -23,7 +23,7 @@ export function generateUI(
   template: AppCreatorStore['template'],
   node: HTMLElement
 ) {
-  const templateCopy = Object.assign({}, template);
+  const templateCopy = deepCloneTemplate(template);
 
   // Recursively creates ui widgets and returns the root of the tree.
   function getWidgetTree(widgetData: WidgetMetaData): HTMLElement {
@@ -47,7 +47,6 @@ export function generateUI(
   const root = templateCopy.widgets[ROOT_ID];
 
   node.appendChild(getWidgetTree(root));
-
   // Replace the store's template with the one that include the widgetRefs.
   store.dispatch(setSelectedTemplate(templateCopy));
 }
@@ -88,7 +87,7 @@ export function getWidgetElement({
   let draggable = null;
 
   switch (type) {
-    case WidgetType.map:
+    case WidgetType.MAP:
       // We wrap the map with a div and give it a height and width of a 100%.
       const wrapper = document.createElement('div');
       wrapper.style.width = element.style.width;
@@ -107,8 +106,8 @@ export function getWidgetElement({
 
       element = wrapper;
       break;
-    case WidgetType.panel:
-    case WidgetType.sidemenu:
+    case WidgetType.PANEL:
+    case WidgetType.SIDEMENU:
       if ((element as Panel).editable) {
         (element as Panel).editable = !!editable;
       }

@@ -20,15 +20,13 @@ export const database: TemplateItem[] = [
     name: 'Left Side Panel',
     imageUrl:
       'https://storage.cloud.google.com/ee-app-creator.appspot.com/left-panel.png',
-    device: DeviceType.desktop,
+    device: DeviceType.DESKTOP,
     template: `{
         "config": {
             "parentID": "left-side-panel",
             "parentName": "Left Side Panel",
             "id": "left-side-panel-desktop",
             "name": "Left Side Panel Desktop",
-            "textDirection": "left",
-            "language": "en",
             "device": "desktop"
         },
         "widgets": {
@@ -44,8 +42,6 @@ export const database: TemplateItem[] = [
                     "height": "100%",
                     "width": "100%",
                     "margin": "0px",
-                    "backgroundColor": "#FFFFFFFF",
-                    "backgroundOpacity": "100",
                     "shown": "true",
                     "boxSizing": "border-box"
                 }
@@ -61,11 +57,7 @@ export const database: TemplateItem[] = [
                 "style": {
                     "height": "100%",
                     "width": "40%",
-                    "padding": "8px",
                     "margin": "0px",
-                    "backgroundColor": "#dfd2aeFF",
-                    "backgroundOpacity": "100",
-                    "borderWidth": "5px",
                     "borderColor": "#e28b59",
                     "boxSizing": "border-box"
                 }
@@ -89,8 +81,6 @@ export const database: TemplateItem[] = [
                     "height": "100%",
                     "width": "60%",
                     "margin": "0px",
-                    "backgroundColor": "#FFFFFFFF",
-                    "backgroundOpacity": "100",
                     "boxSizing": "border-box"
                 }
             },
@@ -102,7 +92,6 @@ export const database: TemplateItem[] = [
                     "targetUrl": ""
                 },
                 "style": {
-                    "backgroundColor": "#FFFFFF00",
                     "fontSize": "32px",
                     "fontWeight": "700"
                 }
@@ -115,7 +104,6 @@ export const database: TemplateItem[] = [
                     "targetUrl": ""
                 },
                 "style": {
-                    "backgroundColor": "#FFFFFF00",
                     "fontSize": "14px"
                 }
             },
@@ -126,10 +114,7 @@ export const database: TemplateItem[] = [
                     "label": "Button",
                     "disabled": "false"
                 },
-                "style": {
-                    "backgroundColor": "#FFFFFFFF",
-                    "backgroundOpacity": "100"
-                }
+                "style": {}
             }
         }
     }`,
@@ -139,15 +124,13 @@ export const database: TemplateItem[] = [
     name: 'Left Drawer Mobile',
     imageUrl:
       'https://storage.googleapis.com/ee-app-creator.appspot.com/left-drawer-mobile.png',
-    device: DeviceType.mobile,
+    device: DeviceType.MOBILE,
     template: `{
         "config": {
             "parentID": "left-drawer-mobile",
             "parentName": "Left Drawer Mobile",
             "id": "left-drawer-mobile",
             "name": "Left Side Panel Mobile",
-            "textDirection": "left",
-            "language": "en",
             "device": "mobile"
         },
         "widgets": {
@@ -155,18 +138,17 @@ export const database: TemplateItem[] = [
                 "id": "panel-template-0",
                 "editable": false,
                 "hasDropzone": false,
-                "children": ["map-template-0", "sidemenu-template-0"],
+                "children": ["sidemenu-template-0", "map-template-0"],
                 "uniqueAttributes": {
                     "layout": "row"
                 },
                 "style": {
                     "height": "100%",
                     "width": "100%",
-                    "padding": "0px",
                     "margin": "0px",
                     "color": "black",
-                    "backgroundColor": "#FFFFFF",
-                    "box-sizing": "border-box"
+                    "box-sizing": "border-box",
+                    "position": "relative"
                 }
             },
             "sidemenu-template-0": {
@@ -187,12 +169,11 @@ export const database: TemplateItem[] = [
                     "padding": "0px",
                     "margin": "0px",
                     "color": "black",
-                    "backgroundOpacity": "100",
-                    "backgroundColor": "#FFFFFF00",
                     "box-sizing": "border-box",
                     "position": "absolute",
                     "top":0,
-                    "left":0
+                    "left":0,
+                    "zIndex": 10
                 }
             },
             "label-template-0": {
@@ -203,7 +184,6 @@ export const database: TemplateItem[] = [
                    "targetUrl": ""
                 },
                 "style": {
-                   "backgroundColor": "#FFFFFF00",
                    "fontSize": "32px",
                    "fontWeight": "700"
                 }
@@ -226,9 +206,7 @@ export const database: TemplateItem[] = [
                    "label": "Button",
                    "disabled": "false"
                 },
-                "style": {
-                   "backgroundColor": "#FFFFFF00"
-                }
+                "style": {}
              },
             "map-template-0": {
                 "id": "map-template-0",
@@ -248,10 +226,8 @@ export const database: TemplateItem[] = [
                 "style": {
                     "height": "100%",
                     "width": "100%",
-                    "padding": "0px",
                     "margin": "0px",
                     "color": "black",
-                    "backgroundColor": "#FFFFFF",
                     "box-sizing": "border-box"
                 }
             }
@@ -263,15 +239,13 @@ export const database: TemplateItem[] = [
     name: 'Right Side Panel',
     imageUrl:
       'https://storage.cloud.google.com/ee-app-creator.appspot.com/right-panel.png',
-    device: DeviceType.desktop,
+    device: DeviceType.DESKTOP,
     template: `{
         "config": {
             "parentID": "right-side-panel",
             "parentName": "Right Side Panel",
             "id": "right-side-panel-desktop",
             "name": "Right Side Panel Desktop",
-            "textDirection": "left",
-            "language": "en",
             "device": "desktop"
         },
         "widgets": {
@@ -287,8 +261,6 @@ export const database: TemplateItem[] = [
                     "height": "100%",
                     "width": "100%",
                     "margin": "0px",
-                    "backgroundColor": "#FFFFFFFF",
-                    "backgroundOpacity": "100",
                     "boxSizing": "border-box"
                 }
             },
@@ -304,8 +276,6 @@ export const database: TemplateItem[] = [
                     "height": "100%",
                     "width": "40%",
                     "margin": "0px",
-                    "backgroundColor": "#FFFFFFFF",
-                    "backgroundOpacity": "100",
                     "boxSizing": "border-box"
                 }
             },
@@ -368,9 +338,7 @@ export const database: TemplateItem[] = [
                     "disabled": "false"
                 },
                 "style": {
-                    "margin": "8px",
-                    "backgroundColor": "#FFFFFFFF",
-                    "backgroundOpacity": "100"
+                    "margin": "8px"
                 }
             }
         }
@@ -381,16 +349,14 @@ export const database: TemplateItem[] = [
     name: 'Map With Legend',
     imageUrl:
       'https://storage.cloud.google.com/ee-app-creator.appspot.com/legend-example.png',
-    device: DeviceType.desktop,
+    device: DeviceType.DESKTOP,
     template: `{
         "config": {
             "parentID": "map-with-legend",
             "parentName": "Map with legend",
             "id": "map-with-legend-desktop",
-            "name": "Map with legend Desktop",
-            "textDirection": "left",
-            "language": "en",
-            "device": "desktop"
+            "device": "desktop",
+            "name": "Map with legend Desktop"
         },
         "widgets": {
             "panel-template-0": {
@@ -405,8 +371,6 @@ export const database: TemplateItem[] = [
                     "height": "100%",
                     "width": "100%",
                     "margin": "0px",
-                    "backgroundColor": "#FFFFFF",
-                    "backgroundOpacity": "100",
                     "position": "relative",
                     "boxSizing": "border-box"
                 }
@@ -420,13 +384,11 @@ export const database: TemplateItem[] = [
                     "layout": "column"
                 },
                 "style": {
-                    "height": "300px",
-                    "width": "500px",
-                    "padding": "16px",
+                    "height": "35%",
+                    "width": "400px",
                     "margin": "0px",
                     "backgroundColor": "#0e1626CC",
                     "backgroundOpacity": "80",
-                    "borderWidth": "5px",
                     "borderStyle": "solid",
                     "borderColor": "#85b7b0",
                     "position": "absolute",
@@ -454,8 +416,6 @@ export const database: TemplateItem[] = [
                     "height": "100%",
                     "width": "100%",
                     "margin": "0px",
-                    "backgroundColor": "#FFFFFFFF",
-                    "backgroundOpacity": "100",
                     "boxSizing": "border-box"
                 }
             },
@@ -468,9 +428,6 @@ export const database: TemplateItem[] = [
                 },
                 "style": {
                     "margin": "8px",
-                    "color": "#ffffff",
-                    "backgroundColor": "#FFFFFF00",
-                    "backgroundOpacity": "0px",
                     "fontSize": "16px"
                 }
             },
@@ -482,9 +439,7 @@ export const database: TemplateItem[] = [
                     "disabled": "false"
                 },
                 "style": {
-                    "margin": "8px",
-                    "backgroundColor": "#FFFFFF",
-                    "backgroundOpacity": "0px"
+                    "margin": "8px"
                 }
             },
             "label-template-1": {
@@ -496,9 +451,6 @@ export const database: TemplateItem[] = [
                 },
                 "style": {
                     "margin": "8px",
-                    "color": "#ffffff",
-                    "backgroundColor": "#FFFFFF00",
-                    "backgroundOpacity": "0px",
                     "fontSize": "32px",
                     "fontWeight": "700"
                 }
@@ -511,16 +463,14 @@ export const database: TemplateItem[] = [
     name: 'Two Maps',
     imageUrl:
       'https://storage.cloud.google.com/ee-app-creator.appspot.com/two-map.png',
-    device: DeviceType.desktop,
+    device: DeviceType.DESKTOP,
     template: `{
         "config": {
             "parentID": "two-maps",
             "parentName": "Two Maps",
             "id": "two-maps-desktop",
-            "name": "Two Maps Desktop",
-            "textDirection": "left",
-            "language": "en",
-            "device": "desktop"
+            "device": "desktop",
+            "name": "Two Maps Desktop"
         },
         "widgets": {
             "panel-template-0": {
@@ -535,8 +485,6 @@ export const database: TemplateItem[] = [
                     "height": "100%",
                     "width": "100%",
                     "margin": "0px",
-                    "backgroundColor": "#FFFFFFFF",
-                    "backgroundOpacity": "100",
                     "position": "relative",
                     "boxSizing": "border-box"
                 }
@@ -550,13 +498,11 @@ export const database: TemplateItem[] = [
                     "layout": "column"
                 },
                 "style": {
-                    "height": "350px",
-                    "width": "300px",
-                    "padding": "16px",
+                    "height": "300px",
+                    "width": "250px",
                     "margin": "0px",
                     "backgroundColor": "#17263CF2",
                     "backgroundOpacity": "95",
-                    "borderWidth": "5px",
                     "borderStyle": "solid",
                     "borderColor": "#dfd2ae",
                     "position": "absolute",
@@ -575,13 +521,11 @@ export const database: TemplateItem[] = [
                     "layout": "column"
                 },
                 "style": {
-                    "height": "350px",
-                    "width": "300px",
-                    "padding": "16px",
+                    "height": "300px",
+                    "width": "250px",
                     "margin": "0px",
                     "backgroundColor": "#DFD2AEF2",
                     "backgroundOpacity": "95",
-                    "borderWidth": "5px",
                     "borderStyle": "solid",
                     "borderColor": "#17263c",
                     "position": "absolute",
@@ -673,9 +617,7 @@ export const database: TemplateItem[] = [
                     "disabled": "false"
                 },
                 "style": {
-                    "margin": "8px",
-                    "backgroundColor": "#ffffffFF",
-                    "backgroundOpacity": "100"
+                    "margin": "8px"
                 }
             },
             "button-template-1": {
@@ -686,9 +628,7 @@ export const database: TemplateItem[] = [
                     "disabled": "false"
                 },
                 "style": {
-                    "margin": "8px",
-                    "backgroundColor": "#FFFFFFFF",
-                    "backgroundOpacity": "100"
+                    "margin": "8px"
                 }
             },
             "label-template-3": {
@@ -700,8 +640,6 @@ export const database: TemplateItem[] = [
                 },
                 "style": {
                     "margin": "8px",
-                    "color": "#ffffff",
-                    "backgroundColor": "#FFFFFF00",
                     "fontSize": "22px",
                     "fontWeight": "700"
                 }
@@ -715,7 +653,6 @@ export const database: TemplateItem[] = [
                 },
                 "style": {
                     "margin": "8px",
-                    "backgroundColor": "#FFFFFF00",
                     "fontSize": "22px",
                     "fontWeight": "700"
                 }
@@ -729,15 +666,13 @@ export const database: TemplateItem[] = [
     name: 'Four Maps',
     imageUrl:
       'https://storage.cloud.google.com/ee-app-creator.appspot.com/four-maps.png',
-    device: DeviceType.desktop,
+    device: DeviceType.DESKTOP,
     template: `{
         "config": {
             "parentID": "four-maps",
             "parentName": "Four Maps",
             "id": "four-maps-desktop",
             "name": "Four Maps Desktop",
-            "textDirection": "left",
-            "language": "en",
             "device": "desktop"
         },
         "widgets": {
@@ -753,8 +688,6 @@ export const database: TemplateItem[] = [
                     "height": "100%",
                     "width": "100%",
                     "margin": "0px",
-                    "backgroundColor": "#FFFFFFFF",
-                    "backgroundOpacity":"100", 
                     "position": "relative",
                     "boxSizing": "border-box"
                 }
@@ -771,8 +704,6 @@ export const database: TemplateItem[] = [
                     "height": "8%",
                     "width": "100%",
                     "margin": "0px",
-                    "backgroundColor": "#FFFFFFFF",
-                    "backgroundOpacity":"100", 
                     "position": "relative",
                     "boxSizing": "border-box"
                 }
@@ -789,8 +720,6 @@ export const database: TemplateItem[] = [
                     "height": "92%",
                     "width": "100%",
                     "margin": "0px",
-                    "backgroundColor": "#FFFFFFFF",
-                    "backgroundOpacity":"100",
                     "boxSizing": "border-box"
                 }
             },
@@ -806,8 +735,6 @@ export const database: TemplateItem[] = [
                     "height": "50%",
                     "width": "100%",
                     "margin": "0px",
-                    "backgroundColor": "#FFFFFFFF",
-                    "backgroundOpacity":"100",
                     "boxSizing": "border-box"
                 }
             },
@@ -829,8 +756,6 @@ export const database: TemplateItem[] = [
                     "height": "100%",
                     "width": "50%",
                     "margin": "0px",
-                    "backgroundColor": "#FFFFFFFF",
-                    "backgroundOpacity":"100",
                     "boxSizing": "border-box"
                 }
             },
@@ -852,8 +777,6 @@ export const database: TemplateItem[] = [
                     "height": "100%",
                     "width": "50%",
                     "margin": "0px",
-                    "backgroundColor": "#FFFFFFFF",
-                    "backgroundOpacity":"100",
                     "boxSizing": "border-box"
                 }
             },
@@ -869,8 +792,6 @@ export const database: TemplateItem[] = [
                     "height": "50%",
                     "width": "100%",
                     "margin": "0px",
-                    "backgroundColor": "#FFFFFFFF",
-                    "backgroundOpacity":"100",
                     "boxSizing": "border-box"
                 }
             },
@@ -892,8 +813,6 @@ export const database: TemplateItem[] = [
                     "height": "100%",
                     "width": "50%",
                     "margin": "0px",
-                    "backgroundColor": "#FFFFFFFF",
-                    "backgroundOpacity":"100",
                     "boxSizing": "border-box"
                 }
             },
@@ -915,8 +834,6 @@ export const database: TemplateItem[] = [
                     "height": "100%",
                     "width": "50%",
                     "margin": "0px",
-                    "backgroundColor": "#FFFFFFFF",
-                    "backgroundOpacity":"100",
                     "boxSizing": "border-box"
                 }
             },
@@ -932,8 +849,6 @@ export const database: TemplateItem[] = [
                     "height": "150px",
                     "width": "300px",
                     "margin": "0px",
-                    "backgroundColor": "#FFFFFFFF",
-                    "backgroundOpacity":"100",
                     "position": "absolute",
                     "top": "16px",
                     "left": "16px",
@@ -953,8 +868,6 @@ export const database: TemplateItem[] = [
                     "height": "150px",
                     "width": "300px",
                     "margin": "0px",
-                    "backgroundColor": "#FFFFFFFF",
-                    "backgroundOpacity":"100",
                     "position": "absolute",
                     "top": "16px",
                     "right": "16px",
@@ -974,8 +887,6 @@ export const database: TemplateItem[] = [
                     "height": "150px",
                     "width": "300px",
                     "margin": "0px",
-                    "backgroundColor": "#FFFFFFFF",
-                    "backgroundOpacity":"100",
                     "position": "absolute",
                     "bottom": "16px",
                     "left": "16px",
@@ -995,8 +906,6 @@ export const database: TemplateItem[] = [
                     "height": "150px",
                     "width": "300px",
                     "margin": "0px",
-                    "backgroundColor": "#FFFFFFFF",
-                    "backgroundOpacity":"100",
                     "position": "absolute",
                     "bottom": "16px",
                     "right": "16px",
@@ -1015,7 +924,6 @@ export const database: TemplateItem[] = [
                    "height": "px",
                    "width": "98%",
                    "margin": "8px",
-                   "backgroundColor": "#FFFFFF00",
                    "borderWidth": "0px",
                    "borderStyle": "solid",
                    "borderColor": "black",

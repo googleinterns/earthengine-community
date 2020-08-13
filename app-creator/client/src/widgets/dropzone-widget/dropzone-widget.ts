@@ -3,9 +3,7 @@
  */
 import { css, customElement, html, LitElement, property } from 'lit-element';
 import { styleMap } from 'lit-html/directives/style-map';
-import '@polymer/iron-icon/iron-icon.js';
 import { DraggableWidget } from '../draggable-widget/draggable-widget';
-import '../empty-notice/empty-notice';
 import { EMPTY_NOTICE_ID } from '../empty-notice/empty-notice';
 import { store } from '../../redux/store';
 import {
@@ -16,6 +14,8 @@ import {
   updateWidgetChildren,
 } from '../../redux/actions';
 import { EventType } from '../../redux/types/enums';
+import '@polymer/iron-icon/iron-icon.js';
+import '../empty-notice/empty-notice';
 
 export const CONTAINER_ID = 'container';
 
@@ -83,10 +83,9 @@ export class Dropzone extends LitElement {
   }
 
   /**
-   * Takes in an html element (usually a dropzone) and returns the children ids without the empty-notice.
+   * Return children IDs for a given dropzone.
    */
   getChildrenIds(): string[] {
-    // We slice the first child because it is always the empty notice.
     return Array.from(this.children).map((el) => {
       return el.firstElementChild!.id;
     });
@@ -113,7 +112,7 @@ export class Dropzone extends LitElement {
     }
 
     // set the global reordering state to true so we know that we don't increment the current widget id
-    if (store.getState().eventType !== EventType.reordering) {
+    if (store.getState().eventType !== EventType.REORDERING) {
       store.dispatch(setReordering(true));
     }
     return;
@@ -131,16 +130,21 @@ export class Dropzone extends LitElement {
     const clone = widget.cloneNode(true) as HTMLElement;
     clone.id += `-${store.getState().widgetIDs[widget.id]}`;
 
-    // Return early if the widget has been added to another panel earlier.
-    const template = store.getState().template.widgets;
-    for (const id in template) {
+    // If a widget exists in another panel, remove it.
+    const widgets = store.getState().template.widgets;
+    for (const id in widgets) {
       if (
-        typeof template[id] === 'object' &&
-        !Array.isArray(template[id]) &&
+        typeof widgets[id] === 'object' &&
+        !Array.isArray(widgets[id]) &&
         id !== parent!.id &&
-        template[id].children.includes(clone.id)
+        widgets[id].children.includes(clone.id)
       ) {
-        return;
+        const widget = widgets[clone.id].widgetRef;
+        const draggable = widget.parentElement as DraggableWidget;
+        const dropzone = draggable.parentElement as Dropzone;
+        dropzone.removeChild(draggable);
+        const childrenIds = dropzone.getChildrenIds();
+        store.dispatch(updateWidgetChildren(id, childrenIds));
       }
     }
 
@@ -168,7 +172,7 @@ export class Dropzone extends LitElement {
     }
 
     // We use this to correctly increment the widget id.
-    if (store.getState().eventType !== EventType.adding) {
+    if (store.getState().eventType !== EventType.ADDING) {
       store.dispatch(setElementAdded(true));
     }
 
