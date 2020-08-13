@@ -34,6 +34,14 @@ export class Textbox extends LitElement {
     },
   };
 
+  static disabledStyles: Set<string> = new Set([
+    'fontSize',
+    'fontFamily',
+    'textAlign',
+    'whiteSpace',
+    'shown',
+  ]);
+
   static DEFAULT_TEXTBOX_ATTRIBUTES: DefaultAttributesType = getDefaultAttributes(
     Textbox.attributes
   );

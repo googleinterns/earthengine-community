@@ -15,9 +15,9 @@ import {
   updateWidgetSharedStatus,
 } from '../../redux/actions';
 import { EventType } from '../../redux/types/enums';
+import { SCRATCH_PANEL } from '../../utils/constants';
 import '@polymer/iron-icon/iron-icon.js';
 import '../empty-notice/empty-notice';
-import { SCRATCH_PANEL } from '../../utils/constants';
 import {
   addBackgroundColorToSharedWidget,
   removeBackgroundColorFromSharedWidget,

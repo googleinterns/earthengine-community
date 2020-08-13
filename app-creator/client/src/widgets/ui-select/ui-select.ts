@@ -34,17 +34,21 @@ export class Select extends LitElement {
       placeholder: 'Enter placeholder',
       type: InputType.TEXT,
     },
-    value: {
-      value: 'Item 1',
-      placeholder: 'Enter value',
-      type: InputType.TEXT,
-    },
     disabled: {
       value: 'false',
       type: InputType.SELECT,
       items: ['true', 'false'],
     },
   };
+
+  static disabledStyles: Set<string> = new Set([
+    'color',
+    'fontSize',
+    'fontWeight',
+    'textAlign',
+    'whiteSpace',
+    'shown',
+  ]);
 
   static DEFAULT_SELECT_ATTRIBUTES: DefaultAttributesType = getDefaultAttributes(
     Select.attributes
@@ -85,10 +89,10 @@ export class Select extends LitElement {
     const { styles } = this;
     return html`
       <paper-dropdown-menu
+        style=${styleMap(styles)}
         label="${this.placeholder}"
         ?disabled=${this.disabled}
         @value-changed=${this.handleSelectionChange}
-        style=${styleMap(styles)}
       >
         <paper-listbox
           slot="dropdown-content"

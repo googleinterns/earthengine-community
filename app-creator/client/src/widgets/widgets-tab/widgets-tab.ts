@@ -150,7 +150,7 @@ export class WidgetsTab extends LitElement {
   /**
    * Returns widgets with names and ids that include the search query.
    */
-  filterWidgets(query: string): WidgetItem[] {
+  private filterWidgets(query: string): WidgetItem[] {
     return WidgetsTab.widgets.filter(({ id, name }) => {
       const lowerCasedQuery = query.toLowerCase();
       return (

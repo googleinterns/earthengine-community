@@ -90,6 +90,25 @@ export class Chart extends LitElement {
     },
   };
 
+  static disabledStyles: Set<string> = new Set([
+    'height',
+    'width',
+    'padding',
+    'margin',
+    'color',
+    'backgroundColor',
+    'backgroundOpacity',
+    'borderWidth',
+    'borderStyle',
+    'borderColor',
+    'fontSize',
+    'fontWeight',
+    'fontFamily',
+    'textAlign',
+    'whiteSpace',
+    'shown',
+  ]);
+
   static DEFAULT_CHART_ATTRIBUTES: DefaultAttributesType = getDefaultAttributes(
     Chart.attributes
   );

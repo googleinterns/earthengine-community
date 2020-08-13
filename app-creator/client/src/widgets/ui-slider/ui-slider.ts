@@ -11,6 +11,7 @@ import {
   getDefaultAttributes,
 } from '../../redux/types/attributes';
 import { InputType } from '../../redux/types/enums';
+import { store } from '../../redux/store';
 
 @customElement('ui-slider')
 export class Slider extends LitElement {
@@ -53,6 +54,15 @@ export class Slider extends LitElement {
     },
   };
 
+  static disabledStyles: Set<string> = new Set([
+    'fontSize',
+    'fontWeight',
+    'fontFamily',
+    'textAlign',
+    'whiteSpace',
+    'shown',
+  ]);
+
   static DEFAULT_SLIDER_ATTRIBUTES: DefaultAttributesType = getDefaultAttributes(
     Slider.attributes
   );
@@ -85,13 +95,17 @@ export class Slider extends LitElement {
   /**
    * Displays input field next to slider for editing.
    */
-  @property({ type: Boolean }) editable = true;
+  @property({ type: Boolean }) editable = false;
 
   render() {
     const { value, max, min, editable, disabled, styles } = this;
     return html`
       <paper-slider
-        style=${styleMap(styles)}
+        style=${styleMap({
+          ...styles,
+          '--paper-slider-active-color': styles.color,
+          '--paper-slider-knob-color': styles.color,
+        })}
         value=${value}
         max=${max}
         min=${min}

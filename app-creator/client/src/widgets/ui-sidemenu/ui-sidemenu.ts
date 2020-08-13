@@ -92,6 +92,23 @@ export class SideMenu extends LitElement {
    */
   @query('ui-panel') panel!: Panel;
 
+  static disabledStyles: Set<string> = new Set([
+    'height',
+    'width',
+    'margin',
+    'color',
+    'fontSize',
+    'fontWeight',
+    'fontFamily',
+    'textAlign',
+    'whiteSpace',
+    'shown',
+    'backgroundOpacity',
+    'borderWidth',
+    'borderStyle',
+    'borderColor',
+  ]);
+
   firstUpdated() {
     if (this.panel) {
       this.panel.id = this.id;

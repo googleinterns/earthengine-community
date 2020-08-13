@@ -44,6 +44,8 @@ export class Button extends LitElement {
     },
   };
 
+  static disabledStyles: Set<string> = new Set(['whiteSpace', 'shown']);
+
   static DEFAULT_BUTTON_ATTRIBUTES: DefaultAttributesType = getDefaultAttributes(
     Button.attributes
   );

@@ -31,8 +31,13 @@ import { Map } from '../ui-map/ui-map.js';
 import { store } from '../../redux/store';
 import { AppCreatorStore } from '../../redux/reducer';
 import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog.js';
+<<<<<<< HEAD
 import '@polymer/paper-dialog/paper-dialog.js';
 import '../empty-notice/empty-notice';
+=======
+import { Panel } from '../ui-panel/ui-panel';
+import { SideMenu } from '../ui-sidemenu/ui-sidemenu';
+>>>>>>> added mechanism for disabling attributes
 
 @customElement('attributes-tab')
 export class AttributesTab extends connect(store)(LitElement) {
@@ -641,14 +646,52 @@ ${value}</textarea
     }
   }
 
+<<<<<<< HEAD
+=======
+  private getDisabledStyles(type: string): Set<string> | null {
+    switch (type) {
+      case WidgetType.MAP:
+        return Map.disabledStyles;
+      case WidgetType.LABEL:
+        return Label.disabledStyles;
+      case WidgetType.BUTTON:
+        return Button.disabledStyles;
+      case WidgetType.CHECKBOX:
+        return Checkbox.disabledStyles;
+      case WidgetType.SELECT:
+        return Select.disabledStyles;
+      case WidgetType.SLIDER:
+        return Slider.disabledStyles;
+      case WidgetType.TEXTBOX:
+        return Textbox.disabledStyles;
+      case WidgetType.CHART:
+        return Chart.disabledStyles;
+      case WidgetType.PANEL:
+        return Panel.disabledStyles;
+      case WidgetType.SIDEMENU:
+        return SideMenu.disabledStyles;
+      default:
+        return null;
+    }
+  }
+
+>>>>>>> added mechanism for disabling attributes
   private getStyleAttributes(): Array<TemplateResult | {}> | {} {
     const widget = this.editingWidget;
     if (widget == null) {
       return nothing;
     }
 
+    const disabledStyles = this.getDisabledStyles(getWidgetType(widget.id));
+
     const styleAttributes = store.getState().template.widgets[widget.id].style;
-    return Object.keys(sharedAttributes).map((key) => {
+
+    const inputs: Array<TemplateResult | {}> = [];
+
+    for (const key of Object.keys(sharedAttributes)) {
+      if (disabledStyles && disabledStyles.has(key)) {
+        continue;
+      }
       const value = styleAttributes[key];
       const placeholder = sharedAttributes[key].placeholder;
       const unit = sharedAttributes[key].unit;
@@ -664,65 +707,79 @@ ${value}</textarea
 
       switch (type) {
         case InputType.TEXT:
-          return this.getTextInput(
-            key,
-            attributeTitle,
-            value,
-            widget.id,
-            AttributeType.STYLE,
-            placeholder,
-            tooltip,
-            validator
+          inputs.push(
+            this.getTextInput(
+              key,
+              attributeTitle,
+              value,
+              widget.id,
+              AttributeType.STYLE,
+              placeholder,
+              tooltip,
+              validator
+            )
           );
+          break;
         case InputType.TEXTAREA:
-          return this.getTextareaInput(
-            key,
-            attributeTitle,
-            value,
-            widget.id,
-            AttributeType.STYLE,
-            placeholder,
-            tooltip,
-            validator
+          inputs.push(
+            this.getTextareaInput(
+              key,
+              attributeTitle,
+              value,
+              widget.id,
+              AttributeType.STYLE,
+              placeholder,
+              tooltip,
+              validator
+            )
           );
+          break;
         case InputType.COLOR:
-          return this.getColorInput(
-            key,
-            attributeTitle,
-            value,
-            widget.id,
-            AttributeType.STYLE,
-            tooltip
+          inputs.push(
+            this.getColorInput(
+              key,
+              attributeTitle,
+              value,
+              widget.id,
+              AttributeType.STYLE,
+              tooltip
+            )
           );
+          break;
         case InputType.SELECT:
-          return this.getSelectInput(
-            key,
-            attributeTitle,
-            value,
-            widget.id,
-            AttributeType.STYLE,
-            tooltip,
-            items
+          inputs.push(
+            this.getSelectInput(
+              key,
+              attributeTitle,
+              value,
+              widget.id,
+              AttributeType.STYLE,
+              tooltip,
+              items
+            )
           );
+          break;
         case InputType.NUMBER:
-          return this.getNumberInput(
-            key,
-            attributeTitle,
-            value,
-            widget.id,
-            AttributeType.STYLE,
-            placeholder,
-            tooltip,
-            validator,
-            unit,
-            step,
-            min,
-            max
+          inputs.push(
+            this.getNumberInput(
+              key,
+              attributeTitle,
+              value,
+              widget.id,
+              AttributeType.STYLE,
+              placeholder,
+              tooltip,
+              validator,
+              unit,
+              step,
+              min,
+              max
+            )
           );
-        default:
-          return nothing;
+          break;
       }
-    });
+    }
+    return inputs;
   }
 
   static emptyNotice = html`

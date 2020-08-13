@@ -65,6 +65,17 @@ export class Panel extends LitElement {
     }
   `;
 
+  static disabledStyles: Set<string> = new Set([
+    'margin',
+    'color',
+    'fontSize',
+    'fontWeight',
+    'fontFamily',
+    'textAlign',
+    'whiteSpace',
+    'shown',
+  ]);
+
   /**
    * Additional custom styles for the panel.
    */

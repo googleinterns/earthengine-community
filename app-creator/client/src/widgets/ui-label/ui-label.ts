@@ -45,6 +45,8 @@ export class Label extends LitElement {
     },
   };
 
+  static disabledStyles: Set<string> = new Set(['whiteSpace', 'shown']);
+
   static DEFAULT_LABEL_ATTRIBUTES: DefaultAttributesType = getDefaultAttributes(
     Label.attributes
   );
