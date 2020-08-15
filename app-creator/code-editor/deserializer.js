@@ -310,8 +310,7 @@ function createApp(template) {
    */
   app.createSidemenuElement = function (obj, style) {
     // Sidemenu is an object with the properties: sidePanel and contentPanel.
-    var mobileMenu = sidemenu.createSidemenu(style);
-    return mobileMenu.init();
+    return sidemenu.createSidemenu(style);
   };
 
   /**

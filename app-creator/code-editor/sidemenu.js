@@ -13,6 +13,7 @@ function createSidemenu(style) {
       style: {
         width: '30px',
         height: '100%',
+        maxWidth: '500px',
       },
     });
 
@@ -57,7 +58,7 @@ function createSidemenu(style) {
    */
   sidemenu.createMenuButton = function (sidePanel, contentPanel) {
     return ui.Checkbox({
-      label: '| ▶',
+      label: '|    ▶',
       onChange: function () {
         var sidePanelWidth = sidePanel.style().get('width');
         sidePanel
@@ -71,9 +72,11 @@ function createSidemenu(style) {
         contentPanel.style().set('padding', contentPanelWidth ? '0px' : '16px');
       },
       style: {
-        height: '100%',
+        height: '50px',
+        border: '0.5px solid black',
+        padding: '0px 6px',
         margin: '0px 0px 0px -28px',
-        fontSize: '20px',
+        fontSize: '18px',
       },
     });
   };
@@ -106,6 +109,7 @@ function createSidemenu(style) {
         height: '100%',
         margin: 0,
         padding: 0,
+        backgroundColor: '#f5f6f9',
       },
       layout: ui.Panel.Layout.flow('vertical'),
     });
@@ -134,7 +138,7 @@ function createSidemenu(style) {
     });
   };
 
-  return sidemenu;
+  return sidemenu.init();
 }
 
 exports.createSidemenu = createSidemenu;
