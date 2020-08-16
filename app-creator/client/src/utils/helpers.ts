@@ -81,6 +81,9 @@ export const chips = [
   },
 ];
 
+/**
+ * Creates a toast message element.
+ */
 export function createToastMessage(
   id: string,
   message: string,
