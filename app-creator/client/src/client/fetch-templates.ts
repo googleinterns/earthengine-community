@@ -23,6 +23,7 @@ export const database: TemplateItem[] = [
     device: DeviceType.DESKTOP,
     template: `{
         "config": {
+            "version": "1.0",
             "parentID": "left-side-panel",
             "parentName": "Left Side Panel",
             "id": "left-side-panel-desktop",
@@ -56,7 +57,7 @@ export const database: TemplateItem[] = [
                 },
                 "style": {
                     "height": "100%",
-                    "width": "40%",
+                    "width": "30%",
                     "margin": "0px",
                     "borderColor": "#e28b59",
                     "boxSizing": "border-box"
@@ -79,7 +80,7 @@ export const database: TemplateItem[] = [
                 },
                 "style": {
                     "height": "100%",
-                    "width": "60%",
+                    "width": "auto",
                     "margin": "0px",
                     "boxSizing": "border-box"
                 }
@@ -95,6 +96,7 @@ export const database: TemplateItem[] = [
     device: DeviceType.MOBILE,
     template: `{
         "config": {
+            "version": "1.0",
             "parentID": "left-drawer-mobile",
             "parentName": "Left Drawer Mobile",
             "id": "left-drawer-mobile",
@@ -174,6 +176,7 @@ export const database: TemplateItem[] = [
     device: DeviceType.DESKTOP,
     template: `{
         "config": {
+            "version": "1.0",
             "parentID": "right-side-panel",
             "parentName": "Right Side Panel",
             "id": "right-side-panel-desktop",
@@ -206,7 +209,7 @@ export const database: TemplateItem[] = [
                 },
                 "style": {
                     "height": "100%",
-                    "width": "40%",
+                    "width": "30%",
                     "margin": "0px",
                     "boxSizing": "border-box"
                 }
@@ -228,7 +231,7 @@ export const database: TemplateItem[] = [
                 },
                 "style": {
                     "height": "100%",
-                    "width": "60%",
+                    "width": "auto",
                     "margin": "0px",
                     "backgroundColor": "#FFFFFFFF",
                     "backgroundOpacity": "100",
@@ -239,18 +242,19 @@ export const database: TemplateItem[] = [
     }`,
   },
   {
-    id: 'map-with-legend',
-    name: 'Map With Legend',
+    id: 'left-side-legend',
+    name: 'Left Side Legend',
     imageUrl:
       'https://storage.cloud.google.com/ee-app-creator.appspot.com/legend-example.png',
     device: DeviceType.DESKTOP,
     template: `{
         "config": {
-            "parentID": "map-with-legend",
-            "parentName": "Map with legend",
-            "id": "map-with-legend-desktop",
+            "version": "1.0",
+            "parentID": "left-side-legend",
+            "parentName": "Left Side Legend",
+            "id": "left-side-legend-desktop",
             "device": "desktop",
-            "name": "Map with legend Desktop"
+            "name": "Left Side Legend Desktop"
         },
         "widgets": {
             "panel-template-0": {
@@ -317,18 +321,19 @@ export const database: TemplateItem[] = [
     }`,
   },
   {
-    id: 'map-with-legend-right',
-    name: 'Map With Legend Right',
+    id: 'right-side-legend',
+    name: 'Right Side Legend',
     imageUrl:
-      'https://storage.cloud.google.com/ee-app-creator.appspot.com/legend-example.png',
+      'https://storage.googleapis.com/ee-app-creator.appspot.com/map-with-legend-right-side.png',
     device: DeviceType.DESKTOP,
     template: `{
         "config": {
-            "parentID": "map-with-legend-right",
-            "parentName": "Map with legend right side",
-            "id": "map-with-legend-right-desktop",
+            "version": "1.0",
+            "parentID": "right-side-legend",
+            "parentName": "Right Side Legend",
+            "id": "right-side-legend-desktop",
             "device": "desktop",
-            "name": "Map with legend right desktop"
+            "name": "Right Side Legend desktop"
         },
         "widgets": {
             "panel-template-0": {
@@ -438,6 +443,7 @@ export const database: TemplateItem[] = [
     device: DeviceType.DESKTOP,
     template: `{
         "config": {
+            "version": "1.0",
             "parentID": "two-maps",
             "parentName": "Two Maps",
             "id": "two-maps-desktop",
@@ -641,6 +647,7 @@ export const database: TemplateItem[] = [
     device: DeviceType.DESKTOP,
     template: `{
         "config": {
+            "version": "1.0",
             "parentID": "four-maps",
             "parentName": "Four Maps",
             "id": "four-maps-desktop",
@@ -673,9 +680,10 @@ export const database: TemplateItem[] = [
                     "layout": "column"
                 },
                 "style": {
-                    "height": "8%",
+                    "height": "60px",
                     "width": "100%",
                     "margin": "0px",
+                    "padding": "8px",
                     "position": "relative",
                     "boxSizing": "border-box"
                 }
@@ -689,7 +697,7 @@ export const database: TemplateItem[] = [
                     "layout": "column"
                 },
                 "style": {
-                    "height": "92%",
+                    "height": "calc(100% - 60px)",
                     "width": "100%",
                     "margin": "0px",
                     "boxSizing": "border-box"

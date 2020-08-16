@@ -14,11 +14,7 @@ import {
 } from 'lit-element';
 import { store } from '../../redux/store';
 import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog.js';
-import {
-  ROOT_ID,
-  TEMPLATE_TIMESTAMP,
-  SCRATCH_PANEL,
-} from '../../utils/constants';
+import { ROOT_ID, TEMPLATE_TIMESTAMP } from '../../utils/constants';
 import { setSelectedTemplate, setEventType } from '../../redux/actions';
 import { PaperToastElement } from '@polymer/paper-toast/paper-toast.js';
 import {
@@ -26,12 +22,14 @@ import {
   storeSnapshotInLocalStorage,
   createToastMessage,
   setUrlParam,
+  getWidgetType,
 } from '../../utils/helpers';
 import { incrementWidgetIDs } from '../../utils/template-generation';
+import { EventType, WidgetType } from '../../redux/types/enums';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-tabs/paper-tabs.js';
 import '@polymer/paper-tabs/paper-tab.js';
-import { EventType } from '../../redux/types/enums';
+import { AppCreatorStore } from '../../redux/reducer';
 
 @customElement('tool-bar')
 export class ToolBar extends LitElement {
@@ -239,13 +237,67 @@ app.draw();
    */
   private getTemplateString(space: number = 0) {
     const template = deepCloneTemplate(store.getState().template);
+    return JSON.stringify(this.normalizeTemplate(template), null, space);
+  }
+
+  /**
+   * Normalize template.
+   */
+  private normalizeTemplate(template: AppCreatorStore['template']) {
     const { widgets } = template;
     for (const id in widgets) {
-      if (widgets[id].shared || id === SCRATCH_PANEL) {
-        delete widgets[id];
+      const type = getWidgetType(id);
+      if (type === WidgetType.SELECT) {
+        const items = widgets[id].uniqueAttributes.items;
+        widgets[
+          id
+        ].uniqueAttributes.items = this.getArrayStringFromCommaSeparatedValues(
+          items
+        );
+      } else if (type === WidgetType.CHART) {
+        const colors = widgets[id].uniqueAttributes.color;
+        widgets[
+          id
+        ].uniqueAttributes.color = this.getArrayStringFromCommaSeparatedValues(
+          colors
+        );
+
+        const dataTable = widgets[id].uniqueAttributes.dataTable;
+        widgets[id].uniqueAttributes.dataTable = this.normalizeDataTable(
+          dataTable
+        );
       }
     }
-    return JSON.stringify(template, null, space);
+
+    return template;
+  }
+
+  /**
+   * Correctly formats dataTable into JSON string.
+   */
+  private normalizeDataTable(dataTable: string) {
+    const withQuotes = dataTable.replace(/[a-zA-Z]+(?=:)/g, (key: string) => {
+      return `'${key}'`;
+    });
+    // Filter white spaces.
+    return withQuotes.replace(/[\t\n\r ]/g, '');
+  }
+
+  /**
+   * Converts a string of comma separated values to a serialized array.
+   * "Javascript, python" => "["Javascript","Python"]".
+   */
+  private getArrayStringFromCommaSeparatedValues(values: string) {
+    const result = [];
+    const valuesArray = values.split(',');
+    for (const value of valuesArray) {
+      const trimmedValue = value.trim();
+      if (trimmedValue !== '') {
+        result.push(`\\"${trimmedValue}\\"`);
+      }
+    }
+
+    return result.length > 0 ? `[${result.join(',')}]` : '';
   }
 
   /**

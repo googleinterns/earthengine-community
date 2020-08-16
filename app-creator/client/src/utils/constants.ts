@@ -9,7 +9,6 @@ export const ROOT_ID = 'panel-template-0';
 export const WIDGET_REF = 'widgetRef';
 
 /**
-<<<<<<< HEAD
  * Key for template param.
  */
 export const TEMPLATE_TIMESTAMP = 't';
@@ -20,8 +19,6 @@ export const TEMPLATE_TIMESTAMP = 't';
 export const TEMPLATE_SNAPSHOTS = 'template_snapshots';
 
 /**
-=======
->>>>>>> added widgets to scratch panel
  * Scratch panel id.
  */
 export const SCRATCH_PANEL = 'scratch-panel';

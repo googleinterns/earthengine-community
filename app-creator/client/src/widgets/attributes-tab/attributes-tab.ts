@@ -161,6 +161,11 @@ export class AttributesTab extends connect(store)(LitElement) {
     }
   `;
 
+  /**
+   * Sets the search query.
+   */
+  @property({ type: String }) query = '';
+
   stateChanged(state: AppCreatorStore) {
     if (state.editingElement !== this.editingWidget) {
       this.editingWidget = state.editingElement;
@@ -185,11 +190,6 @@ export class AttributesTab extends connect(store)(LitElement) {
       );
     }
   }
-
-  /**
-   * Sets the search query.
-   */
-  @property({ type: String }) query = '';
 
   /**
    * Widget currently being edited.
@@ -286,7 +286,7 @@ export class AttributesTab extends connect(store)(LitElement) {
               e,
               (value: string) =>
                 store.dispatch(
-                  updateWidgetMetaData(key, value, id, attributeType)
+                  updateWidgetMetaData(key, value.trim(), id, attributeType)
                 ),
               validator
             );
@@ -337,7 +337,7 @@ export class AttributesTab extends connect(store)(LitElement) {
               e,
               (value: string) =>
                 store.dispatch(
-                  updateWidgetMetaData(key, value, id, attributeType)
+                  updateWidgetMetaData(key, value.trim(), id, attributeType)
                 ),
               validator
             );
