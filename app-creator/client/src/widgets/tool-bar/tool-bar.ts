@@ -19,7 +19,7 @@ import {
   TEMPLATE_TIMESTAMP,
   SCRATCH_PANEL,
 } from '../../utils/constants';
-import { setSelectedTemplate } from '../../redux/actions';
+import { setSelectedTemplate, setEventType } from '../../redux/actions';
 import { PaperToastElement } from '@polymer/paper-toast/paper-toast.js';
 import {
   deepCloneTemplate,
@@ -31,6 +31,7 @@ import { incrementWidgetIDs } from '../../utils/template-generation';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-tabs/paper-tabs.js';
 import '@polymer/paper-tabs/paper-tab.js';
+import { EventType } from '../../redux/types/enums';
 
 @customElement('tool-bar')
 export class ToolBar extends LitElement {
@@ -303,6 +304,9 @@ app.draw();
       store.dispatch(setSelectedTemplate(templateJSON));
 
       incrementWidgetIDs(templateJSON.widgets);
+
+      // Dispatch event to re-render the story-board.
+      store.dispatch(setEventType(EventType.IMPORTING));
 
       this.importDialog.close();
 

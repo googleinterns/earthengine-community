@@ -86,6 +86,7 @@ export const sharedAttributes: AttributeMetaData = {
   },
   backgroundOpacity: {
     value: '0',
+    placeholder: '0 - 100',
     min: 0,
     max: 100,
     type: InputType.NUMBER,

@@ -139,7 +139,7 @@ export function getBackgroundColor(style: { [key: string]: any }): string {
 
   // Empty string case.
   if (backgroundOpacityStr === '') {
-    backgroundOpacityStr = '100';
+    backgroundOpacityStr = '00';
   }
 
   const backgroundOpacity = parseInt(backgroundOpacityStr);
