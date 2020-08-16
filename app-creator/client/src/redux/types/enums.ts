@@ -46,6 +46,7 @@ export enum EventType {
   CHANGINGPALETTE = 'changingPalette',
   CHANGINGTEMPLATE = 'changingTemplate',
   SHAREDWIDGETS = 'sharedWidgets',
+  IMPORTING = 'importing',
   NONE = 'none',
 }
 
