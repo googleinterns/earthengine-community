@@ -34,6 +34,11 @@ export enum Tab {
   ATTRIBUTES = 2,
 }
 
+export enum ExportTab {
+  CODE = 0,
+  JSON = 1,
+}
+
 export enum AttributeType {
   UNIQUE = 'uniqueAttributes',
   STYLE = 'style',

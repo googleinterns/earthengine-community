@@ -23,7 +23,6 @@ export const database: TemplateItem[] = [
     device: DeviceType.DESKTOP,
     template: `{
         "config": {
-            "version": "1.0",
             "parentID": "left-side-panel",
             "parentName": "Left Side Panel",
             "id": "left-side-panel-desktop",
@@ -96,7 +95,6 @@ export const database: TemplateItem[] = [
     device: DeviceType.MOBILE,
     template: `{
         "config": {
-            "version": "1.0",
             "parentID": "left-drawer-mobile",
             "parentName": "Left Drawer Mobile",
             "id": "left-drawer-mobile",
@@ -176,7 +174,6 @@ export const database: TemplateItem[] = [
     device: DeviceType.DESKTOP,
     template: `{
         "config": {
-            "version": "1.0",
             "parentID": "right-side-panel",
             "parentName": "Right Side Panel",
             "id": "right-side-panel-desktop",
@@ -249,7 +246,6 @@ export const database: TemplateItem[] = [
     device: DeviceType.DESKTOP,
     template: `{
         "config": {
-            "version": "1.0",
             "parentID": "left-side-legend",
             "parentName": "Left Side Legend",
             "id": "left-side-legend-desktop",
@@ -328,7 +324,6 @@ export const database: TemplateItem[] = [
     device: DeviceType.DESKTOP,
     template: `{
         "config": {
-            "version": "1.0",
             "parentID": "right-side-legend",
             "parentName": "Right Side Legend",
             "id": "right-side-legend-desktop",
@@ -407,7 +402,6 @@ export const database: TemplateItem[] = [
     device: DeviceType.DESKTOP,
     template: `{
         "config": {
-            "version": "1.0",
             "parentID": "two-maps",
             "parentName": "Two Maps",
             "id": "two-maps-desktop",
@@ -536,7 +530,6 @@ export const database: TemplateItem[] = [
     device: DeviceType.DESKTOP,
     template: `{
         "config": {
-            "version": "1.0",
             "parentID": "four-maps",
             "parentName": "Four Maps",
             "id": "four-maps-desktop",

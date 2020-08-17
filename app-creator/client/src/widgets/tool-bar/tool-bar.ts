@@ -12,6 +12,7 @@ import {
   query,
   property,
 } from 'lit-element';
+import { nothing } from 'lit-html';
 import { store } from '../../redux/store';
 import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog.js';
 import { ROOT_ID, TEMPLATE_TIMESTAMP } from '../../utils/constants';
@@ -22,11 +23,11 @@ import {
   storeSnapshotInLocalStorage,
   createToastMessage,
   setUrlParam,
-  getWidgetType,
+  getCodeSnippet,
+  normalizeTemplate,
 } from '../../utils/helpers';
 import { incrementWidgetIDs } from '../../utils/template-generation';
-import { EventType, WidgetType } from '../../redux/types/enums';
-import { AppCreatorStore } from '../../redux/reducer';
+import { EventType, ExportTab } from '../../redux/types/enums';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-tabs/paper-tabs.js';
 import '@polymer/paper-tabs/paper-tab.js';
@@ -126,7 +127,7 @@ export class ToolBar extends LitElement {
   /**
    * Sets currently selected tab on the export dialog.
    */
-  @property({ type: Number }) selectedTab = 0;
+  @property({ type: Number }) selectedTab = ExportTab.CODE;
 
   /**
    * Reference to the export dialog element.
@@ -160,24 +161,6 @@ export class ToolBar extends LitElement {
   @query('#copy-confirmation-toast') copyConfirmationToast!: PaperToastElement;
 
   /**
-   * Wraps template string with a working code example.
-   */
-  private getCodeSnippet(template: string) {
-    return `var AppCreator = require('users/msibrahim/app-creator:app-creator-deserializer');
-
-/**
- * Create app instance.
- */
-var app = AppCreator.createApp('${template}');
-
-/**
- * Draw app to screen. 
- */
-app.draw();    
-    `;
-  }
-
-  /**
    * Triggered when export button is clicked. It displays the paper dialog which
    * contains the serialized template string.
    */
@@ -199,12 +182,12 @@ app.draw();
       return;
     }
 
-    if (this.selectedTab === 0) {
+    if (this.selectedTab === ExportTab.CODE) {
       // Display code snippet.
-      jsonSnippetContainer.textContent = this.getCodeSnippet(
+      jsonSnippetContainer.textContent = getCodeSnippet(
         this.getTemplateString()
       );
-    } else if (this.selectedTab === 1) {
+    } else if (this.selectedTab === ExportTab.JSON) {
       // Display JSON string.
       jsonSnippetContainer.textContent = this.getTemplateString(3);
     }
@@ -238,67 +221,7 @@ app.draw();
    */
   private getTemplateString(space: number = 0) {
     const template = deepCloneTemplate(store.getState().template);
-    return JSON.stringify(this.normalizeTemplate(template), null, space);
-  }
-
-  /**
-   * Normalize template.
-   */
-  private normalizeTemplate(template: AppCreatorStore['template']) {
-    const { widgets } = template;
-    for (const id in widgets) {
-      const type = getWidgetType(id);
-      if (type === WidgetType.SELECT) {
-        const items = widgets[id].uniqueAttributes.items;
-        widgets[
-          id
-        ].uniqueAttributes.items = this.getArrayStringFromCommaSeparatedValues(
-          items
-        );
-      } else if (type === WidgetType.CHART) {
-        const colors = widgets[id].uniqueAttributes.color;
-        widgets[
-          id
-        ].uniqueAttributes.color = this.getArrayStringFromCommaSeparatedValues(
-          colors
-        );
-
-        const dataTable = widgets[id].uniqueAttributes.dataTable;
-        widgets[id].uniqueAttributes.dataTable = this.normalizeDataTable(
-          dataTable
-        );
-      }
-    }
-
-    return template;
-  }
-
-  /**
-   * Correctly formats dataTable into JSON string.
-   */
-  private normalizeDataTable(dataTable: string) {
-    const withQuotes = dataTable.replace(/[a-zA-Z]+(?=:)/g, (key: string) => {
-      return `'${key}'`;
-    });
-    // Filter white spaces.
-    return withQuotes.replace(/[\t\n\r ]/g, '');
-  }
-
-  /**
-   * Converts a string of comma separated values to a serialized array.
-   * "Javascript, python" => "["Javascript","Python"]".
-   */
-  private getArrayStringFromCommaSeparatedValues(values: string) {
-    const result = [];
-    const valuesArray = values.split(',');
-    for (const value of valuesArray) {
-      const trimmedValue = value.trim();
-      if (trimmedValue !== '') {
-        result.push(`\\"${trimmedValue}\\"`);
-      }
-    }
-
-    return result.length > 0 ? `[${result.join(',')}]` : '';
+    return JSON.stringify(normalizeTemplate(template), null, space);
   }
 
   /**
@@ -307,11 +230,11 @@ app.draw();
   private copy() {
     const textArea = document.createElement('textarea');
     // We get the template string without indentation and with escaped single quotes.
-    if (this.selectedTab === 0) {
-      textArea.value = this.getCodeSnippet(
+    if (this.selectedTab === ExportTab.CODE) {
+      textArea.value = getCodeSnippet(
         this.getTemplateString().replace(/'/g, "\\'")
       );
-    } else if (this.selectedTab === 1) {
+    } else if (this.selectedTab === ExportTab.JSON) {
       textArea.value = this.getTemplateString().replace(/'/g, "\\'");
     }
 
@@ -416,12 +339,22 @@ app.draw();
       <paper-dialog id="export-dialog" with-backdrop no-cancel-on-outside-click>
         <h2>Paste string in the Earth Engine Code Editor</h2>
         <paper-tabs selected=${this.selectedTab} noink>
-          <paper-tab @click=${() => handleSnippetToggle.call(this, 0)}>
-            Code
-          </paper-tab>
-          <paper-tab @click=${() => handleSnippetToggle.call(this, 1)}>
-            JSON
-          </paper-tab>
+          ${Object.keys(ExportTab).map((key) => {
+            if (!isNaN(Number(key))) {
+              return nothing;
+            }
+            return html`
+              <paper-tab
+                @click=${() =>
+                  handleSnippetToggle.call(
+                    this,
+                    ExportTab[key as keyof typeof ExportTab] as number
+                  )}
+              >
+                ${key}
+              </paper-tab>
+            `;
+          })}
         </paper-tabs>
         <paper-dialog-scrollable id="json-string-container">
           <pre><code id="json-snippet"></code
