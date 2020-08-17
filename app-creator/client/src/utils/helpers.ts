@@ -1,8 +1,4 @@
-import {
-  DeviceType,
-  WidgetType,
-  WidgetsRequiringBackground,
-} from '../redux/types/enums';
+import { DeviceType, WidgetsRequiringBackground } from '../redux/types/enums';
 import { AppCreatorStore } from '../redux/reducer';
 import { WIDGET_REF, TEMPLATE_SNAPSHOTS } from './constants';
 import { store } from '../redux/store';
