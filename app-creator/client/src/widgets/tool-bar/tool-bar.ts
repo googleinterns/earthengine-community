@@ -12,7 +12,7 @@ import { setSelectedTemplate } from '../../redux/actions';
 import { PaperToastElement } from '@polymer/paper-toast/paper-toast.js';
 import {
   deepCloneTemplate,
-  storeTemplateInLocalStorage,
+  storeSnapshotInLocalStorage,
   createToastMessage,
 } from '../../utils/helpers';
 import { incrementWidgetIDs } from '../../utils/template-generation';
@@ -250,11 +250,18 @@ export class ToolBar extends LitElement {
    */
   private handleDuplicateButtonAction() {
     try {
-      storeTemplateInLocalStorage();
+      /**
+       * Get current timestamp to store it as a key.
+       */
+      const timestamp = Date.now();
 
-      const url = location.href;
+      storeSnapshotInLocalStorage(timestamp);
 
-      window.open(url);
+      const url = new URL(location.href);
+
+      url.searchParams.set('template_timestamp', timestamp.toString());
+
+      window.open(url.href);
     } catch (e) {
       this.localStorageFailureToast.open();
     }

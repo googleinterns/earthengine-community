@@ -5,6 +5,12 @@ import { store } from '../redux/store';
 import { html, TemplateResult } from 'lit-element';
 import '@polymer/paper-toast/paper-toast';
 
+const WIDGET_REF_KEYS = new Set([
+  'draggingElement',
+  'editingElement',
+  WIDGET_REF,
+]);
+
 /**
  * Converts camel case to title case.
  * ie. helloWorld => Hello World
@@ -98,7 +104,7 @@ export function deepCloneTemplate(
      * we no longer need to keep the refs. As a result, we skip over them when we are producing the
      * output string.
      */
-    if (skipRefs && key === WIDGET_REF) {
+    if (skipRefs && WIDGET_REF_KEYS.has(key)) {
       continue;
     }
 
@@ -115,15 +121,34 @@ export function deepCloneTemplate(
 }
 
 /**
- * Takes a snapshot of the current template and stores it in localStorage.
+ * Takes a snapshot of the current store and stores it in localStorage.
  */
-export function storeTemplateInLocalStorage() {
-  /**
-   * Saving current template string in localStorage so we can transfer data across.
-   * */
-  const currentTemplate = JSON.stringify(
-    deepCloneTemplate(store.getState().template)
-  );
+export function storeSnapshotInLocalStorage(timestamp?: number) {
+  try {
+    /**
+     * Saving current store snapshot as a string in localStorage so we can transfer data across.
+     * */
+    const storeSnapshot = JSON.stringify(deepCloneTemplate(store.getState()));
 
-  localStorage.setItem('previousTemplate', currentTemplate);
+    // Retrieve template stack from local storage if it exists.
+    const templateStackJSON = localStorage.getItem('templateStack');
+    let templateStackArray = [];
+    if (templateStackJSON) {
+      // If templateStack exits, we want to retrieve it and convert it into an array.
+      templateStackArray = JSON.parse(templateStackJSON);
+    }
+
+    const timestampValue = timestamp ?? Date.now();
+
+    // Add the store snapshot as a new entry with the key being the timestamp.
+    templateStackArray.push({
+      timestamp: timestampValue,
+      snapshot: storeSnapshot,
+    });
+
+    // Stringify the templateStackArray and store it back in localStorage.
+    localStorage.setItem(`templateStack`, JSON.stringify(templateStackArray));
+  } catch (e) {
+    throw e;
+  }
 }

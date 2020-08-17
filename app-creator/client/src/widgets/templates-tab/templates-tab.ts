@@ -18,7 +18,7 @@ import { connect } from 'pwa-helpers';
 import { AppCreatorStore } from '../../redux/reducer';
 import { DeviceType } from '../../redux/types/enums';
 import { classMap } from 'lit-html/directives/class-map';
-import { chips, storeTemplateInLocalStorage } from '../../utils/helpers';
+import { chips, storeSnapshotInLocalStorage } from '../../utils/helpers';
 import { transferData } from '../../utils/template-generation';
 import { PaperDialogElement } from '@polymer/paper-dialog';
 import '@polymer/paper-input/paper-input.js';
@@ -184,7 +184,7 @@ export class TemplatesTab extends connect(store)(LitElement) {
 
     if (template) {
       try {
-        storeTemplateInLocalStorage();
+        storeSnapshotInLocalStorage();
 
         // Replace the redux store with the new template and trigger a re-render.
         const templateJSON = JSON.parse(template);

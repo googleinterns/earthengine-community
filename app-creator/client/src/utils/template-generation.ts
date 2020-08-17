@@ -22,6 +22,10 @@ import { Map } from '../widgets/ui-map/ui-map';
 import { SideMenu } from '../widgets/ui-sidemenu/ui-sidemenu';
 import '../widgets/ui-sidemenu/ui-sidemenu';
 
+interface TemplateSnapshot {
+  [timestamp: string]: string;
+}
+
 /**
  * Builds a DOM tree given a template JSON and renders it in the provided HTML node.
  */
@@ -146,12 +150,55 @@ export function getWidgetElement({
  */
 export function transferData() {
   try {
-    // Retrieve template from storage.
-    const template = localStorage.getItem('previousTemplate');
+    // Retrieve template stack from storage.
+    const templateStackJSON: string | null = localStorage.getItem(
+      'templateStack'
+    );
 
-    if (template) {
-      const templateJSON = JSON.parse(template);
-      const { widgets } = templateJSON;
+    if (!templateStackJSON) {
+      return;
+    }
+
+    let templateStackArray: TemplateSnapshot[] = JSON.parse(templateStackJSON);
+
+    if (!templateStackArray || templateStackArray.length === 0) {
+      return;
+    }
+
+    let snapshotObj;
+
+    // Get template timestamp from URL
+    const queryString = window.location.search;
+    if (queryString !== '') {
+      const urlParams = new URLSearchParams(queryString);
+      if (urlParams.has('template_timestamp')) {
+        const timestamp = urlParams.get('template_timestamp');
+        snapshotObj = templateStackArray.find(
+          (snapshot) => snapshot.timestamp === timestamp
+        );
+        // Remove entry from templateStackArray
+        if (snapshotObj) {
+          templateStackArray = templateStackArray.filter(
+            (snapshot) => snapshot.timestamp !== timestamp
+          );
+        }
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+    }
+
+    // If snapshot is null or undefined (in the case of selecting template from the templates-tab). We just retrieve the latest template.
+    if (!snapshotObj) {
+      snapshotObj = templateStackArray.pop();
+    }
+
+    localStorage.setItem('templateStack', JSON.stringify(templateStackArray));
+
+    if (snapshotObj) {
+      const snapshot = snapshotObj.snapshot;
+
+      const storeJSON = JSON.parse(snapshot);
+
+      const { widgets } = storeJSON.template;
 
       /**
        * Get all panels that are not the root and that exist in the new and old template.
@@ -195,6 +242,8 @@ export function transferData() {
       }
 
       store.dispatch(setEventType(EventType.CHANGINGTEMPLATE, true));
+
+      incrementWidgetIDs(widgets);
     }
   } catch (e) {
     throw e;

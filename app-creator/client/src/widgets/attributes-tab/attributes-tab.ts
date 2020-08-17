@@ -12,8 +12,6 @@ import {
   UniqueAttributes,
   Tooltip,
 } from '../../redux/types/attributes.js';
-import '@polymer/paper-dialog/paper-dialog.js';
-import '../empty-notice/empty-notice';
 import { camelCaseToTitleCase, getWidgetType } from '../../utils/helpers.js';
 import { updateWidgetMetaData } from '../../redux/actions.js';
 import {
@@ -33,6 +31,8 @@ import { Map } from '../ui-map/ui-map.js';
 import { store } from '../../redux/store';
 import { AppCreatorStore } from '../../redux/reducer';
 import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog.js';
+import '@polymer/paper-dialog/paper-dialog.js';
+import '../empty-notice/empty-notice';
 
 @customElement('attributes-tab')
 export class AttributesTab extends connect(store)(LitElement) {

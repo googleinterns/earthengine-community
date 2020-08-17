@@ -48,6 +48,7 @@ export function applyPalette(
     if (widgetId.startsWith('panel') || widgetId.startsWith('sidemenu')) {
       widgets[widgetId].style.backgroundColor =
         PalettePicker.palette[color].backgroundColor;
+      widgets[widgetId].style.color = PalettePicker.palette[color].color;
       widgets[widgetId].style.backgroundOpacity = '100';
     } else if (widgetId.startsWith('map')) {
       // Apply map styling.
