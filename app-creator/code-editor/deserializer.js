@@ -363,7 +363,7 @@ function createApp(template) {
     };
 
     try {
-      dataTable = JSON.parse(uniqueAttributes.dataTable);
+      dataTable = JSON.parse(uniqueAttributes.dataTable.replace(/'/g, '"'));
     } catch (e) {
       print('Error parsing dataTable for chart element');
     }
@@ -400,10 +400,10 @@ function createApp(template) {
   app.createSelectElement = function (obj, style) {
     var uniqueAttributes = obj.uniqueAttributes;
 
-    var items = [''];
+    var items = ['Item 1'];
     try {
-      items = JSON.parse(uniqueAttributes.items);
-      items = items.map(function (item) {
+      var templateItems = JSON.parse(uniqueAttributes.items);
+      items = templateItems.map(function (item) {
         return item.trim();
       });
     } catch (e) {
@@ -526,17 +526,10 @@ function createApp(template) {
    * Helper function for creating map elements.
    */
   app.createMapElement = function (obj, style) {
-    // Wrap map widget with panel.
-    var mapHeight = style.height;
-    var mapWidth = style.width;
-    var panelStyle = { height: mapHeight, width: mapWidth };
-
     // Update map dimensions to take up all the panel space.
-    style.width = '100%';
-    style.height = '100%';
+    style.width = 'auto';
 
     var map = ui.Map({ style: style });
-    var panel = ui.Panel({ style: panelStyle, widgets: [map] });
 
     var uniqueAttributes = obj.uniqueAttributes;
 
@@ -578,7 +571,7 @@ function createApp(template) {
         : customMapStylesJSON;
     map.setOptions({ styles: { custom: appliedStyles } });
 
-    return panel;
+    return map;
   };
 
   /**
