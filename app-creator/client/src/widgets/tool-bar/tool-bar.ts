@@ -26,10 +26,11 @@ import {
 } from '../../utils/helpers';
 import { incrementWidgetIDs } from '../../utils/template-generation';
 import { EventType, WidgetType } from '../../redux/types/enums';
+import { AppCreatorStore } from '../../redux/reducer';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-tabs/paper-tabs.js';
 import '@polymer/paper-tabs/paper-tab.js';
-import { AppCreatorStore } from '../../redux/reducer';
+import '@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js';
 
 @customElement('tool-bar')
 export class ToolBar extends LitElement {
