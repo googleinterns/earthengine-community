@@ -30,14 +30,11 @@ import { Chart } from '../ui-chart/ui-chart.js';
 import { Map } from '../ui-map/ui-map.js';
 import { store } from '../../redux/store';
 import { AppCreatorStore } from '../../redux/reducer';
-import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog.js';
-<<<<<<< HEAD
-import '@polymer/paper-dialog/paper-dialog.js';
-import '../empty-notice/empty-notice';
-=======
 import { Panel } from '../ui-panel/ui-panel';
 import { SideMenu } from '../ui-sidemenu/ui-sidemenu';
->>>>>>> added mechanism for disabling attributes
+import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog.js';
+import '@polymer/paper-dialog/paper-dialog.js';
+import '../empty-notice/empty-notice';
 
 @customElement('attributes-tab')
 export class AttributesTab extends connect(store)(LitElement) {
@@ -646,8 +643,6 @@ ${value}</textarea
     }
   }
 
-<<<<<<< HEAD
-=======
   private getDisabledStyles(type: string): Set<string> | null {
     switch (type) {
       case WidgetType.MAP:
@@ -675,7 +670,6 @@ ${value}</textarea
     }
   }
 
->>>>>>> added mechanism for disabling attributes
   private getStyleAttributes(): Array<TemplateResult | {}> | {} {
     const widget = this.editingWidget;
     if (widget == null) {

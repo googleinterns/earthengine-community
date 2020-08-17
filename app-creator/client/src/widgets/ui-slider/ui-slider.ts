@@ -11,7 +11,6 @@ import {
   getDefaultAttributes,
 } from '../../redux/types/attributes';
 import { InputType } from '../../redux/types/enums';
-import { store } from '../../redux/store';
 
 @customElement('ui-slider')
 export class Slider extends LitElement {
