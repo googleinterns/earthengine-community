@@ -1,9 +1,10 @@
-import { DeviceType } from '../redux/types/enums';
+import { DeviceType, WidgetType } from '../redux/types/enums';
 import { AppCreatorStore } from '../redux/reducer';
 import { WIDGET_REF, TEMPLATE_SNAPSHOTS } from './constants';
 import { store } from '../redux/store';
 import { html, TemplateResult } from 'lit-element';
 import '@polymer/paper-toast/paper-toast';
+import { EEWidget } from '../redux/types/types';
 
 const WIDGET_REF_KEYS = new Set([
   'draggingElement',
@@ -172,4 +173,48 @@ export function setUrlParam(key: string, value: string): URL {
   }
 
   return url;
+}
+
+/**
+ * Adds background color to an element. Used when adding elements to the scratch panel.
+ */
+const WidgetsRequiringBackground = new Set([
+  WidgetType.LABEL,
+  WidgetType.CHECKBOX,
+  WidgetType.SLIDER,
+]);
+
+export function addBackgroundColorToSharedWidget(element: HTMLElement) {
+  const elementStyle: { [key: string]: string } = Object.assign(
+    {},
+    store.getState().template.widgets[element.id].style
+  );
+
+  const type = getWidgetType(element.id);
+  if (
+    elementStyle.color === '#ffffff' &&
+    WidgetsRequiringBackground.has(type as WidgetType)
+  ) {
+    const paletteBackground = store.getState().selectedPalette.backgroundColor;
+    elementStyle.backgroundColor =
+      paletteBackground === '#ffffff' ? '#000000' : paletteBackground;
+    elementStyle.borderRadius = '8px';
+    elementStyle.padding = '8px';
+    (element as EEWidget).setStyle(elementStyle);
+  }
+}
+
+/**
+ * Removes background color from an element. Used when adding elements to the scratch panel.
+ */
+export function removeBackgroundColorFromSharedWidget(element: HTMLElement) {
+  const elementStyle: { [key: string]: string } = Object.assign(
+    {},
+    store.getState().template.widgets[element.id].style
+  );
+
+  elementStyle.backgroundColor = elementStyle.backgroundColor;
+  elementStyle.borderRadius = elementStyle.borderRadius ?? '4px';
+  elementStyle.padding = elementStyle.padding ?? '0px';
+  (element as EEWidget).setStyle(elementStyle);
 }

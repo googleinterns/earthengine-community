@@ -18,6 +18,10 @@ import { EventType } from '../../redux/types/enums';
 import '@polymer/iron-icon/iron-icon.js';
 import '../empty-notice/empty-notice';
 import { SCRATCH_PANEL } from '../../utils/constants';
+import {
+  addBackgroundColorToSharedWidget,
+  removeBackgroundColorFromSharedWidget,
+} from '../../utils/helpers';
 
 export const CONTAINER_ID = 'container';
 
@@ -114,7 +118,9 @@ export class Dropzone extends LitElement {
       store.dispatch(updateWidgetChildren(parent.id, ids));
       if (parent.id === SCRATCH_PANEL) {
         store.dispatch(updateWidgetSharedStatus(widget.id, true));
+        addBackgroundColorToSharedWidget(widget as HTMLElement);
       } else {
+        removeBackgroundColorFromSharedWidget(widget as HTMLElement);
         store.dispatch(updateWidgetSharedStatus(widget.id, false));
       }
     }

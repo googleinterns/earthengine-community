@@ -194,7 +194,23 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
       const { widgetRef } = templateToBeUpdated.widgets[id];
 
       // Update the css styling on the element.
-      widgetRef.setStyle(templateToBeUpdated.widgets[id].style);
+      const widgetStyle = Object.assign(
+        {},
+        templateToBeUpdated.widgets[id].style
+      );
+
+      if (
+        templateToBeUpdated.widgets[id].shared &&
+        (widgetStyle.backgroundColor.startsWith('#ffffff') ||
+          (widgetStyle.backgroundColor.length === 9 &&
+            widgetStyle.backgroundColor.endsWith('00')))
+      ) {
+        widgetStyle.backgroundColor = state.selectedPalette.backgroundColor;
+        widgetStyle.padding = '8px';
+        widgetStyle.borderRadius = '8px';
+      }
+
+      widgetRef.setStyle(widgetStyle);
 
       // Update unique attributes (i.e. label, disabled, mapstyles, etc...).
       updateUniqueAttributesInDOM(widgetRef, templateToBeUpdated);
@@ -204,18 +220,16 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
         template: templateToBeUpdated,
       };
     case UPDATE_WIDGET_SHARED_STATUS:
+      const templateWithUpdatedStatus = deepCloneTemplate(
+        state.template,
+        false
+      );
+      templateWithUpdatedStatus.widgets[action.payload.id].shared =
+        action.payload.isShared;
+
       return {
         ...state,
-        template: {
-          ...state.template,
-          widgets: {
-            ...state.template.widgets,
-            [action.payload.id]: {
-              ...state.template.widgets[action.payload.id],
-              shared: action.payload.isShared,
-            },
-          },
-        },
+        template: templateWithUpdatedStatus,
       };
     case REMOVE_WIDGET:
       // Create template copy.

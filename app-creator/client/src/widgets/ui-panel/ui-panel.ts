@@ -125,7 +125,7 @@ export class Panel extends LitElement {
     if (dropzone != null) {
       (dropzone as Dropzone).setStyleProperty(
         'borderColor',
-        'var(--accent-color)'
+        store.getState().selectedPalette.color
       );
     }
 

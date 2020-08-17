@@ -242,12 +242,7 @@ export function transferData() {
        */
       const remainingWidgetIds = [];
       for (const id in widgets) {
-        if (
-          id !== SCRATCH_PANEL &&
-          !id.startsWith('panel') &&
-          !id.startsWith('sidemenu') &&
-          !(id in store.getState().template.widgets)
-        ) {
+        if (isActiveWidget(id)) {
           const { uniqueAttributes, style } = widgets[id];
 
           remainingWidgetIds.push(id);
@@ -270,6 +265,16 @@ export function transferData() {
   } catch (e) {
     throw e;
   }
+}
+
+function isActiveWidget(id: string) {
+  return (
+    id !== SCRATCH_PANEL &&
+    !id.startsWith(WidgetType.PANEL) &&
+    !id.startsWith(WidgetType.SIDEMENU) &&
+    !id.startsWith(WidgetType.MAP) &&
+    !(id in store.getState().template.widgets)
+  );
 }
 
 /**

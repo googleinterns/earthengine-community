@@ -10,6 +10,7 @@ import { EventType } from '../../redux/types/enums';
 import { setEventType } from '../../redux/actions';
 import { DraggableWidget } from '../draggable-widget/draggable-widget';
 import { Dropzone } from '../dropzone-widget/dropzone-widget';
+import { addBackgroundColorToSharedWidget } from '../../utils/helpers';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/paper-tabs/paper-tabs';
@@ -92,6 +93,8 @@ export class ScratchPanel extends connect(store)(LitElement) {
           const draggableWrapper = new DraggableWidget();
           draggableWrapper.editable = true;
           draggableWrapper.appendChild(element);
+
+          addBackgroundColorToSharedWidget(element);
 
           if (this.dropzone) {
             this.dropzone.appendChild(draggableWrapper);
