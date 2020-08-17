@@ -356,7 +356,7 @@ export const database: TemplateItem[] = [
                 "id": "panel-template-1",
                 "editable": true,
                 "hasDropzone": true,
-                "children": ["label-template-1", "label-template-0", "button-template-0"],
+                "children": [],
                 "uniqueAttributes": {
                     "layout": "column"
                 },
@@ -394,42 +394,6 @@ export const database: TemplateItem[] = [
                     "width": "100%",
                     "margin": "0px",
                     "boxSizing": "border-box"
-                }
-            },
-            "label-template-0": {
-                "id": "label-template-0",
-                "children": [],
-                "uniqueAttributes": {
-                    "value": "Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities and makes it available for scientists, researchers, and developers to detect changes, map trends, and quantify differences on the surface of the earth.",
-                    "targetUrl": ""
-                },
-                "style": {
-                    "margin": "8px",
-                    "fontSize": "16px"
-                }
-            },
-            "button-template-0": {
-                "id": "button-template-0",
-                "children": [],
-                "uniqueAttributes": {
-                    "label": "Button",
-                    "disabled": "false"
-                },
-                "style": {
-                    "margin": "8px"
-                }
-            },
-            "label-template-1": {
-                "id": "label-template-1",
-                "children": [],
-                "uniqueAttributes": {
-                    "value": "Earth Engine",
-                    "targetUrl": ""
-                },
-                "style": {
-                    "margin": "8px",
-                    "fontSize": "32px",
-                    "fontWeight": "700"
                 }
             }
         }
@@ -559,81 +523,6 @@ export const database: TemplateItem[] = [
                     "backgroundOpacity": "100",
                     "boxSizing": "border-box"
                 }
-            },
-            "label-template-0": {
-                "id": "label-template-0",
-                "children": [],
-                "uniqueAttributes": {
-                    "value": "Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities and makes it available for scientists, researchers, and developers to detect changes, map trends, and quantify differences on the Earth\'s surface.",
-                    "targetUrl": ""
-                },
-                "style": {
-                    "margin": "8px",
-                    "backgroundColor": "#FFFFFF00",
-                    "fontSize": "14px"
-                }
-            },
-            "label-template-2": {
-                "id": "label-template-2",
-                "children": [],
-                "uniqueAttributes": {
-                    "value": "Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities and makes it available for scientists, researchers, and developers to detect changes, map trends, and quantify differences on the Earth\'s surface.",
-                    "targetUrl": ""
-                },
-                "style": {
-                    "margin": "8px",
-                    "color": "#ffffff",
-                    "backgroundColor": "#FFFFFF00",
-                    "fontSize": "14px"
-                }
-            },
-            "button-template-0": {
-                "id": "button-template-0",
-                "children": [],
-                "uniqueAttributes": {
-                    "label": "Button",
-                    "disabled": "false"
-                },
-                "style": {
-                    "margin": "8px"
-                }
-            },
-            "button-template-1": {
-                "id": "button-template-1",
-                "children": [],
-                "uniqueAttributes": {
-                    "label": "Button",
-                    "disabled": "false"
-                },
-                "style": {
-                    "margin": "8px"
-                }
-            },
-            "label-template-3": {
-                "id": "label-template-3",
-                "children": [],
-                "uniqueAttributes": {
-                    "value": "Earth Engine",
-                    "targetUrl": ""
-                },
-                "style": {
-                    "margin": "8px",
-                    "fontSize": "22px",
-                    "fontWeight": "700"
-                }
-            },
-            "label-template-4": {
-                "id": "label-template-4",
-                "children": [],
-                "uniqueAttributes": {
-                    "value": "Earth Engine",
-                    "targetUrl": ""
-                },
-                "style": {
-                    "margin": "8px",
-                    "fontSize": "22px",
-                    "fontWeight": "700"
-                }
             }
         }
            
@@ -675,7 +564,7 @@ export const database: TemplateItem[] = [
                 "id": "panel-template-1",
                 "editable": true,
                 "hasDropzone": true,
-                "children": ["label-template-0"],
+                "children": [],
                 "uniqueAttributes": {
                     "layout": "column"
                 },
@@ -891,28 +780,6 @@ export const database: TemplateItem[] = [
                     "right": "16px",
                     "boxSizing": "border-box",
                     "zIndex": "1"
-                }
-            },
-            "label-template-0": {
-                "id": "label-template-0",
-                "children": [],
-                "uniqueAttributes": {
-                   "value": "Earth Engine",
-                   "targetUrl": ""
-                },
-                "style": {
-                   "height": "px",
-                   "width": "98%",
-                   "margin": "8px",
-                   "borderWidth": "0px",
-                   "borderStyle": "solid",
-                   "borderColor": "black",
-                   "fontSize": "24px",
-                   "fontWeight": "700",
-                   "fontFamily": "Roboto",
-                   "textAlign": "center",
-                   "whiteSpace": "normal",
-                   "shown": "true"
                 }
             }
         }

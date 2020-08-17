@@ -75,10 +75,8 @@ export function applyPalette(
       widgets[widgetId].style.backgroundColor = '#ffffff00';
     } else if (widgetId.startsWith(WidgetType.BUTTON)) {
       // Apply styles for button elements.
-      widgets[widgetId].style.backgroundColor =
-        PalettePicker.palette[color].color;
-      widgets[widgetId].style.color =
-        PalettePicker.palette[color].backgroundColor;
+      // TODO: change when backgroundColor is supported on the code editor.
+      widgets[widgetId].style.backgroundColor = '#ffffff';
       widgets[widgetId].style.backgroundOpacity = '100';
     }
     (widgets[widgetId].widgetRef as EEWidget)?.setStyle(
