@@ -186,11 +186,12 @@ export class Storyboard extends connect(store)(LitElement) {
      * We want to re-render the storyboard when we switch the template color palette.
      * We do this by checking if the CHANGINGPALETTE event has been emitted.
      */
-    if (
-      state.eventType === EventType.CHANGINGPALETTE ||
-      state.eventType === EventType.IMPORTING
-    ) {
+    if (state.eventType === EventType.CHANGINGPALETTE) {
       this.renderNewTemplate(template);
+    } else if (state.eventType === EventType.IMPORTING) {
+      this.renderNewTemplate(template);
+
+      store.dispatch(setEventType(EventType.CLEAR_SCRATCH_PANEL));
     } else if (state.eventType === EventType.CHANGINGTEMPLATE) {
       /**
        * In the case of template changes, we want incrementWidgetIDs after populating the new
