@@ -73,6 +73,11 @@ export class ScratchPanel extends connect(store)(LitElement) {
       this.populateDropzone(widgets);
       store.dispatch(setEventType(EventType.NONE));
     }
+
+    if (state.eventType === EventType.CLEAR_SCRATCH_PANEL) {
+      this.dropzone.innerHTML = '';
+      this.requestUpdate();
+    }
   }
 
   /**
