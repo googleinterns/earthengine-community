@@ -9,6 +9,16 @@ export const ROOT_ID = 'panel-template-0';
 export const WIDGET_REF = 'widgetRef';
 
 /**
+ * Key for template param.
+ */
+export const TEMPLATE_TIMESTAMP = 't';
+
+/**
+ * Local storage key for storing template snapshots.
+ */
+export const TEMPLATE_SNAPSHOTS = 'template_snapshots';
+
+/**
  * List of default map styles.
  */
 export const MAP_STYLES = [

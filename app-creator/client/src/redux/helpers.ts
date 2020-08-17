@@ -2,10 +2,11 @@
  * @fileoverview This file contains helper functions that are specific to the reducer itself.
  */
 import { AppCreatorStore, WidgetMetaData } from './reducer';
-import { PaletteNames } from './types/enums';
+import { PaletteNames, WidgetType } from './types/enums';
 import { PalettePicker } from '../widgets/palette-picker/palette-picker';
 import { EEWidget } from './types/types';
 import { UpdateWidgetMetaData } from './types/actions';
+import { ROOT_ID } from '../utils/constants';
 
 /**
  * Removes widget meta data from the current template.
@@ -45,24 +46,29 @@ export function applyPalette(
 ) {
   for (const widgetId in widgets) {
     // Set the background color of panel elements. Non-panel elements start with a transparent background.
-    if (widgetId.startsWith('panel') || widgetId.startsWith('sidemenu')) {
+    if (
+      widgetId.startsWith(WidgetType.PANEL) ||
+      widgetId.startsWith(WidgetType.SIDEMENU)
+    ) {
       widgets[widgetId].style.backgroundColor =
         PalettePicker.palette[color].backgroundColor;
-      widgets[widgetId].style.color = PalettePicker.palette[color].color;
+      if (widgetId === ROOT_ID) {
+        widgets[widgetId].style.color = PalettePicker.palette[color].color;
+      }
       widgets[widgetId].style.backgroundOpacity = '100';
-    } else if (widgetId.startsWith('map')) {
+    } else if (widgetId.startsWith(WidgetType.MAP)) {
       // Apply map styling.
       widgets[widgetId].uniqueAttributes.mapStyles =
         PalettePicker.palette[color].map;
     } else if (
-      !widgetId.startsWith('panel') &&
-      !widgetId.startsWith('button')
+      !widgetId.startsWith(WidgetType.PANEL) &&
+      !widgetId.startsWith(WidgetType.BUTTON)
     ) {
       // Apply color property on non-panel elements.
       widgets[widgetId].style.color = PalettePicker.palette[color].color;
       // Setting transparent background.
       widgets[widgetId].style.backgroundColor = '#ffffff00';
-    } else if (widgetId.startsWith('button')) {
+    } else if (widgetId.startsWith(WidgetType.BUTTON)) {
       // Apply styles for button elements.
       widgets[widgetId].style.backgroundColor =
         PalettePicker.palette[color].color;

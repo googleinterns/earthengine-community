@@ -3,7 +3,7 @@
  * whenever we want to display a new template on the story-board.
  */
 import { AppCreatorStore, WidgetMetaData } from '../redux/reducer';
-import { ROOT_ID } from './constants';
+import { ROOT_ID, TEMPLATE_SNAPSHOTS, TEMPLATE_TIMESTAMP } from './constants';
 import { store } from '../redux/store';
 import {
   setSelectedTemplate,
@@ -21,10 +21,6 @@ import { Panel } from '../widgets/ui-panel/ui-panel';
 import { Map } from '../widgets/ui-map/ui-map';
 import { SideMenu } from '../widgets/ui-sidemenu/ui-sidemenu';
 import '../widgets/ui-sidemenu/ui-sidemenu';
-
-interface TemplateSnapshot {
-  [timestamp: string]: string;
-}
 
 /**
  * Builds a DOM tree given a template JSON and renders it in the provided HTML node.
@@ -151,51 +147,44 @@ export function getWidgetElement({
 export function transferData() {
   try {
     // Retrieve template stack from storage.
-    const templateStackJSON: string | null = localStorage.getItem(
-      'templateStack'
+    const templateSnapshots: string | null = localStorage.getItem(
+      TEMPLATE_SNAPSHOTS
     );
 
-    if (!templateStackJSON) {
+    if (!templateSnapshots) {
       return;
     }
 
-    let templateStackArray: TemplateSnapshot[] = JSON.parse(templateStackJSON);
+    let templates: { [timestamp: string]: string } = JSON.parse(
+      templateSnapshots
+    );
 
-    if (!templateStackArray || templateStackArray.length === 0) {
+    if (!templates) {
       return;
     }
 
-    let snapshotObj;
+    let snapshot: string | null = null;
 
     // Get template timestamp from URL
     const queryString = window.location.search;
     if (queryString !== '') {
       const urlParams = new URLSearchParams(queryString);
-      if (urlParams.has('template_timestamp')) {
-        const timestamp = urlParams.get('template_timestamp');
-        snapshotObj = templateStackArray.find(
-          (snapshot) => snapshot.timestamp === timestamp
-        );
-        // Remove entry from templateStackArray
-        if (snapshotObj) {
-          templateStackArray = templateStackArray.filter(
-            (snapshot) => snapshot.timestamp !== timestamp
-          );
+      if (urlParams.has(TEMPLATE_TIMESTAMP)) {
+        const timestamp = urlParams.get(TEMPLATE_TIMESTAMP);
+        if (timestamp) {
+          snapshot = templates[timestamp];
+          if (snapshot) {
+            delete templates[timestamp];
+          }
         }
+
+        // Remove parameter from URL.
         window.history.replaceState(null, '', window.location.pathname);
+        localStorage.setItem(TEMPLATE_SNAPSHOTS, JSON.stringify(templates));
       }
     }
 
-    // If snapshot is null or undefined (in the case of selecting template from the templates-tab). We just retrieve the latest template.
-    if (!snapshotObj) {
-      snapshotObj = templateStackArray.pop();
-    }
-
-    localStorage.setItem('templateStack', JSON.stringify(templateStackArray));
-
-    if (snapshotObj) {
-      const snapshot = snapshotObj.snapshot;
-
+    if (snapshot != null) {
       const storeJSON = JSON.parse(snapshot);
 
       const { widgets } = storeJSON.template;
@@ -209,7 +198,8 @@ export function transferData() {
       for (const widgetID in widgets) {
         if (
           widgetID !== ROOT_ID &&
-          (widgetID.startsWith('panel') || widgetID.startsWith('sidemenu')) &&
+          (widgetID.startsWith(WidgetType.PANEL) ||
+            widgetID.startsWith(WidgetType.SIDEMENU)) &&
           store.getState().template.widgets.hasOwnProperty(widgetID)
         ) {
           panelIDs.push(widgetID);

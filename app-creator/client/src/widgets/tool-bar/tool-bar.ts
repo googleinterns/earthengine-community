@@ -7,13 +7,14 @@
 import { LitElement, html, customElement, css, query } from 'lit-element';
 import { store } from '../../redux/store';
 import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog.js';
-import { ROOT_ID } from '../../utils/constants';
+import { ROOT_ID, TEMPLATE_TIMESTAMP } from '../../utils/constants';
 import { setSelectedTemplate } from '../../redux/actions';
 import { PaperToastElement } from '@polymer/paper-toast/paper-toast.js';
 import {
   deepCloneTemplate,
   storeSnapshotInLocalStorage,
   createToastMessage,
+  setUrlParam,
 } from '../../utils/helpers';
 import { incrementWidgetIDs } from '../../utils/template-generation';
 import '@polymer/paper-button/paper-button.js';
@@ -257,9 +258,7 @@ export class ToolBar extends LitElement {
 
       storeSnapshotInLocalStorage(timestamp);
 
-      const url = new URL(location.href);
-
-      url.searchParams.set('template_timestamp', timestamp.toString());
+      const url = setUrlParam(TEMPLATE_TIMESTAMP, timestamp.toString());
 
       window.open(url.href);
     } catch (e) {

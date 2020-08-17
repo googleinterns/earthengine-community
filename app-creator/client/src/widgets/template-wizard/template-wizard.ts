@@ -400,6 +400,11 @@ export class TemplateWizard extends LitElement {
     }
   }
 
+  /*
+   * TODO: Add elements to differentiate duplication flow from regular flow.
+   * Examples: populate text input with 'Copy of <previous-template>', or skip template wizard and go
+   * straight to app creation.
+   */
   render() {
     const {
       handleSearch,

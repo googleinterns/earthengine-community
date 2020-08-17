@@ -1,6 +1,6 @@
 import { DeviceType } from '../redux/types/enums';
 import { AppCreatorStore } from '../redux/reducer';
-import { WIDGET_REF } from './constants';
+import { WIDGET_REF, TEMPLATE_SNAPSHOTS } from './constants';
 import { store } from '../redux/store';
 import { html, TemplateResult } from 'lit-element';
 import '@polymer/paper-toast/paper-toast';
@@ -123,32 +123,48 @@ export function deepCloneTemplate(
 /**
  * Takes a snapshot of the current store and stores it in localStorage.
  */
-export function storeSnapshotInLocalStorage(timestamp?: number) {
+export function storeSnapshotInLocalStorage(timestamp: number) {
   try {
     /**
      * Saving current store snapshot as a string in localStorage so we can transfer data across.
-     * */
+     */
     const storeSnapshot = JSON.stringify(deepCloneTemplate(store.getState()));
 
-    // Retrieve template stack from local storage if it exists.
-    const templateStackJSON = localStorage.getItem('templateStack');
-    let templateStackArray = [];
-    if (templateStackJSON) {
-      // If templateStack exits, we want to retrieve it and convert it into an array.
-      templateStackArray = JSON.parse(templateStackJSON);
+    /*
+     * Retrieve template snapshots object from local storage if it exists.
+     * The snapshots object contains templates keyed by their timestamp.
+     * Alternatively, we can use the timestamp to key directly into localStorage
+     * rather than creating an extra buffer and doing unnecessary parsing.
+     */
+    const templateSnapshots = localStorage.getItem(TEMPLATE_SNAPSHOTS);
+
+    let templates: { [timestamp: string]: string } = {};
+    if (templateSnapshots) {
+      // If templateSnapshots exist, we want to retrieve it and convert it into an object.
+      templates = JSON.parse(templateSnapshots);
     }
 
-    const timestampValue = timestamp ?? Date.now();
-
     // Add the store snapshot as a new entry with the key being the timestamp.
-    templateStackArray.push({
-      timestamp: timestampValue,
-      snapshot: storeSnapshot,
-    });
+    templates[timestamp] = storeSnapshot;
 
-    // Stringify the templateStackArray and store it back in localStorage.
-    localStorage.setItem(`templateStack`, JSON.stringify(templateStackArray));
+    // Stringify templates and store it back in localStorage.
+    localStorage.setItem(TEMPLATE_SNAPSHOTS, JSON.stringify(templates));
   } catch (e) {
     throw e;
   }
+}
+
+/**
+ * Set URL parameter given a key and a value.
+ */
+export function setUrlParam(key: string, value: string): URL {
+  const url = new URL(location.href);
+  url.searchParams.set(key, value);
+
+  if (window.history.replaceState) {
+    //prevents browser from storing history with each change:
+    window.history.replaceState(null, '', url.href);
+  }
+
+  return url;
 }

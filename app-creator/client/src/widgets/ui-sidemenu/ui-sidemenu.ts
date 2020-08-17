@@ -28,6 +28,7 @@ export class SideMenu extends LitElement {
       margin: var(--tight);
       pointer-events: auto;
       background-color: white;
+      color: #000000;
       border-radius: 50%;
       z-index: 10;
     }
