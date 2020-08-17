@@ -130,12 +130,16 @@ export function storeSnapshotInLocalStorage(timestamp: number) {
      */
     const storeSnapshot = JSON.stringify(deepCloneTemplate(store.getState()));
 
+<<<<<<< HEAD
     /*
      * Retrieve template snapshots object from local storage if it exists.
      * The snapshots object contains templates keyed by their timestamp.
      * Alternatively, we can use the timestamp to key directly into localStorage
      * rather than creating an extra buffer and doing unnecessary parsing.
      */
+=======
+    // Retrieve template snapshots object from local storage if it exists.
+>>>>>>> Refactored template storage logic
     const templateSnapshots = localStorage.getItem(TEMPLATE_SNAPSHOTS);
 
     let templates: { [timestamp: string]: string } = {};

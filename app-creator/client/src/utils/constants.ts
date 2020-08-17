@@ -11,7 +11,11 @@ export const WIDGET_REF = 'widgetRef';
 /**
  * Key for template param.
  */
+<<<<<<< HEAD
 export const TEMPLATE_TIMESTAMP = 't';
+=======
+export const TEMPLATE_TIMESTAMP = 'template_timestamp';
+>>>>>>> Refactored template storage logic
 
 /**
  * Local storage key for storing template snapshots.
