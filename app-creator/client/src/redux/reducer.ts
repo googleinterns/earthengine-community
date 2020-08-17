@@ -206,6 +206,7 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
        */
       if (
         templateToBeUpdated.widgets[id].shared &&
+        widgetStyle.color.startsWith('#ffffff') &&
         (widgetStyle.backgroundColor.startsWith('#ffffff') ||
           (widgetStyle.backgroundColor.length === 9 &&
             widgetStyle.backgroundColor.endsWith('00')))
