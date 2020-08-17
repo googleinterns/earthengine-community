@@ -356,10 +356,9 @@ app.draw();
       // Update the store with the new template.
       store.dispatch(setSelectedTemplate(templateJSON));
 
-      incrementWidgetIDs(templateJSON.widgets);
-
       // Dispatch event to re-render the story-board.
       store.dispatch(setEventType(EventType.IMPORTING));
+      incrementWidgetIDs(templateJSON.widgets);
 
       this.importDialog.close();
 
