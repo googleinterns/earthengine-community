@@ -225,7 +225,6 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
         template: templateToBeUpdated,
       };
     case UPDATE_WIDGET_SHARED_STATUS:
-<<<<<<< HEAD
       const templateWithUpdatedStatus = deepCloneTemplate(
         state.template,
         false
@@ -236,20 +235,6 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
       return {
         ...state,
         template: templateWithUpdatedStatus,
-=======
-      return {
-        ...state,
-        template: {
-          ...state.template,
-          widgets: {
-            ...state.template.widgets,
-            [action.payload.id]: {
-              ...state.template.widgets[action.payload.id],
-              shared: action.payload.isShared,
-            },
-          },
-        },
->>>>>>> added widgets to scratch panel
       };
     case REMOVE_WIDGET:
       // Create template copy.

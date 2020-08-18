@@ -439,9 +439,6 @@ export const database: TemplateItem[] = [
                     "backgroundOpacity": "100",
                     "boxSizing": "border-box"
                 }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
             },
             "label-template-0": {
                 "id": "label-template-0",
