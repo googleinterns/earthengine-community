@@ -85,7 +85,7 @@ export class Dropzone extends LitElement {
   /**
    * Return children IDs for a given dropzone.
    */
-  getChildrenIds(): string[] {
+  private getChildrenIds(): string[] {
     return Array.from(this.children).map((el) => {
       return el.firstElementChild!.id;
     });
@@ -94,7 +94,7 @@ export class Dropzone extends LitElement {
   /**
    * Places the dragging widget in the correct order in the container.
    */
-  handleReorderingWidget(
+  private handleReorderingWidget(
     parent: Element | null,
     widget: Element,
     nextElement: Element | null
@@ -121,7 +121,7 @@ export class Dropzone extends LitElement {
   /**
    * Places a clone of the dragging widget in the correct order in the container.
    */
-  handleAddingWidget(
+  private handleAddingWidget(
     parent: Element | null,
     widget: Element,
     nextElement: Element | null
@@ -182,7 +182,7 @@ export class Dropzone extends LitElement {
   /**
    * Callback triggered whenever we drag a widget over a dropzone-widget.
    */
-  handleDragOver(e: DragEvent) {
+  private handleDragOver(e: DragEvent) {
     // Get widget that's currently being dragged.
     const widget = store.getState().draggingElement;
 
@@ -216,7 +216,7 @@ export class Dropzone extends LitElement {
    * Takes in a cloned element and returns that element with a draggable wrapper around it.
    * @param clone element to be wrapped.
    */
-  wrapDraggableWidget(clone: HTMLElement): DraggableWidget {
+  private wrapDraggableWidget(clone: HTMLElement): DraggableWidget {
     const cloneDraggableWrapper = document.createElement('draggable-widget');
     cloneDraggableWrapper.editable = true;
     cloneDraggableWrapper.style.width = '100%';
@@ -230,7 +230,7 @@ export class Dropzone extends LitElement {
    * @param widget widget currently being dragged.
    * @param y the y coordinate of the triggered event.
    */
-  getNextElement(widget: Element, y: number): Element | null {
+  private getNextElement(widget: Element, y: number): Element | null {
     /**
      * Get all widgets in the container excluding the currently dragged widget.
      * The direct children of the container are the widget wrappers that allow them to be

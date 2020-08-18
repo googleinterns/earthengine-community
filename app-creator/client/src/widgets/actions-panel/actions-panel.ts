@@ -69,14 +69,14 @@ export class ActionsPanel extends connect(store)(LitElement) {
   @property({ type: Number })
   selectedTab = Tab.TEMPLATES;
 
-  handleTabSwitch(index: Tab) {
+  private handleTabSwitch(index: Tab) {
     store.dispatch(setSelectedTab(index));
   }
 
   /**
    * Collapses/Expands the actions panel.
    */
-  togglePanel({ target }: { target: EventTarget }) {
+  private togglePanel({ target }: { target: EventTarget }) {
     const panel = this.shadowRoot?.getElementById('container');
 
     if (panel == null) {

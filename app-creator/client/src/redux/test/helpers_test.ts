@@ -11,9 +11,9 @@ import {
   applyPalette,
   updateWidgetAttribute,
 } from '../helpers';
-import { AppCreatorStore } from '../reducer';
 import { PaletteNames, AttributeType } from '../types/enums';
 import { PalettePicker } from '../../widgets/palette-picker/palette-picker';
+import { createTemplateStub } from '../../utils/test/helpers_test';
 
 suite('redux store helpers', () => {
   suite('palette changes', () => {
@@ -196,46 +196,3 @@ suite('redux store helpers', () => {
     });
   });
 });
-
-function createTemplateStub(): AppCreatorStore['template'] {
-  return {
-    widgets: {
-      'panel-0': {
-        children: ['label-0'],
-        style: {
-          backgroundColor: '#000000',
-          color: '#ffffff',
-        },
-      },
-      'label-0': {
-        id: 'label-0',
-        children: [],
-        uniqueAttributes: {},
-        style: {
-          backgroundColor: '#000000',
-          color: '#ffffff',
-        },
-      },
-      'button-0': {
-        id: 'button-0',
-        children: [],
-        uniqueAttributes: {},
-        style: {
-          backgroundColor: '#000000',
-          color: '#ffffff',
-        },
-      },
-      'map-0': {
-        id: 'map-0',
-        children: [],
-        uniqueAttributes: {
-          mapStyles: PaletteNames.AUBERGINE,
-        },
-        style: {
-          backgroundColor: '#ffffff',
-          color: '#ffffff',
-        },
-      },
-    },
-  };
-}

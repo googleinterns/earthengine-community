@@ -204,7 +204,7 @@ export class Map extends LitElement {
     this.onclick = (e: Event) => e.stopPropagation();
   }
 
-  handleMouseDown(e: Event) {
+  private handleMouseDown(e: Event) {
     e.stopPropagation();
     DraggableWidget.removeEditingWidgetHighlight();
     if (store.getState().editingElement != this) {
@@ -217,7 +217,7 @@ export class Map extends LitElement {
    * Called on initialization and on property changes. Initial call
    * creates a new map instance but subsequent ones update the existing object.
    */
-  updateMap() {
+  private updateMap() {
     loadGoogleMaps(this.apiKey).then(() => {
       this.mapOptions.zoom = this.zoom || 0;
 
@@ -305,7 +305,7 @@ export class Map extends LitElement {
     this.updateMap();
   }
 
-  getCustomMapStyle(value: string): google.maps.MapTypeStyle[] {
+  private getCustomMapStyle(value: string): google.maps.MapTypeStyle[] {
     switch (value) {
       case 'standard':
         return standard;

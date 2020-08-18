@@ -106,7 +106,7 @@ export class PalettePicker extends LitElement {
   /**
    * Callback triggered on new palette selection.
    */
-  handlePaletteSelection(e: Event) {
+  private handlePaletteSelection(e: Event) {
     const newPalette = (e.target as HTMLSelectElement).value as PaletteNames;
     this.selectedPalette = newPalette;
 

@@ -31,6 +31,8 @@ import '../dropzone-widget/dropzone-widget';
 import '../ui-map/ui-map';
 import '../ui-panel/ui-panel';
 import '@polymer/paper-dialog/paper-dialog';
+import { createToastMessage } from '../../utils/helpers';
+import { PaperToastElement } from '@polymer/paper-toast';
 
 const STORYBOARD_ID = 'storyboard';
 
@@ -148,6 +150,12 @@ export class Storyboard extends connect(store)(LitElement) {
   @query(`#${STORYBOARD_ID}`) storyboard!: PaperCardElement;
 
   /**
+   * Toast message for local storage failure.
+   */
+  @query('#failed-local-storage-toast')
+  localStorageFailureToast!: PaperToastElement;
+
+  /**
    * Reference to paper dialog modal.
    */
   @query('paper-dialog') paletteConfimationDialog!: PaperDialogElement;
@@ -171,13 +179,21 @@ export class Storyboard extends connect(store)(LitElement) {
       store.dispatch(setSelectedTemplateID(template.config.id));
 
       this.renderNewTemplate(template);
-    }
+    } else if (
+      /**
+       * We want to re-render the storyboard when we switch the template color palette.
+       * We do this by checking if the CHANGINGPALETTE event has been emitted.
+       */
+      state.eventType === EventType.CHANGINGPALETTE
+    ) {
+      this.renderNewTemplate(template);
+    } else if (state.eventType === EventType.CHANGINGTEMPLATE) {
+      /**
+       * In the case of template changes, we want incrementWidgetIDs after populating the new
+       * template with widgets from the previous one.
+       */
+      store.dispatch(setEventType(EventType.NONE, true));
 
-    /**
-     * We want to re-render the storyboard when we switch the template color palette.
-     * We do this by checking if the CHANGINGPALETTE event has been emitted.
-     */
-    if (state.eventType === EventType.CHANGINGPALETTE) {
       this.renderNewTemplate(template);
     }
   }
@@ -185,7 +201,7 @@ export class Storyboard extends connect(store)(LitElement) {
   /**
    * Renders new template by calling generateUI and requesting update.
    */
-  renderNewTemplate(template: AppCreatorStore['template']) {
+  private renderNewTemplate(template: AppCreatorStore['template']) {
     const { storyboard } = this;
     if (storyboard) {
       storyboard.innerHTML = ``;
@@ -198,7 +214,7 @@ export class Storyboard extends connect(store)(LitElement) {
   /**
    * Sets the selected palette in state and opens the confirmation dialog.
    */
-  handlePaletteChange(e: CustomEvent) {
+  private handlePaletteChange(e: CustomEvent) {
     this.selectedPalette = e.detail.selectedPalette;
     if (this.paletteConfimationDialog) {
       this.paletteConfimationDialog.open();
@@ -208,7 +224,7 @@ export class Storyboard extends connect(store)(LitElement) {
   /**
    * Called when users confirm on the confirmation dialog when changing palettes.
    */
-  paletteChangeConfirmation() {
+  private paletteChangeConfirmation() {
     store.dispatch(setPalette(this.selectedPalette));
     store.dispatch(setEventType(EventType.CHANGINGPALETTE, true));
     this.requestUpdate();
@@ -217,7 +233,7 @@ export class Storyboard extends connect(store)(LitElement) {
   /**
    * Called when users decline palette change.
    */
-  declinePaletteChange() {
+  private declinePaletteChange() {
     if (this.paletteConfimationDialog) {
       this.paletteConfimationDialog.close();
     }
@@ -265,6 +281,11 @@ export class Storyboard extends connect(store)(LitElement) {
       </paper-dialog>
     `;
 
+    const localStorageFailureToast = createToastMessage(
+      'failed-local-storage-toast',
+      'Failed to duplicate template.'
+    );
+
     return html`
       <div
         class=${classMap({
@@ -278,7 +299,7 @@ export class Storyboard extends connect(store)(LitElement) {
           style=${styleMap(styles)}
           class="storyboard"
         ></paper-card>
-        ${paletteChangeConfirmationDialog}
+        ${paletteChangeConfirmationDialog} ${localStorageFailureToast}
       </div>
     `;
   }

@@ -3,14 +3,20 @@
  * whenever we want to display a new template on the story-board.
  */
 import { AppCreatorStore, WidgetMetaData } from '../redux/reducer';
-import { ROOT_ID } from './constants';
+import { ROOT_ID, TEMPLATE_SNAPSHOTS, TEMPLATE_TIMESTAMP } from './constants';
 import { store } from '../redux/store';
-import { setSelectedTemplate } from '../redux/actions';
+import {
+  setSelectedTemplate,
+  addWidgetMetaData,
+  updateWidgetChildren,
+  setEventType,
+  updateWidgetIDs,
+} from '../redux/actions';
 import { Dropzone } from '../widgets/dropzone-widget/dropzone-widget';
 import { DraggableWidget } from '../widgets/draggable-widget/draggable-widget';
 import { getWidgetType, deepCloneTemplate } from './helpers';
 import { EEWidget } from '../redux/types/types';
-import { WidgetType } from '../redux/types/enums';
+import { WidgetType, EventType } from '../redux/types/enums';
 import { Panel } from '../widgets/ui-panel/ui-panel';
 import { Map } from '../widgets/ui-map/ui-map';
 import { SideMenu } from '../widgets/ui-sidemenu/ui-sidemenu';
@@ -133,4 +139,139 @@ export function getWidgetElement({
   }
 
   return { element, dropzone, map, draggable };
+}
+
+/**
+ * Retrieves previous template from localStorage and populate new template with widgets.
+ */
+export function transferData() {
+  try {
+    // Retrieve template stack from storage.
+    const templateSnapshots: string | null = localStorage.getItem(
+      TEMPLATE_SNAPSHOTS
+    );
+
+    if (!templateSnapshots) {
+      return;
+    }
+
+    let templates: { [timestamp: string]: string } = JSON.parse(
+      templateSnapshots
+    );
+
+    if (!templates) {
+      return;
+    }
+
+    let snapshot: string | null = null;
+
+    // Get template timestamp from URL
+    const queryString = window.location.search;
+    if (queryString !== '') {
+      const urlParams = new URLSearchParams(queryString);
+      if (urlParams.has(TEMPLATE_TIMESTAMP)) {
+        const timestamp = urlParams.get(TEMPLATE_TIMESTAMP);
+        if (timestamp) {
+          snapshot = templates[timestamp];
+          if (snapshot) {
+            delete templates[timestamp];
+          }
+        }
+
+        // Remove parameter from URL.
+        window.history.replaceState(null, '', window.location.pathname);
+        localStorage.setItem(TEMPLATE_SNAPSHOTS, JSON.stringify(templates));
+      }
+    }
+
+    if (snapshot != null) {
+      const storeJSON = JSON.parse(snapshot);
+
+      const { widgets } = storeJSON.template;
+
+      /**
+       * Get all panels that are not the root and that exist in the new and old template.
+       * We need to retrieve panels and sidemenu widgets, because they are containers
+       * that could hold user added widgets (i.e. label, button, etc...).
+       */
+      const panelIDs = [];
+      for (const widgetID in widgets) {
+        if (
+          widgetID !== ROOT_ID &&
+          (widgetID.startsWith(WidgetType.PANEL) ||
+            widgetID.startsWith(WidgetType.SIDEMENU)) &&
+          store.getState().template.widgets.hasOwnProperty(widgetID)
+        ) {
+          panelIDs.push(widgetID);
+        }
+      }
+
+      /**
+       * Populating store with widgets that share the same IDs.
+       */
+      for (const panelID of panelIDs) {
+        const { children } = widgets[panelID];
+        for (const child of children) {
+          const childMetaData: WidgetMetaData = widgets[child];
+          const { id, uniqueAttributes, style } = childMetaData;
+
+          // Create DOM element using meta data. Returns EEWidget (i.e. <ui-label></ui-label>).
+          const { element } = getWidgetElement(childMetaData);
+
+          store.dispatch(
+            addWidgetMetaData(id, element, uniqueAttributes, style)
+          );
+
+          store.dispatch(
+            updateWidgetChildren(panelID, [
+              ...store.getState().template.widgets[panelID].children,
+              id,
+            ])
+          );
+        }
+      }
+
+      store.dispatch(setEventType(EventType.CHANGINGTEMPLATE, true));
+
+      incrementWidgetIDs(widgets);
+    }
+  } catch (e) {
+    throw e;
+  }
+}
+
+/**
+ * Updates widget ids. Since we pre-populate the template by widgets from the previous template,
+ * we need to increment the widget IDs in our store to match the new widgets.
+ */
+export function incrementWidgetIDs(widgets: { [key: string]: WidgetMetaData }) {
+  const updatedIDs: AppCreatorStore['widgetIDs'] = {};
+  for (const key in store.getState().widgetIDs) {
+    let largest = -Infinity;
+
+    for (const widgetID in widgets) {
+      const type = getWidgetType(widgetID);
+      if (type === key) {
+        try {
+          const index = widgetID.lastIndexOf('-');
+          if (index === -1) {
+            throw new Error('Widget id incorrectly formatted');
+          }
+          const count = widgetID.slice(index + 1);
+          const countInt = parseInt(count);
+          largest = Math.max(largest, countInt);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+
+    if (largest !== -Infinity) {
+      updatedIDs[key] = largest + 1;
+    }
+  }
+
+  store.dispatch(updateWidgetIDs(updatedIDs));
+
+  return updatedIDs;
 }

@@ -164,7 +164,7 @@ export class WidgetsTab extends LitElement {
    * Sets the query property when an onsearch event is dispatched from the
    * searchbar widget.
    */
-  handleSearch({ detail: { query } }: onSearchEvent) {
+  private handleSearch({ detail: { query } }: onSearchEvent) {
     this.query = query;
   }
 }

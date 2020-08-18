@@ -1,6 +1,15 @@
 import { DeviceType } from '../redux/types/enums';
 import { AppCreatorStore } from '../redux/reducer';
-import { WIDGET_REF } from './constants';
+import { WIDGET_REF, TEMPLATE_SNAPSHOTS } from './constants';
+import { store } from '../redux/store';
+import { html, TemplateResult } from 'lit-element';
+import '@polymer/paper-toast/paper-toast';
+
+const WIDGET_REF_KEYS = new Set([
+  'draggingElement',
+  'editingElement',
+  WIDGET_REF,
+]);
 
 /**
  * Converts camel case to title case.
@@ -61,6 +70,17 @@ export const chips = [
   },
 ];
 
+export function createToastMessage(
+  id: string,
+  message: string
+): TemplateResult {
+  return html`<paper-toast
+    id=${id}
+    text=${message}
+    duration="10000"
+  ></paper-toast> `;
+}
+
 /*
  * Generates random ids with length 32.
  */
@@ -84,7 +104,7 @@ export function deepCloneTemplate(
      * we no longer need to keep the refs. As a result, we skip over them when we are producing the
      * output string.
      */
-    if (skipRefs && key === WIDGET_REF) {
+    if (skipRefs && WIDGET_REF_KEYS.has(key)) {
       continue;
     }
 
@@ -98,4 +118,53 @@ export function deepCloneTemplate(
   }
 
   return clone;
+}
+
+/**
+ * Takes a snapshot of the current store and stores it in localStorage.
+ */
+export function storeSnapshotInLocalStorage(timestamp: number) {
+  try {
+    /**
+     * Saving current store snapshot as a string in localStorage so we can transfer data across.
+     */
+    const storeSnapshot = JSON.stringify(deepCloneTemplate(store.getState()));
+
+    /*
+     * Retrieve template snapshots object from local storage if it exists.
+     * The snapshots object contains templates keyed by their timestamp.
+     * Alternatively, we can use the timestamp to key directly into localStorage
+     * rather than creating an extra buffer and doing unnecessary parsing.
+     */
+    const templateSnapshots = localStorage.getItem(TEMPLATE_SNAPSHOTS);
+
+    let templates: { [timestamp: string]: string } = {};
+    if (templateSnapshots) {
+      // If templateSnapshots exist, we want to retrieve it and convert it into an object.
+      templates = JSON.parse(templateSnapshots);
+    }
+
+    // Add the store snapshot as a new entry with the key being the timestamp.
+    templates[timestamp] = storeSnapshot;
+
+    // Stringify templates and store it back in localStorage.
+    localStorage.setItem(TEMPLATE_SNAPSHOTS, JSON.stringify(templates));
+  } catch (e) {
+    throw e;
+  }
+}
+
+/**
+ * Set URL parameter given a key and a value.
+ */
+export function setUrlParam(key: string, value: string): URL {
+  const url = new URL(location.href);
+  url.searchParams.set(key, value);
+
+  if (window.history.replaceState) {
+    //prevents browser from storing history with each change:
+    window.history.replaceState(null, '', url.href);
+  }
+
+  return url;
 }

@@ -20,6 +20,7 @@ import { onSearchEvent } from '../search-bar/search-bar';
 import { generateRandomId } from '../../utils/helpers';
 import { store } from '../../redux/store';
 import { setSelectedTemplate, setPalette } from '../../redux/actions';
+import { transferData } from '../../utils/template-generation';
 import '@polymer/paper-progress/paper-progress';
 import '@cwmr/paper-chip/paper-chip.js';
 
@@ -271,21 +272,21 @@ export class TemplateWizard extends LitElement {
     this.showTemplateSelectionModal();
   }
 
-  showTemplateSelectionModal() {
+  private showTemplateSelectionModal() {
     this.dialog.open();
   }
 
   /**
    * Used for filtering templates.
    */
-  handleDeviceFilters(device: DeviceType) {
+  private handleDeviceFilters(device: DeviceType) {
     this.deviceFilter = device;
   }
 
   /**
    * Generates an input header for each setting input.
    */
-  createInputHeader(title: string) {
+  private createInputHeader(title: string) {
     return html`
       <div class="input-header">
         <p class="input-label">${title}</p>
@@ -296,14 +297,14 @@ export class TemplateWizard extends LitElement {
   /**
    * Sets currently selected template id.
    */
-  handleTemplateSelection(id: string) {
+  private handleTemplateSelection(id: string) {
     this.selectedTemplateID = id;
   }
 
   /**
    * Returns an array of template cards.
    */
-  getTemplateCards(showTitle = false): Array<TemplatesTabItem> {
+  private getTemplateCards(showTitle = false): Array<TemplatesTabItem> {
     return this.templates.map(({ id, name, imageUrl, device }) => {
       return {
         id,
@@ -328,14 +329,14 @@ export class TemplateWizard extends LitElement {
    * Sets the query property when an onsearch event is dispatched from the
    * searchbar widget.
    */
-  handleSearch({ detail: { query } }: onSearchEvent) {
+  private handleSearch({ detail: { query } }: onSearchEvent) {
     this.query = query.trim();
   }
 
   /**
    * Creates a text input element.
    */
-  createTextInput(
+  private createTextInput(
     title: string,
     value: string,
     placeholder: string,
@@ -362,45 +363,9 @@ export class TemplateWizard extends LitElement {
   }
 
   /**
-   * Creates a select input element.
-   */
-  createSelectInput(
-    key: string,
-    title: string,
-    value: string,
-    items: string[]
-  ): TemplateResult | {} {
-    if (items == null) {
-      return nothing;
-    }
-    const optionList = [];
-    for (const item of items) {
-      optionList.push(html`<option value="${item}" ?selected=${item === value}
-        >${item}</option
-      >`);
-    }
-
-    return html`
-      <div class="config-input-container config-select-input">
-        ${this.createInputHeader(title)}
-        <select
-          name="${title}"
-          class="config-input"
-          .value="${this.config[key]}"
-          @change=${(e: Event) => {
-            this.config[key] = (e.target as HTMLSelectElement).value;
-          }}
-        >
-          ${optionList}
-        </select>
-      </div>
-    `;
-  }
-
-  /**
    * Callback triggered on continue button click.
    */
-  handleContinueClick() {
+  private handleContinueClick() {
     try {
       // Get template from database.
       const template = templatesManager
@@ -419,6 +384,9 @@ export class TemplateWizard extends LitElement {
         // Set new template in store.
         store.dispatch(setSelectedTemplate(templateJSON));
 
+        // Populate template with widgets from localStorage.
+        transferData();
+
         // Close dialog.
         const { dialog } = this;
         if (dialog != null) {
@@ -432,6 +400,11 @@ export class TemplateWizard extends LitElement {
     }
   }
 
+  /*
+   * TODO: Add elements to differentiate duplication flow from regular flow.
+   * Examples: populate text input with 'Copy of <previous-template>', or skip template wizard and go
+   * straight to app creation.
+   */
   render() {
     const {
       handleSearch,

@@ -19,6 +19,7 @@ export const UPDATE_WIDGET_CHILDREN = 'UPDATE_WIDGET_CHILDREN';
 export const SET_SELECTED_TEMPLATE_ID = 'SET_SELECTED_TEMPLATE_ID';
 export const SET_PALETTE = 'SET_PALETTE';
 export const SET_EVENT_TYPE = 'SET_EVENT_TYPE';
+export const UPDATE_WIDGET_IDS = 'UPDATE_WIDGET_IDS';
 
 export interface UpdateWidgetChildren {
   type: typeof UPDATE_WIDGET_CHILDREN;
@@ -75,6 +76,13 @@ export interface AddWidgetMetaData {
       uniqueAttributes: {};
       style: {};
     };
+  };
+}
+
+export interface UpdateWidgetIDs {
+  type: typeof UPDATE_WIDGET_IDS;
+  payload: {
+    updatedIDs: AppCreatorStore['widgetIDs'];
   };
 }
 
@@ -147,12 +155,13 @@ export type AppCreatorAction =
   | SetSelectedTabAction
   | SetIsReorderingAction
   | SetSelectedTemplate
-  | IncrementWidgetAction
-  | ResetDraggingValuesAction
-  | AddWidgetMetaData
-  | RemoveWidget
-  | UpdateWidgetMetaData
-  | UpdateWidgetChildren
   | SetSelectedTemplateIDAction
   | SetPalette
-  | SetEventType;
+  | SetEventType
+  | AddWidgetMetaData
+  | ResetDraggingValuesAction
+  | RemoveWidget
+  | IncrementWidgetAction
+  | UpdateWidgetMetaData
+  | UpdateWidgetChildren
+  | UpdateWidgetIDs;
