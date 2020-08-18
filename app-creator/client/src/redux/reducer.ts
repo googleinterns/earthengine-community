@@ -199,6 +199,11 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
         templateToBeUpdated.widgets[id].style
       );
 
+      /**
+       * For widgets that are on the scratch panel and have a white color,
+       * and their background color is either white or transparent, we
+       * keep the background color from the selected palette.
+       */
       if (
         templateToBeUpdated.widgets[id].shared &&
         (widgetStyle.backgroundColor.startsWith('#ffffff') ||

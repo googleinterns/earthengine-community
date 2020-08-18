@@ -1,5 +1,5 @@
 /**
- *  @fileoverview The scratch-panel widget is the right side panel in that stores intermediary
+ *  @fileoverview The scratch-panel widget is the right side panel that stores intermediary widgets.
  */
 import { LitElement, html, customElement, css, query } from 'lit-element';
 import { IronIconElement } from '@polymer/iron-icon';

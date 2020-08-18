@@ -1,10 +1,15 @@
-import { DeviceType, WidgetType } from '../redux/types/enums';
+import {
+  DeviceType,
+  WidgetType,
+  WidgetsRequiringBackground,
+} from '../redux/types/enums';
 import { AppCreatorStore } from '../redux/reducer';
 import { WIDGET_REF, TEMPLATE_SNAPSHOTS } from './constants';
 import { store } from '../redux/store';
 import { html, TemplateResult } from 'lit-element';
 import '@polymer/paper-toast/paper-toast';
 import { EEWidget } from '../redux/types/types';
+import { sharedAttributes } from '../redux/types/attributes';
 
 const WIDGET_REF_KEYS = new Set([
   'draggingElement',
@@ -132,16 +137,12 @@ export function storeSnapshotInLocalStorage(timestamp: number) {
      */
     const storeSnapshot = JSON.stringify(deepCloneTemplate(store.getState()));
 
-<<<<<<< HEAD
     /*
      * Retrieve template snapshots object from local storage if it exists.
      * The snapshots object contains templates keyed by their timestamp.
      * Alternatively, we can use the timestamp to key directly into localStorage
      * rather than creating an extra buffer and doing unnecessary parsing.
      */
-=======
-    // Retrieve template snapshots object from local storage if it exists.
->>>>>>> Refactored template storage logic
     const templateSnapshots = localStorage.getItem(TEMPLATE_SNAPSHOTS);
 
     let templates: { [timestamp: string]: string } = {};
@@ -175,15 +176,6 @@ export function setUrlParam(key: string, value: string): URL {
   return url;
 }
 
-/**
- * Adds background color to an element. Used when adding elements to the scratch panel.
- */
-const WidgetsRequiringBackground = new Set([
-  WidgetType.LABEL,
-  WidgetType.CHECKBOX,
-  WidgetType.SLIDER,
-]);
-
 export function addBackgroundColorToSharedWidget(element: HTMLElement) {
   const elementStyle: { [key: string]: string } = Object.assign(
     {},
@@ -193,7 +185,9 @@ export function addBackgroundColorToSharedWidget(element: HTMLElement) {
   const type = getWidgetType(element.id);
   if (
     elementStyle.color === '#ffffff' &&
-    WidgetsRequiringBackground.has(type as WidgetType)
+    elementStyle.backgroundColor.length === 9 &&
+    elementStyle.backgroundColor.endsWith('00') &&
+    Object.values(WidgetsRequiringBackground).includes(type)
   ) {
     const paletteBackground = store.getState().selectedPalette.backgroundColor;
     elementStyle.backgroundColor =
@@ -213,8 +207,7 @@ export function removeBackgroundColorFromSharedWidget(element: HTMLElement) {
     store.getState().template.widgets[element.id].style
   );
 
-  elementStyle.backgroundColor = elementStyle.backgroundColor;
   elementStyle.borderRadius = elementStyle.borderRadius ?? '4px';
-  elementStyle.padding = elementStyle.padding ?? '0px';
+  elementStyle.padding = elementStyle.padding ?? sharedAttributes.padding.value;
   (element as EEWidget).setStyle(elementStyle);
 }

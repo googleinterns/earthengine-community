@@ -198,19 +198,6 @@ export class Storyboard extends connect(store)(LitElement) {
        */
       store.dispatch(setEventType(EventType.NONE, true));
       this.renderNewTemplate(template);
-
-      try {
-        const template = localStorage.getItem('previousTemplate');
-        if (template) {
-          const widgets = JSON.parse(template).widgets;
-          incrementWidgetIDs(widgets);
-        }
-
-        localStorage.removeItem('previousTemplate');
-      } catch (e) {
-        console.error(e);
-        this.localStorageFailureToast.open();
-      }
     }
   }
 

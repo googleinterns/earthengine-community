@@ -82,6 +82,8 @@ export const updateWidgetMetaData = (
 /**
  * Sets the shared attribute on the widget object. The shared attribute
  * lets us know if a widget is on the template or on the scratch panel.
+ * TODO: change 'shared' attribute to 'active' for a clearer definition.
+ * A widget is active when it is on the template and inactive otherwise.
  */
 export const updateWidgetSharedStatus = (
   id: string,
