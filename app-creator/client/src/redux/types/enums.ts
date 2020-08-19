@@ -19,6 +19,15 @@ export enum WidgetType {
   SIDEMENU = 'sidemenu',
 }
 
+/**
+ * Adds background color to an element. Used when adding elements to the scratch panel.
+ */
+export enum WidgetsRequiringBackground {
+  LABEL = WidgetType.LABEL,
+  CHECKBOX = WidgetType.CHECKBOX,
+  SLIDER = WidgetType.SLIDER,
+}
+
 export enum Tab {
   TEMPLATES = 0,
   WIDGETS = 1,
@@ -36,6 +45,7 @@ export enum EventType {
   ADDING = 'adding',
   CHANGINGPALETTE = 'changingPalette',
   CHANGINGTEMPLATE = 'changingTemplate',
+  SHAREDWIDGETS = 'sharedWidgets',
   NONE = 'none',
 }
 

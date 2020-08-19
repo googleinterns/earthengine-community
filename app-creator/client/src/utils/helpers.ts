@@ -1,9 +1,15 @@
-import { DeviceType } from '../redux/types/enums';
+import {
+  DeviceType,
+  WidgetType,
+  WidgetsRequiringBackground,
+} from '../redux/types/enums';
 import { AppCreatorStore } from '../redux/reducer';
 import { WIDGET_REF, TEMPLATE_SNAPSHOTS } from './constants';
 import { store } from '../redux/store';
 import { html, TemplateResult } from 'lit-element';
 import '@polymer/paper-toast/paper-toast';
+import { EEWidget } from '../redux/types/types';
+import { sharedAttributes } from '../redux/types/attributes';
 
 const WIDGET_REF_KEYS = new Set([
   'draggingElement',
@@ -72,12 +78,13 @@ export const chips = [
 
 export function createToastMessage(
   id: string,
-  message: string
+  message: string,
+  duration?: number
 ): TemplateResult {
   return html`<paper-toast
     id=${id}
     text=${message}
-    duration="10000"
+    duration=${duration ?? 10000}
   ></paper-toast> `;
 }
 
@@ -110,7 +117,7 @@ export function deepCloneTemplate(
 
     if (Array.isArray(template[key])) {
       clone[key] = template[key].slice();
-    } else if (typeof template[key] === 'object' && key !== WIDGET_REF) {
+    } else if (typeof template[key] === 'object' && !WIDGET_REF_KEYS.has(key)) {
       clone[key] = deepCloneTemplate(template[key], skipRefs);
     } else {
       clone[key] = template[key];
@@ -167,4 +174,40 @@ export function setUrlParam(key: string, value: string): URL {
   }
 
   return url;
+}
+
+export function addBackgroundColorToSharedWidget(element: HTMLElement) {
+  const elementStyle: { [key: string]: string } = Object.assign(
+    {},
+    store.getState().template.widgets[element.id].style
+  );
+
+  const type = getWidgetType(element.id);
+  if (
+    elementStyle.color === '#ffffff' &&
+    elementStyle.backgroundColor.length === 9 &&
+    elementStyle.backgroundColor.endsWith('00') &&
+    Object.values(WidgetsRequiringBackground).includes(type)
+  ) {
+    const paletteBackground = store.getState().selectedPalette.backgroundColor;
+    elementStyle.backgroundColor =
+      paletteBackground === '#ffffff' ? '#000000' : paletteBackground;
+    elementStyle.borderRadius = '8px';
+    elementStyle.padding = '8px';
+    (element as EEWidget).setStyle(elementStyle);
+  }
+}
+
+/**
+ * Removes background color from an element. Used when adding elements to the scratch panel.
+ */
+export function removeBackgroundColorFromSharedWidget(element: HTMLElement) {
+  const elementStyle: { [key: string]: string } = Object.assign(
+    {},
+    store.getState().template.widgets[element.id].style
+  );
+
+  elementStyle.borderRadius = elementStyle.borderRadius ?? '4px';
+  elementStyle.padding = elementStyle.padding ?? sharedAttributes.padding.value;
+  (element as EEWidget).setStyle(elementStyle);
 }

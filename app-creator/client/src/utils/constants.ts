@@ -19,6 +19,11 @@ export const TEMPLATE_TIMESTAMP = 't';
 export const TEMPLATE_SNAPSHOTS = 'template_snapshots';
 
 /**
+ * Scratch panel id.
+ */
+export const SCRATCH_PANEL = 'scratch-panel';
+
+/**
  * List of default map styles.
  */
 export const MAP_STYLES = [

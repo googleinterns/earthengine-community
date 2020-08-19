@@ -7,7 +7,11 @@
 import { LitElement, html, customElement, css, query } from 'lit-element';
 import { store } from '../../redux/store';
 import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog.js';
-import { ROOT_ID, TEMPLATE_TIMESTAMP } from '../../utils/constants';
+import {
+  ROOT_ID,
+  TEMPLATE_TIMESTAMP,
+  SCRATCH_PANEL,
+} from '../../utils/constants';
 import { setSelectedTemplate } from '../../redux/actions';
 import { PaperToastElement } from '@polymer/paper-toast/paper-toast.js';
 import {
@@ -174,6 +178,12 @@ export class ToolBar extends LitElement {
    */
   private getTemplateString(space: number = 0) {
     const template = deepCloneTemplate(store.getState().template);
+    const { widgets } = template;
+    for (const id in widgets) {
+      if (widgets[id].shared || id === SCRATCH_PANEL) {
+        delete widgets[id];
+      }
+    }
     return JSON.stringify(template, null, space);
   }
 

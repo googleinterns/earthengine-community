@@ -34,6 +34,8 @@ import {
   SET_EVENT_TYPE,
   UpdateWidgetIDs,
   UPDATE_WIDGET_IDS,
+  UpdateWidgetSharedStatus,
+  UPDATE_WIDGET_SHARED_STATUS,
 } from './types/actions';
 import {
   DEFAULT_SHARED_ATTRIBUTES,
@@ -73,6 +75,25 @@ export const updateWidgetMetaData = (
       value,
       id,
       attributeType,
+    },
+  };
+};
+
+/**
+ * Sets the shared attribute on the widget object. The shared attribute
+ * lets us know if a widget is on the template or on the scratch panel.
+ * TODO: change 'shared' attribute to 'active' for a clearer definition.
+ * A widget is active when it is on the template and inactive otherwise.
+ */
+export const updateWidgetSharedStatus = (
+  id: string,
+  isShared: boolean
+): UpdateWidgetSharedStatus => {
+  return {
+    type: UPDATE_WIDGET_SHARED_STATUS,
+    payload: {
+      id,
+      isShared,
     },
   };
 };
@@ -127,6 +148,7 @@ export const setPalette = (palette: PaletteNames): SetPalette => {
 export const addWidgetMetaData = (
   id: string,
   widget: Element,
+  shared?: boolean,
   uniqueAttributes?: UniqueAttributes,
   style?: { [key: string]: string }
 ): AddWidgetMetaData => {
@@ -135,6 +157,7 @@ export const addWidgetMetaData = (
     payload: {
       [id]: {
         id,
+        shared: shared ?? false,
         widgetRef: widget as HTMLElement,
         children: [],
         uniqueAttributes: uniqueAttributes ?? {

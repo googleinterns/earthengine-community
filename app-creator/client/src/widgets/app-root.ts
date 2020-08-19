@@ -3,15 +3,16 @@
  *  in which all other widgets are rendered.
  */
 import { LitElement, html, customElement, css } from 'lit-element';
+import '@polymer/paper-progress/paper-progress.js';
+import '@polymer/paper-toast/paper-toast.js';
+import '@cwmr/paper-chip/paper-chip.js';
 import './tool-bar/tool-bar';
 import './actions-panel/actions-panel';
 import './tab-container/tab-container';
 import './story-board/story-board';
 import './search-bar/search-bar';
-import '@polymer/paper-progress/paper-progress.js';
-import '@polymer/paper-toast/paper-toast.js';
-import '@cwmr/paper-chip/paper-chip.js';
 import './template-wizard/template-wizard';
+import './scratch-panel/scratch-panel';
 
 @customElement('app-root')
 export class AppRoot extends LitElement {
@@ -54,6 +55,8 @@ export class AppRoot extends LitElement {
             <story-board id="storyboard"></story-board>
           </div>
           <template-wizard></template-wizard>
+
+          <scratch-panel></scratch-panel>
         </div>
       </div>
     `;

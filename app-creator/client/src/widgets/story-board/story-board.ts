@@ -16,23 +16,27 @@ import { DeviceType, EventType, PaletteNames } from '../../redux/types/enums';
 import { store } from '../../redux/store';
 import { AppCreatorStore } from '../../redux/reducer';
 import { PaperCardElement } from '@polymer/paper-card/paper-card.js';
-import { generateUI } from '../../utils/template-generation';
+import {
+  generateUI,
+  incrementWidgetIDs,
+} from '../../utils/template-generation';
 import {
   setSelectedTemplateID,
   setEventType,
   setPalette,
 } from '../../redux/actions';
 import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog';
+import { createToastMessage } from '../../utils/helpers';
+import { PaperToastElement } from '@polymer/paper-toast';
 import '@polymer/paper-card/paper-card.js';
 import '@polymer/iron-icons/hardware-icons.js';
 import '@polymer/paper-tabs/paper-tabs';
 import '@polymer/paper-tabs/paper-tab';
+import '@polymer/paper-dialog/paper-dialog';
 import '../dropzone-widget/dropzone-widget';
 import '../ui-map/ui-map';
 import '../ui-panel/ui-panel';
 import '@polymer/paper-dialog/paper-dialog';
-import { createToastMessage } from '../../utils/helpers';
-import { PaperToastElement } from '@polymer/paper-toast';
 
 const STORYBOARD_ID = 'storyboard';
 
@@ -193,7 +197,6 @@ export class Storyboard extends connect(store)(LitElement) {
        * template with widgets from the previous one.
        */
       store.dispatch(setEventType(EventType.NONE, true));
-
       this.renderNewTemplate(template);
     }
   }

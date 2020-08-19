@@ -81,7 +81,7 @@ export const sharedAttributes: AttributeMetaData = {
     type: InputType.COLOR,
   },
   backgroundColor: {
-    value: '#FFFFFF',
+    value: '#ffffff00',
     type: InputType.COLOR,
   },
   backgroundOpacity: {
@@ -101,7 +101,7 @@ export const sharedAttributes: AttributeMetaData = {
     items: ['solid', 'dashed'],
   },
   borderColor: {
-    value: 'black',
+    value: '#000000',
     type: InputType.COLOR,
   },
   fontSize: {

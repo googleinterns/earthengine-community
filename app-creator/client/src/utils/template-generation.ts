@@ -3,7 +3,12 @@
  * whenever we want to display a new template on the story-board.
  */
 import { AppCreatorStore, WidgetMetaData } from '../redux/reducer';
-import { ROOT_ID, TEMPLATE_SNAPSHOTS, TEMPLATE_TIMESTAMP } from './constants';
+import {
+  ROOT_ID,
+  TEMPLATE_SNAPSHOTS,
+  TEMPLATE_TIMESTAMP,
+  SCRATCH_PANEL,
+} from './constants';
 import { store } from '../redux/store';
 import {
   setSelectedTemplate,
@@ -29,7 +34,7 @@ export function generateUI(
   template: AppCreatorStore['template'],
   node: HTMLElement
 ) {
-  const templateCopy = deepCloneTemplate(template);
+  const templateCopy = deepCloneTemplate(template, false);
 
   // Recursively creates ui widgets and returns the root of the tree.
   function getWidgetTree(widgetData: WidgetMetaData): HTMLElement {
@@ -219,7 +224,7 @@ export function transferData() {
           const { element } = getWidgetElement(childMetaData);
 
           store.dispatch(
-            addWidgetMetaData(id, element, uniqueAttributes, style)
+            addWidgetMetaData(id, element, false, uniqueAttributes, style)
           );
 
           store.dispatch(
@@ -231,6 +236,28 @@ export function transferData() {
         }
       }
 
+      /**
+       * Getting remaining widgets that have not been added. We will populate the scratch panel
+       * with these widgets so that the user can add them later on.
+       */
+      const remainingWidgetIds = [];
+      for (const id in widgets) {
+        if (isActiveWidget(id)) {
+          const { uniqueAttributes, style } = widgets[id];
+
+          remainingWidgetIds.push(id);
+
+          const { element } = getWidgetElement(widgets[id]);
+
+          store.dispatch(
+            addWidgetMetaData(id, element, true, uniqueAttributes, style)
+          );
+        }
+      }
+
+      store.dispatch(updateWidgetChildren(SCRATCH_PANEL, remainingWidgetIds));
+
+      store.dispatch(setEventType(EventType.SHAREDWIDGETS, true));
       store.dispatch(setEventType(EventType.CHANGINGTEMPLATE, true));
 
       incrementWidgetIDs(widgets);
@@ -238,6 +265,16 @@ export function transferData() {
   } catch (e) {
     throw e;
   }
+}
+
+function isActiveWidget(id: string) {
+  return (
+    id !== SCRATCH_PANEL &&
+    !id.startsWith(WidgetType.PANEL) &&
+    !id.startsWith(WidgetType.SIDEMENU) &&
+    !id.startsWith(WidgetType.MAP) &&
+    !(id in store.getState().template.widgets)
+  );
 }
 
 /**

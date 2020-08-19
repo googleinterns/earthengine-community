@@ -186,7 +186,7 @@ export class DraggableWidget extends LitElement {
 
     store.dispatch(setEditingWidget(widget));
 
-    container.style.borderColor = 'var(--accent-color)';
+    container.style.borderColor = store.getState().selectedPalette.color;
   }
 
   /**
