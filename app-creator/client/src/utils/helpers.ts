@@ -1,4 +1,8 @@
-import { DeviceType, WidgetsRequiringBackground } from '../redux/types/enums';
+import {
+  DeviceType,
+  WidgetsRequiringBackground,
+  WidgetType,
+} from '../redux/types/enums';
 import { AppCreatorStore } from '../redux/reducer';
 import { WIDGET_REF, TEMPLATE_SNAPSHOTS } from './constants';
 import { store } from '../redux/store';
@@ -23,17 +27,22 @@ export function camelCaseToTitleCase(text: string) {
 }
 
 /**
+ * Empty set placeholder.
+ */
+export const emptySet = new Set();
+
+/**
  * Returns widget type.
  * id. 'label-0' => 'label'
  */
-export function getWidgetType(id: string): string {
+export function getWidgetType(id: string): WidgetType {
   const index = id.indexOf('-');
 
   if (index === -1) {
-    return id;
+    return id as WidgetType;
   }
 
-  return id.slice(0, index);
+  return id.slice(0, index) as WidgetType;
 }
 
 /**

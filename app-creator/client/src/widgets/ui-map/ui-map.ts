@@ -5,6 +5,7 @@ import {
   AttributeMetaData,
   DefaultAttributesType,
   getDefaultAttributes,
+  SharedAttributes,
 } from '../../redux/types/attributes';
 import { store } from '../../redux/store';
 import { setEditingWidget, setSelectedTab } from '../../redux/actions';
@@ -129,7 +130,7 @@ export class Map extends LitElement {
     },
   };
 
-  static disabledStyles: Set<string> = new Set([
+  static disabledStyles: Set<SharedAttributes> = new Set([
     'height',
     'width',
     'padding',

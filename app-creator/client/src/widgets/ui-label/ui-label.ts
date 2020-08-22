@@ -10,6 +10,7 @@ import {
   AttributeMetaData,
   DefaultAttributesType,
   getDefaultAttributes,
+  SharedAttributes,
 } from '../../redux/types/attributes';
 import { InputType } from '../../redux/types/enums';
 
@@ -45,7 +46,10 @@ export class Label extends LitElement {
     },
   };
 
-  static disabledStyles: Set<string> = new Set(['whiteSpace', 'shown']);
+  static disabledStyles: Set<SharedAttributes> = new Set([
+    'whiteSpace',
+    'shown',
+  ]);
 
   static DEFAULT_LABEL_ATTRIBUTES: DefaultAttributesType = getDefaultAttributes(
     Label.attributes
