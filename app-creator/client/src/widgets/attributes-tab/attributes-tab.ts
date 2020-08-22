@@ -11,8 +11,13 @@ import {
   AttributeMetaData,
   UniqueAttributes,
   Tooltip,
+  SharedAttributes,
 } from '../../redux/types/attributes.js';
-import { camelCaseToTitleCase, getWidgetType } from '../../utils/helpers.js';
+import {
+  camelCaseToTitleCase,
+  getWidgetType,
+  emptySet,
+} from '../../utils/helpers.js';
 import { updateWidgetMetaData } from '../../redux/actions.js';
 import {
   EventType,
@@ -643,7 +648,7 @@ ${value}</textarea
     }
   }
 
-  private getDisabledStyles(type: string): Set<string> | null {
+  private getDisabledStyles(type: WidgetType): Set<SharedAttributes> | null {
     switch (type) {
       case WidgetType.MAP:
         return Map.disabledStyles;
@@ -670,23 +675,44 @@ ${value}</textarea
     }
   }
 
+  /**
+   * Returns a style object with the disabled styles of the currently
+   * selected widget filtered out.
+   */
+  filterDisabledStyles(
+    styleAttributes: { [key in SharedAttributes]: string },
+    disabledStyles: Set<SharedAttributes>
+  ): { [key in SharedAttributes]: string } {
+    const styles = Object.assign({}, styleAttributes);
+
+    for (const attribute of disabledStyles) {
+      delete styles[attribute as SharedAttributes];
+    }
+
+    return styles;
+  }
+
   private getStyleAttributes(): Array<TemplateResult | {}> | {} {
     const widget = this.editingWidget;
     if (widget == null) {
       return nothing;
     }
 
-    const disabledStyles = this.getDisabledStyles(getWidgetType(widget.id));
-
     const styleAttributes = store.getState().template.widgets[widget.id].style;
 
-    const inputs: Array<TemplateResult | {}> = [];
+    const disabledStyles = this.getDisabledStyles(getWidgetType(widget.id));
 
+    const filteredStyleAttributes = this.filterDisabledStyles(
+      styleAttributes,
+      disabledStyles ?? (emptySet as Set<SharedAttributes>)
+    );
+
+    const inputs: Array<TemplateResult | {}> = [];
     for (const key of Object.keys(sharedAttributes)) {
-      if (disabledStyles && disabledStyles.has(key)) {
+      if (!filteredStyleAttributes.hasOwnProperty(key)) {
         continue;
       }
-      const value = styleAttributes[key];
+      const value = filteredStyleAttributes[key as SharedAttributes];
       const placeholder = sharedAttributes[key].placeholder;
       const unit = sharedAttributes[key].unit;
       const step = sharedAttributes[key].step;

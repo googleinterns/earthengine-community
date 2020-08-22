@@ -10,6 +10,7 @@ import { Dropzone } from '../dropzone-widget/dropzone-widget';
 import { classMap } from 'lit-html/directives/class-map';
 import { Layout } from '../../redux/types/enums';
 import '../dropzone-widget/dropzone-widget';
+import { SharedAttributes } from '../../redux/types/attributes';
 
 @customElement('ui-panel')
 export class Panel extends LitElement {
@@ -65,7 +66,7 @@ export class Panel extends LitElement {
     }
   `;
 
-  static disabledStyles: Set<string> = new Set([
+  static disabledStyles: Set<SharedAttributes> = new Set([
     'margin',
     'color',
     'fontSize',

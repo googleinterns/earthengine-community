@@ -16,6 +16,7 @@ import {
   AttributeMetaData,
   DefaultAttributesType,
   getDefaultAttributes,
+  SharedAttributes,
 } from '../../redux/types/attributes';
 import { InputType } from '../../redux/types/enums';
 import { PaperCheckboxElement } from '@polymer/paper-checkbox/paper-checkbox.js';
@@ -48,7 +49,7 @@ export class Checkbox extends LitElement {
     },
   };
 
-  static disabledStyles: Set<string> = new Set([
+  static disabledStyles: Set<SharedAttributes> = new Set([
     'textAlign',
     'whiteSpace',
     'shown',

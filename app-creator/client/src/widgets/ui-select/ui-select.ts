@@ -10,6 +10,7 @@ import {
   AttributeMetaData,
   DefaultAttributesType,
   getDefaultAttributes,
+  SharedAttributes,
 } from '../../redux/types/attributes';
 import { styleMap } from 'lit-html/directives/style-map';
 import { InputType } from '../../redux/types/enums';
@@ -41,7 +42,7 @@ export class Select extends LitElement {
     },
   };
 
-  static disabledStyles: Set<string> = new Set([
+  static disabledStyles: Set<SharedAttributes> = new Set([
     'color',
     'fontSize',
     'fontWeight',

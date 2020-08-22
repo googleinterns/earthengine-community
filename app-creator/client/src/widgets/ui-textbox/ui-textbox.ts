@@ -9,6 +9,7 @@ import {
   AttributeMetaData,
   DefaultAttributesType,
   getDefaultAttributes,
+  SharedAttributes,
 } from '../../redux/types/attributes';
 import { InputType } from '../../redux/types/enums';
 
@@ -34,7 +35,7 @@ export class Textbox extends LitElement {
     },
   };
 
-  static disabledStyles: Set<string> = new Set([
+  static disabledStyles: Set<SharedAttributes> = new Set([
     'fontSize',
     'fontFamily',
     'textAlign',
