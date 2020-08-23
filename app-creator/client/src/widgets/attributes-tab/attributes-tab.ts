@@ -40,6 +40,7 @@ import { SideMenu } from '../ui-sidemenu/ui-sidemenu';
 import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog.js';
 import '@polymer/paper-dialog/paper-dialog.js';
 import '../empty-notice/empty-notice';
+import { Thumbnail } from '../ui-thumbnail/ui-thumbnail';
 
 @customElement('attributes-tab')
 export class AttributesTab extends connect(store)(LitElement) {
@@ -643,6 +644,12 @@ ${value}</textarea
           uniqueAttributes,
           widget.id
         );
+      case WidgetType.THUMBNAIL:
+        return this.getUniqueAttributeMarkup(
+          Thumbnail.attributes,
+          uniqueAttributes,
+          widget.id
+        );
       default:
         return nothing;
     }
@@ -670,6 +677,8 @@ ${value}</textarea
         return Panel.disabledStyles;
       case WidgetType.SIDEMENU:
         return SideMenu.disabledStyles;
+      case WidgetType.THUMBNAIL:
+        return Thumbnail.disabledStyles;
       default:
         return null;
     }

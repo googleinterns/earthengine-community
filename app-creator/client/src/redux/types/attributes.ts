@@ -10,6 +10,7 @@ import { Slider } from '../../widgets/ui-slider/ui-slider';
 import { Textbox } from '../../widgets/ui-textbox/ui-textbox';
 import { Chart } from '../../widgets/ui-chart/ui-chart';
 import { Map } from '../../widgets/ui-map/ui-map';
+import { Thumbnail } from '../../widgets/ui-thumbnail/ui-thumbnail';
 
 export type SharedAttributes =
   | 'height'
@@ -106,8 +107,8 @@ export const sharedAttributes: AttributeMetaData = {
     type: InputType.COLOR,
   },
   fontSize: {
-    value: '12px',
-    placeholder: '12',
+    value: '14px',
+    placeholder: '14',
     type: InputType.NUMBER,
   },
   fontWeight: {
@@ -193,4 +194,5 @@ export type UniqueAttributes =
   | typeof Slider.DEFAULT_SLIDER_ATTRIBUTES
   | typeof Textbox.DEFAULT_TEXTBOX_ATTRIBUTES
   | typeof Chart.DEFAULT_CHART_ATTRIBUTES
-  | typeof Map.DEFAULT_MAP_ATTRIBUTES;
+  | typeof Map.DEFAULT_MAP_ATTRIBUTES
+  | typeof Thumbnail.DEFAULT_THUMBNAIL_ATTRIBUTES;

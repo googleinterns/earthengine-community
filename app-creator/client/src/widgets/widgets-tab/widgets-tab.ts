@@ -27,6 +27,7 @@ import '../ui-chart/ui-chart';
 import '../search-bar/search-bar';
 import '../empty-notice/empty-notice';
 import '../ui-map/ui-map';
+import '../ui-thumbnail/ui-thumbnail';
 
 interface WidgetItem {
   id: string;
@@ -105,6 +106,14 @@ export class WidgetsTab extends LitElement {
       markup: html`<h6 class="subtitle">Checkbox</h6>
         <draggable-widget>
           <ui-checkbox id="checkbox" label="Item"></ui-checkbox>
+        </draggable-widget>`,
+    },
+    {
+      id: 'ui-thumbnail',
+      name: 'thumbnail',
+      markup: html`<h6 class="subtitle">Thumbnail</h6>
+        <draggable-widget>
+          <ui-thumbnail id="thumbnail"></ui-thumbnail>
         </draggable-widget>`,
     },
     {

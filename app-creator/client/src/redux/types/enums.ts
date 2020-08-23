@@ -17,6 +17,7 @@ export enum WidgetType {
   MAP = 'map',
   CHART = 'chart',
   SIDEMENU = 'sidemenu',
+  THUMBNAIL = 'thumbnail',
 }
 
 /**

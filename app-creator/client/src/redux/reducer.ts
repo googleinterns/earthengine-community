@@ -81,6 +81,7 @@ const INITIAL_STATE: AppCreatorStore = {
     checkbox: 0,
     chart: 0,
     map: 0,
+    thumbnail: 0,
   },
   template: {},
 };

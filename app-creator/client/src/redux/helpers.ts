@@ -8,6 +8,8 @@ import { EEWidget } from './types/types';
 import { UpdateWidgetMetaData } from './types/actions';
 import { ROOT_ID, SCRATCH_PANEL } from '../utils/constants';
 import { SharedAttributes } from './types/attributes';
+import { getWidgetType } from '../utils/helpers';
+import { Thumbnail } from '../widgets/ui-thumbnail/ui-thumbnail';
 
 /**
  * Removes widget meta data from the current template.
@@ -96,18 +98,39 @@ export function addDefaultStyles(template: { [key: string]: any }) {
   // the widget itself has a higher presedence and thus overwrites any defaults.
   for (const id in widgets) {
     // Create a copy of the style object.
-    const styleCopy: { [key: string]: string } = Object.assign(
-      {},
-      DEFAULT_STYLES
-    );
+    const styleCopy = Object.assign({}, DEFAULT_STYLES);
 
-    // Apply any styles defined in the widget's style object.
+    // First overwrite, using defaults defined on the Widget itself.
+    const stylesWithOverwrites = overwriteDefaults(id, styleCopy);
+
+    // Apply any styles defined in the widget's style object (In the original template string).
     for (const attribute in widgets[id].style) {
-      styleCopy[attribute] = widgets[id].style[attribute];
+      stylesWithOverwrites[attribute as SharedAttributes] =
+        widgets[id].style[attribute];
     }
 
     // Overwrite style object with the new one containing defaults.
-    widgets[id].style = styleCopy;
+    widgets[id].style = stylesWithOverwrites;
+  }
+}
+
+/**
+ * Overwrites default styles object with default styles defined on the widget class.
+ */
+export function overwriteDefaults(
+  id: string,
+  style: { [key in string]: string }
+) {
+  const type = getWidgetType(id);
+  switch (type) {
+    case WidgetType.THUMBNAIL:
+      console.log('thumbnail');
+      return {
+        ...style,
+        ...Thumbnail.defaultStyles,
+      };
+    default:
+      return style;
   }
 }
 
@@ -242,7 +265,7 @@ export const DEFAULT_STYLES: { [key in SharedAttributes]: string } = {
   borderWidth: '0px',
   borderStyle: 'solid',
   borderColor: '#000000',
-  fontSize: '12px',
+  fontSize: '14px',
   color: '#000000',
   backgroundColor: '#ffffff',
   backgroundOpacity: '0',

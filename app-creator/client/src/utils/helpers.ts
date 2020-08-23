@@ -198,9 +198,7 @@ export function addBackgroundColorToSharedWidget(element: HTMLElement) {
     elementStyle.backgroundColor.endsWith('00') &&
     Object.values(WidgetsRequiringBackground).includes(type)
   ) {
-    const paletteBackground = store.getState().selectedPalette.backgroundColor;
-    elementStyle.backgroundColor =
-      paletteBackground === '#ffffff' ? '#000000' : paletteBackground;
+    elementStyle.backgroundColor = '#000000';
     elementStyle.borderRadius = '8px';
     elementStyle.padding = '8px';
     (element as EEWidget).setStyle(elementStyle);
@@ -211,6 +209,10 @@ export function addBackgroundColorToSharedWidget(element: HTMLElement) {
  * Removes background color from an element. Used when adding elements to the scratch panel.
  */
 export function removeBackgroundColorFromSharedWidget(element: HTMLElement) {
+  const type = getWidgetType(element.id);
+  if (!Object.values(WidgetsRequiringBackground).includes(type)) {
+    return;
+  }
   const elementStyle: { [key: string]: string } = Object.assign(
     {},
     store.getState().template.widgets[element.id].style

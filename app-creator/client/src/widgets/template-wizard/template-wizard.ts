@@ -483,9 +483,9 @@ export class TemplateWizard extends LitElement {
         <h3>Settings</h3>
         <div class="form-inputs">
           ${this.createTextInput(
-            'Template Name:',
+            'App Name:',
             this.config.name,
-            'Enter Name',
+            'i.e. Global forest change',
             'name',
             false,
             true

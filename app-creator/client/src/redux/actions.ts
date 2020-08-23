@@ -58,6 +58,7 @@ import { Textbox } from '../widgets/ui-textbox/ui-textbox';
 import { Chart } from '../widgets/ui-chart/ui-chart';
 import { Map } from '../widgets/ui-map/ui-map';
 import { AppCreatorStore } from './reducer';
+import { overwriteDefaults } from './helpers';
 
 /**
  * Updates widget attributes.
@@ -152,6 +153,10 @@ export const addWidgetMetaData = (
   uniqueAttributes?: UniqueAttributes,
   style?: { [key: string]: string }
 ): AddWidgetMetaData => {
+  const overwritten = overwriteDefaults(id, DEFAULT_SHARED_ATTRIBUTES);
+  console.log({ overwritten, style });
+  const styles = style ?? overwriteDefaults(id, DEFAULT_SHARED_ATTRIBUTES);
+  console.log({ styles });
   return {
     type: ADD_WIDGET_META_DATA,
     payload: {
@@ -163,7 +168,7 @@ export const addWidgetMetaData = (
         uniqueAttributes: uniqueAttributes ?? {
           ...getUniqueAttributes(getWidgetType(id)),
         },
-        style: style ?? { ...DEFAULT_SHARED_ATTRIBUTES },
+        style: styles,
       },
     },
   };
