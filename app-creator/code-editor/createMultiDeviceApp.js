@@ -1,11 +1,11 @@
 var AppCreator = require('users/msibrahim/app-creator:app-creator-deserializer');
 
 /**
- * AppCreator.createResponsiveApp provides an API for building responsive templates.
+ * AppCreator.createMultiDeviceApp provides an API for building responsive templates.
  * This could be used for building apps that dynamically resize to fit the window.
  * -----------------------------------------------------------------------------------------------
  *
- * The createResponsiveApp method takes in an object with two keys: desktop and mobile.
+ * The createMultiDeviceApp method takes in an object with two keys: desktop and mobile.
  * Each key points to an app instance created by AppCreator.createApp. The following
  * example will walk through building a responsive app using this API.
  */
@@ -43,7 +43,7 @@ mobile.widgets().get('button-0').onClick(buttonClick);
 /**
  * 3. Create a responsive app instance passing in the two templates created on step one.
  */
-var responsiveApp = AppCreator.createResponsiveApp({
+var responsiveApp = AppCreator.createMultiDeviceApp({
   desktop: desktop,
   mobile: mobile,
 });

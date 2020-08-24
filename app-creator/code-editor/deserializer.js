@@ -2,8 +2,19 @@ var mapStyles = require('users/msibrahim/app-creator:map-styles');
 var sidemenu = require('users/msibrahim/app-creator:sidemenu');
 
 exports.createApp = createApp;
+exports.createMultiDeviceApp = createMultiDeviceApp;
 exports.createResponsiveApp = createResponsiveApp;
 exports.createMultiSelectorApp = createMultiSelectorApp;
+
+var MOBILE_WINDOW_SIZE = 900;
+
+/**
+ * Temporary placeholder to avoid breaking apps already created with this API.
+ */
+function createResponsiveApp(apps) {
+  print('This API has changed to createMultiDeviceApp.');
+  return createMultiDeviceApp(apps);
+}
 
 /**
  * Creates a multiSelectorApp instance given an optional object with the following format.
@@ -163,9 +174,9 @@ function createMultiSelectorApp(apps) {
 }
 
 /**
- * Creates a reponsive app instance given desktop and mobile apps.
+ * Creates a multiDevice app instance given desktop and mobile apps.
  */
-function createResponsiveApp(apps) {
+function createMultiDeviceApp(apps) {
   var responsiveApp = {};
 
   responsiveApp.desktop = apps.desktop;
@@ -182,7 +193,7 @@ function createResponsiveApp(apps) {
      * If it is not, we don't execute the onResize logic.
      */
     if (responsiveApp.active) {
-      if (!deviceInfo.is_desktop || deviceInfo.width < 900) {
+      if (!deviceInfo.is_desktop || deviceInfo.width < MOBILE_WINDOW_SIZE) {
         responsiveApp.root = responsiveApp.mobile.root;
         responsiveApp.mobile.draw(responsiveApp.renderRoot);
       } else {
@@ -363,7 +374,7 @@ function createApp(template) {
     };
 
     try {
-      dataTable = JSON.parse(uniqueAttributes.dataTable.replace(/'/g, '"'));
+      dataTable = JSON.parse(uniqueAttributes.dataTable);
     } catch (e) {
       print('Error parsing dataTable for chart element');
     }
@@ -400,7 +411,7 @@ function createApp(template) {
   app.createSelectElement = function (obj, style) {
     var uniqueAttributes = obj.uniqueAttributes;
 
-    var items = ['Item 1'];
+    var items = [''];
     try {
       var templateItems = JSON.parse(uniqueAttributes.items);
       items = templateItems.map(function (item) {
@@ -628,6 +639,8 @@ function createApp(template) {
 
   /**
    * Draw UI to the screen by adding the root to ui.Root.
+   * @param container An optional render root to use instead of the default ui.Root.
+   * This is used in MultiSelectorApps to draw to the app body so that the toolbar remains displayed.
    */
   app.draw = function (container) {
     if (!container) {
