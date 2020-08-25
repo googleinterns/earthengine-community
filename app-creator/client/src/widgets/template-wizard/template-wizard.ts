@@ -10,6 +10,7 @@ import {
   html,
 } from 'lit-element';
 import { nothing, TemplateResult } from 'lit-html';
+import { classMap } from 'lit-html/directives/class-map';
 import { DeviceType, PaletteNames } from '../../redux/types/enums';
 import { TemplateItem } from '../../client/fetch-templates';
 import { PaperDialogElement } from '@polymer/paper-dialog';
@@ -17,12 +18,11 @@ import { templatesManager } from '../../data/templates';
 import { PaperToastElement } from '@polymer/paper-toast';
 import { TemplatesTabItem, TemplatesTab } from '../templates-tab/templates-tab';
 import { onSearchEvent } from '../search-bar/search-bar';
-import { generateRandomId } from '../../utils/helpers';
+import { generateRandomId, chips } from '../../utils/helpers';
 import { store } from '../../redux/store';
 import { setSelectedTemplate, setPalette } from '../../redux/actions';
 import { transferData } from '../../utils/template-generation';
 import '@polymer/paper-progress/paper-progress';
-import '@cwmr/paper-chip/paper-chip.js';
 
 @customElement('template-wizard')
 export class TemplateWizard extends LitElement {
@@ -84,18 +84,20 @@ export class TemplateWizard extends LitElement {
       flex-wrap: wrap;
       align-items: center;
       justify-content: center;
-      margin-top: var(--tight);
-    }
-
-    paper-chip {
-      margin: 0px var(--extra-tight);
-      background-color: var(--primary-color);
-      color: var(--accent-color);
+      margin-top: var(--regular);
     }
 
     .selected-paper-chip {
       background-color: var(--accent-color);
       color: var(--primary-color);
+    }
+
+    .button-chip {
+      padding: var(--tight);
+      height: 24px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      text-transform: none;
     }
 
     #content-body {
@@ -133,7 +135,7 @@ export class TemplateWizard extends LitElement {
       border-top: var(--light-border);
     }
 
-    paper-button {
+    #continue-button {
       background-color: var(--accent-color);
       color: var(--primary-color);
       height: 30px;
@@ -452,29 +454,19 @@ export class TemplateWizard extends LitElement {
 
     const sortingChips = html`
       <div id="chips-container">
-        <paper-chip
-          selectable
-          class="${this.deviceFilter === DeviceType.ALL
-            ? 'selected-paper-chip'
-            : ''}"
-          @click=${() => handleDeviceFilters.call(this, DeviceType.ALL)}
-          >All</paper-chip
-        >
-        <paper-chip
-          selectable
-          class="${this.deviceFilter === DeviceType.DESKTOP
-            ? 'selected-paper-chip'
-            : ''}"
-          @click=${() => handleDeviceFilters.call(this, DeviceType.DESKTOP)}
-          >Web</paper-chip
-        ><paper-chip
-          selectable
-          class="${this.deviceFilter === DeviceType.MOBILE
-            ? 'selected-paper-chip'
-            : ''}"
-          @click=${() => handleDeviceFilters.call(this, DeviceType.MOBILE)}
-          >Mobile</paper-chip
-        >
+        ${chips.map(({ label, device }) => {
+          return html`
+            <paper-button
+              class=${classMap({
+                'selected-paper-chip': this.deviceFilter === device,
+                'button-chip': true,
+              })}
+              @click=${() => handleDeviceFilters.call(this, device)}
+            >
+              ${label}
+            </paper-button>
+          `;
+        })}
       </div>
     `;
 
@@ -527,6 +519,7 @@ export class TemplateWizard extends LitElement {
           </div>
           <div id="button-container">
             <paper-button
+              id="continue-button"
               class="${disabledClass}"
               ?disabled=${!validForm}
               @click=${handleContinueClick}

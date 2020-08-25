@@ -41,7 +41,6 @@ import '../ui-chart/ui-chart';
 import '../search-bar/search-bar';
 import '../empty-notice/empty-notice';
 import '../template-card/template-card';
-import '@cwmr/paper-chip/paper-chip.js';
 
 export interface TemplatesTabItem {
   id: string;
@@ -53,12 +52,6 @@ export interface TemplatesTabItem {
 @customElement('templates-tab')
 export class TemplatesTab extends connect(store)(LitElement) {
   static styles = css`
-    paper-chip {
-      margin: 0px var(--extra-tight);
-      background-color: var(--primary-color);
-      color: var(--accent-color);
-    }
-
     paper-button {
       color: var(--accent-color);
     }
@@ -66,6 +59,14 @@ export class TemplatesTab extends connect(store)(LitElement) {
     .selected-paper-chip {
       background-color: var(--accent-color);
       color: var(--primary-color);
+    }
+
+    .button-chip {
+      padding: var(--tight) 0px;
+      height: 24px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      text-transform: none;
     }
 
     .subtitle {
@@ -252,16 +253,17 @@ export class TemplatesTab extends connect(store)(LitElement) {
       <div id="chips-container">
         ${chips.map(({ label, device }) => {
           return html`
-            <paper-chip
-              selectable
+            <paper-button
               class=${classMap({
                 'selected-paper-chip': this.deviceFilter === device,
+                'button-chip': true,
               })}
               @click=${() => {
                 this.deviceFilter = device;
               }}
-              >${label}</paper-chip
             >
+              ${label}
+            </paper-button>
           `;
         })}
       </div>
