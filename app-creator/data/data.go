@@ -14,6 +14,7 @@ import (
 */
 type Template struct {
 	Id string `json:"id"` 
+	Version string `json:"version"` 
 	Name string `json:"name"`
 	ImageURL string `json:"imageURL"`
 	Template string `json:"template"`

@@ -47,7 +47,6 @@ func (t *TemplatesHandler) getTemplates(rw http.ResponseWriter, r *http.Request)
 	if err != nil {
 		http.Error(rw, "Unable to fetch templates from database.", http.StatusInternalServerError)
 	}
-
 	err = templates.ToJSON(rw)
 	if err != nil {
 		http.Error(rw, "Conversion to JSON was unsuccessful.", http.StatusInternalServerError)

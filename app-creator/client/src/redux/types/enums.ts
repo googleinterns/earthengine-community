@@ -34,6 +34,11 @@ export enum Tab {
   ATTRIBUTES = 2,
 }
 
+export enum ExportTab {
+  CODE = 0,
+  JSON = 1,
+}
+
 export enum AttributeType {
   UNIQUE = 'uniqueAttributes',
   STYLE = 'style',
@@ -46,6 +51,8 @@ export enum EventType {
   CHANGINGPALETTE = 'changingPalette',
   CHANGINGTEMPLATE = 'changingTemplate',
   SHAREDWIDGETS = 'sharedWidgets',
+  CLEAR_SCRATCH_PANEL = 'clearScratchPanel',
+  IMPORTING = 'importing',
   NONE = 'none',
 }
 
