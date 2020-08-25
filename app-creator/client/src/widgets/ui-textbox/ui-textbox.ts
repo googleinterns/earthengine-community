@@ -9,6 +9,7 @@ import {
   AttributeMetaData,
   DefaultAttributesType,
   getDefaultAttributes,
+  SharedAttributes,
 } from '../../redux/types/attributes';
 import { InputType } from '../../redux/types/enums';
 
@@ -33,6 +34,14 @@ export class Textbox extends LitElement {
       type: InputType.TEXT,
     },
   };
+
+  static disabledStyles: Set<SharedAttributes> = new Set([
+    'fontSize',
+    'fontFamily',
+    'textAlign',
+    'whiteSpace',
+    'shown',
+  ]);
 
   static DEFAULT_TEXTBOX_ATTRIBUTES: DefaultAttributesType = getDefaultAttributes(
     Textbox.attributes

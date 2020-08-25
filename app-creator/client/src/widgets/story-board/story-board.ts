@@ -16,10 +16,7 @@ import { DeviceType, EventType, PaletteNames } from '../../redux/types/enums';
 import { store } from '../../redux/store';
 import { AppCreatorStore } from '../../redux/reducer';
 import { PaperCardElement } from '@polymer/paper-card/paper-card.js';
-import {
-  generateUI,
-  incrementWidgetIDs,
-} from '../../utils/template-generation';
+import { generateUI } from '../../utils/template-generation';
 import {
   setSelectedTemplateID,
   setEventType,

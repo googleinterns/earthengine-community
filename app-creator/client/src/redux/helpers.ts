@@ -7,6 +7,7 @@ import { PalettePicker } from '../widgets/palette-picker/palette-picker';
 import { EEWidget } from './types/types';
 import { UpdateWidgetMetaData } from './types/actions';
 import { ROOT_ID, SCRATCH_PANEL } from '../utils/constants';
+import { SharedAttributes } from './types/attributes';
 
 /**
  * Removes widget meta data from the current template.
@@ -235,7 +236,7 @@ export function getAttributePrefix(attribute: string): string {
 /**
  * List of default styles shared across all widgets.
  */
-export const DEFAULT_STYLES: { [key: string]: string } = {
+export const DEFAULT_STYLES: { [key in SharedAttributes]: string } = {
   height: 'px',
   width: 'px',
   padding: '0px',

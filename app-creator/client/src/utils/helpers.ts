@@ -1,15 +1,15 @@
 import {
   DeviceType,
-  WidgetType,
   WidgetsRequiringBackground,
+  WidgetType,
 } from '../redux/types/enums';
 import { AppCreatorStore } from '../redux/reducer';
 import { WIDGET_REF, TEMPLATE_SNAPSHOTS } from './constants';
 import { store } from '../redux/store';
 import { html, TemplateResult } from 'lit-element';
-import '@polymer/paper-toast/paper-toast';
 import { EEWidget } from '../redux/types/types';
 import { sharedAttributes } from '../redux/types/attributes';
+import '@polymer/paper-toast/paper-toast';
 
 const WIDGET_REF_KEYS = new Set([
   'draggingElement',
@@ -27,17 +27,22 @@ export function camelCaseToTitleCase(text: string) {
 }
 
 /**
+ * Empty set placeholder.
+ */
+export const emptySet = new Set();
+
+/**
  * Returns widget type.
  * id. 'label-0' => 'label'
  */
-export function getWidgetType(id: string): string {
+export function getWidgetType(id: string): WidgetType {
   const index = id.indexOf('-');
 
   if (index === -1) {
-    return id;
+    return id as WidgetType;
   }
 
-  return id.slice(0, index);
+  return id.slice(0, index) as WidgetType;
 }
 
 /**
@@ -202,6 +207,10 @@ export function addBackgroundColorToSharedWidget(element: HTMLElement) {
  * Removes background color from an element. Used when adding elements to the scratch panel.
  */
 export function removeBackgroundColorFromSharedWidget(element: HTMLElement) {
+  const type = getWidgetType(element.id);
+  if (!Object.values(WidgetsRequiringBackground).includes(type)) {
+    return;
+  }
   const elementStyle: { [key: string]: string } = Object.assign(
     {},
     store.getState().template.widgets[element.id].style

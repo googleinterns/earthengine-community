@@ -17,6 +17,7 @@ import { Layout } from '../../redux/types/enums';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '../ui-panel/ui-panel';
+import { SharedAttributes } from '../../redux/types/attributes';
 
 @customElement('ui-sidemenu')
 export class SideMenu extends LitElement {
@@ -91,6 +92,23 @@ export class SideMenu extends LitElement {
    * Reference to ui panel widget.
    */
   @query('ui-panel') panel!: Panel;
+
+  static disabledStyles: Set<SharedAttributes> = new Set([
+    'height',
+    'width',
+    'margin',
+    'color',
+    'fontSize',
+    'fontWeight',
+    'fontFamily',
+    'textAlign',
+    'whiteSpace',
+    'shown',
+    'backgroundOpacity',
+    'borderWidth',
+    'borderStyle',
+    'borderColor',
+  ]);
 
   firstUpdated() {
     if (this.panel) {

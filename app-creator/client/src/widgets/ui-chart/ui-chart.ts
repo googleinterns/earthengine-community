@@ -10,6 +10,7 @@ import {
   AttributeMetaData,
   DefaultAttributesType,
   getDefaultAttributes,
+  SharedAttributes,
 } from '../../redux/types/attributes';
 import { InputType } from '../../redux/types/enums';
 
@@ -89,6 +90,25 @@ export class Chart extends LitElement {
       items: ['true', 'false'],
     },
   };
+
+  static disabledStyles: Set<SharedAttributes> = new Set([
+    'height',
+    'width',
+    'padding',
+    'margin',
+    'color',
+    'backgroundColor',
+    'backgroundOpacity',
+    'borderWidth',
+    'borderStyle',
+    'borderColor',
+    'fontSize',
+    'fontWeight',
+    'fontFamily',
+    'textAlign',
+    'whiteSpace',
+    'shown',
+  ]);
 
   static DEFAULT_CHART_ATTRIBUTES: DefaultAttributesType = getDefaultAttributes(
     Chart.attributes

@@ -11,8 +11,13 @@ import {
   AttributeMetaData,
   UniqueAttributes,
   Tooltip,
+  SharedAttributes,
 } from '../../redux/types/attributes.js';
-import { camelCaseToTitleCase, getWidgetType } from '../../utils/helpers.js';
+import {
+  camelCaseToTitleCase,
+  getWidgetType,
+  emptySet,
+} from '../../utils/helpers.js';
 import { updateWidgetMetaData } from '../../redux/actions.js';
 import {
   EventType,
@@ -30,6 +35,8 @@ import { Chart } from '../ui-chart/ui-chart.js';
 import { Map } from '../ui-map/ui-map.js';
 import { store } from '../../redux/store';
 import { AppCreatorStore } from '../../redux/reducer';
+import { Panel } from '../ui-panel/ui-panel';
+import { SideMenu } from '../ui-sidemenu/ui-sidemenu';
 import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog.js';
 import '@polymer/paper-dialog/paper-dialog.js';
 import '../empty-notice/empty-notice';
@@ -641,6 +648,50 @@ ${value}</textarea
     }
   }
 
+  private getDisabledStyles(type: WidgetType): Set<SharedAttributes> | null {
+    switch (type) {
+      case WidgetType.MAP:
+        return Map.disabledStyles;
+      case WidgetType.LABEL:
+        return Label.disabledStyles;
+      case WidgetType.BUTTON:
+        return Button.disabledStyles;
+      case WidgetType.CHECKBOX:
+        return Checkbox.disabledStyles;
+      case WidgetType.SELECT:
+        return Select.disabledStyles;
+      case WidgetType.SLIDER:
+        return Slider.disabledStyles;
+      case WidgetType.TEXTBOX:
+        return Textbox.disabledStyles;
+      case WidgetType.CHART:
+        return Chart.disabledStyles;
+      case WidgetType.PANEL:
+        return Panel.disabledStyles;
+      case WidgetType.SIDEMENU:
+        return SideMenu.disabledStyles;
+      default:
+        return null;
+    }
+  }
+
+  /**
+   * Returns a style object with the disabled styles of the currently
+   * selected widget filtered out.
+   */
+  filterDisabledStyles(
+    styleAttributes: { [key in SharedAttributes]: string },
+    disabledStyles: Set<SharedAttributes>
+  ): { [key in SharedAttributes]: string } {
+    const styles = Object.assign({}, styleAttributes);
+
+    for (const attribute of disabledStyles) {
+      delete styles[attribute as SharedAttributes];
+    }
+
+    return styles;
+  }
+
   private getStyleAttributes(): Array<TemplateResult | {}> | {} {
     const widget = this.editingWidget;
     if (widget == null) {
@@ -648,8 +699,20 @@ ${value}</textarea
     }
 
     const styleAttributes = store.getState().template.widgets[widget.id].style;
-    return Object.keys(sharedAttributes).map((key) => {
-      const value = styleAttributes[key];
+
+    const disabledStyles = this.getDisabledStyles(getWidgetType(widget.id));
+
+    const filteredStyleAttributes = this.filterDisabledStyles(
+      styleAttributes,
+      disabledStyles ?? (emptySet as Set<SharedAttributes>)
+    );
+
+    const inputs: Array<TemplateResult | {}> = [];
+    for (const key of Object.keys(sharedAttributes)) {
+      if (!filteredStyleAttributes.hasOwnProperty(key)) {
+        continue;
+      }
+      const value = filteredStyleAttributes[key as SharedAttributes];
       const placeholder = sharedAttributes[key].placeholder;
       const unit = sharedAttributes[key].unit;
       const step = sharedAttributes[key].step;
@@ -664,65 +727,79 @@ ${value}</textarea
 
       switch (type) {
         case InputType.TEXT:
-          return this.getTextInput(
-            key,
-            attributeTitle,
-            value,
-            widget.id,
-            AttributeType.STYLE,
-            placeholder,
-            tooltip,
-            validator
+          inputs.push(
+            this.getTextInput(
+              key,
+              attributeTitle,
+              value,
+              widget.id,
+              AttributeType.STYLE,
+              placeholder,
+              tooltip,
+              validator
+            )
           );
+          break;
         case InputType.TEXTAREA:
-          return this.getTextareaInput(
-            key,
-            attributeTitle,
-            value,
-            widget.id,
-            AttributeType.STYLE,
-            placeholder,
-            tooltip,
-            validator
+          inputs.push(
+            this.getTextareaInput(
+              key,
+              attributeTitle,
+              value,
+              widget.id,
+              AttributeType.STYLE,
+              placeholder,
+              tooltip,
+              validator
+            )
           );
+          break;
         case InputType.COLOR:
-          return this.getColorInput(
-            key,
-            attributeTitle,
-            value,
-            widget.id,
-            AttributeType.STYLE,
-            tooltip
+          inputs.push(
+            this.getColorInput(
+              key,
+              attributeTitle,
+              value,
+              widget.id,
+              AttributeType.STYLE,
+              tooltip
+            )
           );
+          break;
         case InputType.SELECT:
-          return this.getSelectInput(
-            key,
-            attributeTitle,
-            value,
-            widget.id,
-            AttributeType.STYLE,
-            tooltip,
-            items
+          inputs.push(
+            this.getSelectInput(
+              key,
+              attributeTitle,
+              value,
+              widget.id,
+              AttributeType.STYLE,
+              tooltip,
+              items
+            )
           );
+          break;
         case InputType.NUMBER:
-          return this.getNumberInput(
-            key,
-            attributeTitle,
-            value,
-            widget.id,
-            AttributeType.STYLE,
-            placeholder,
-            tooltip,
-            validator,
-            unit,
-            step,
-            min,
-            max
+          inputs.push(
+            this.getNumberInput(
+              key,
+              attributeTitle,
+              value,
+              widget.id,
+              AttributeType.STYLE,
+              placeholder,
+              tooltip,
+              validator,
+              unit,
+              step,
+              min,
+              max
+            )
           );
-        default:
-          return nothing;
+          break;
       }
-    });
+    }
+    return inputs;
   }
 
   static emptyNotice = html`

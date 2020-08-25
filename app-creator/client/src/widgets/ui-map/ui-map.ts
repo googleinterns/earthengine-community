@@ -5,6 +5,7 @@ import {
   AttributeMetaData,
   DefaultAttributesType,
   getDefaultAttributes,
+  SharedAttributes,
 } from '../../redux/types/attributes';
 import { store } from '../../redux/store';
 import { setEditingWidget, setSelectedTab } from '../../redux/actions';
@@ -128,6 +129,22 @@ export class Map extends LitElement {
       },
     },
   };
+
+  static disabledStyles: Set<SharedAttributes> = new Set([
+    'height',
+    'width',
+    'padding',
+    'margin',
+    'color',
+    'backgroundColor',
+    'backgroundOpacity',
+    'fontSize',
+    'fontWeight',
+    'fontFamily',
+    'textAlign',
+    'whiteSpace',
+    'shown',
+  ]);
 
   static DEFAULT_MAP_ATTRIBUTES: DefaultAttributesType = getDefaultAttributes(
     Map.attributes

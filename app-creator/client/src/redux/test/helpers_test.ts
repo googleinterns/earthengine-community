@@ -14,6 +14,7 @@ import {
 import { PaletteNames, AttributeType } from '../types/enums';
 import { PalettePicker } from '../../widgets/palette-picker/palette-picker';
 import { createTemplateStub } from '../../utils/test/helpers_test';
+import { SharedAttributes } from '../types/attributes';
 
 suite('redux store helpers', () => {
   suite('palette changes', () => {
@@ -123,7 +124,9 @@ suite('redux store helpers', () => {
 
       // Check that all other properties match.
       for (const key in defaults) {
-        expect(widgets['label-0'].style[key]).to.equal(defaults[key]);
+        expect(widgets['label-0'].style[key]).to.equal(
+          defaults[key as SharedAttributes]
+        );
       }
 
       // Check that color and background color are the same as the custom color defined.
