@@ -1,33 +1,23 @@
 /**
- *  @fileoverview The story-board widget lets users preview and edit their templates.
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @fileoverview The story-board widget lets users preview and edit their
+ * templates.
  */
-import {
-  css,
-  customElement,
-  html,
-  LitElement,
-  property,
-  query,
-} from 'lit-element';
-import { styleMap } from 'lit-html/directives/style-map';
-import { classMap } from 'lit-html/directives/class-map';
-import { connect } from 'pwa-helpers';
-import { DeviceType, EventType, PaletteNames } from '../../redux/types/enums';
-import { store } from '../../redux/store';
-import { AppCreatorStore } from '../../redux/reducer';
-import { PaperCardElement } from '@polymer/paper-card/paper-card.js';
-import {
-  generateUI,
-  incrementWidgetIDs,
-} from '../../utils/template-generation';
-import {
-  setSelectedTemplateID,
-  setEventType,
-  setPalette,
-} from '../../redux/actions';
-import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog';
-import { createToastMessage } from '../../utils/helpers';
-import { PaperToastElement } from '@polymer/paper-toast';
+
 import '@polymer/paper-card/paper-card.js';
 import '@polymer/iron-icons/hardware-icons.js';
 import '@polymer/paper-tabs/paper-tabs';
@@ -38,14 +28,29 @@ import '../ui-map/ui-map';
 import '../ui-panel/ui-panel';
 import '@polymer/paper-dialog/paper-dialog';
 
+import {PaperCardElement} from '@polymer/paper-card/paper-card.js';
+import {PaperDialogElement} from '@polymer/paper-dialog/paper-dialog';
+import {PaperToastElement} from '@polymer/paper-toast';
+import {css, customElement, html, LitElement, property, query,} from 'lit-element';
+import {classMap} from 'lit-html/directives/class-map';
+import {styleMap} from 'lit-html/directives/style-map';
+import {connect} from 'pwa-helpers';
+
+import {setEventType, setPalette, setSelectedTemplateID,} from '../../redux/actions';
+import {AppCreatorStore} from '../../redux/reducer';
+import {store} from '../../redux/store';
+import {DeviceType, EventType, PaletteNames} from '../../redux/types/enums';
+import {createToastMessage} from '../../utils/helpers';
+import {generateUI, incrementWidgetIDs,} from '../../utils/template-generation';
+
 const STORYBOARD_ID = 'storyboard';
 
 /**
  * The story-board widget renders the currently selected template
  * and allows the user to interact with it.
  */
-@customElement('story-board')
-export class Storyboard extends connect(store)(LitElement) {
+@customElement('story-board') export class Storyboard extends connect
+(store)(LitElement) {
   static styles = css`
     .container {
       height: 100%;
@@ -140,13 +145,12 @@ export class Storyboard extends connect(store)(LitElement) {
   /**
    * Additional custom styles.
    */
-  @property({ type: Object }) styles = {};
+  @property({type: Object}) styles = {};
 
   /**
    * Used for setting template palette.
    */
-  @property({ type: String }) selectedPalette: PaletteNames =
-    PaletteNames.LIGHT;
+  @property({type: String}) selectedPalette: PaletteNames = PaletteNames.LIGHT;
 
   /**
    * Reference to storyboard element.
@@ -176,25 +180,23 @@ export class Storyboard extends connect(store)(LitElement) {
      * the selectedTemplateID property on the store is the same as the
      * template id from the current template config.
      */
-    if (
-      template.hasOwnProperty('config') &&
-      template.config.id !== state.selectedTemplateID
-    ) {
+    if (template.hasOwnProperty('config') &&
+        template.config.id !== state.selectedTemplateID) {
       store.dispatch(setSelectedTemplateID(template.config.id));
 
       this.renderNewTemplate(template);
     } else if (
-      /**
-       * We want to re-render the storyboard when we switch the template color palette.
-       * We do this by checking if the CHANGINGPALETTE event has been emitted.
-       */
-      state.eventType === EventType.CHANGINGPALETTE
-    ) {
+        /**
+         * We want to re-render the storyboard when we switch the template color
+         * palette. We do this by checking if the CHANGINGPALETTE event has been
+         * emitted.
+         */
+        state.eventType === EventType.CHANGINGPALETTE) {
       this.renderNewTemplate(template);
     } else if (state.eventType === EventType.CHANGINGTEMPLATE) {
       /**
-       * In the case of template changes, we want incrementWidgetIDs after populating the new
-       * template with widgets from the previous one.
+       * In the case of template changes, we want incrementWidgetIDs after
+       * populating the new template with widgets from the previous one.
        */
       store.dispatch(setEventType(EventType.NONE, true));
       this.renderNewTemplate(template);
@@ -205,7 +207,7 @@ export class Storyboard extends connect(store)(LitElement) {
    * Renders new template by calling generateUI and requesting update.
    */
   private renderNewTemplate(template: AppCreatorStore['template']) {
-    const { storyboard } = this;
+    const {storyboard} = this;
     if (storyboard) {
       storyboard.innerHTML = ``;
       generateUI(template, storyboard);
@@ -225,7 +227,8 @@ export class Storyboard extends connect(store)(LitElement) {
   }
 
   /**
-   * Called when users confirm on the confirmation dialog when changing palettes.
+   * Called when users confirm on the confirmation dialog when changing
+   * palettes.
    */
   private paletteChangeConfirmation() {
     store.dispatch(setPalette(this.selectedPalette));
@@ -254,7 +257,7 @@ export class Storyboard extends connect(store)(LitElement) {
     } = this;
 
     const isMobile =
-      store.getState().template.config?.device === DeviceType.MOBILE;
+        store.getState().template.config?.device === DeviceType.MOBILE;
 
     const paletteSelectInput = html`
       <div id="palette-select-container">
@@ -285,16 +288,14 @@ export class Storyboard extends connect(store)(LitElement) {
     `;
 
     const localStorageFailureToast = createToastMessage(
-      'failed-local-storage-toast',
-      'Failed to duplicate template.'
-    );
+        'failed-local-storage-toast', 'Failed to duplicate template.');
 
     return html`
       <div
         class=${classMap({
-          'mobile-container': isMobile,
-          container: !isMobile,
-        })}
+      'mobile-container': isMobile,
+      container: !isMobile,
+    })}
       >
         ${paletteSelectInput}
         <paper-card

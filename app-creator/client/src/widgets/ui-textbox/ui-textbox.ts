@@ -1,16 +1,30 @@
 /**
- *  @fileoverview The ui-textbox widget lets users add user input to their templates.
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @fileoverview The ui-textbox widget lets users add user input to their
+ * templates.
  */
+
 import '@polymer/paper-input/paper-input.js';
-import { css, customElement, html, LitElement, property } from 'lit-element';
-import { styleMap } from 'lit-html/directives/style-map';
-import {
-  DEFAULT_SHARED_ATTRIBUTES,
-  AttributeMetaData,
-  DefaultAttributesType,
-  getDefaultAttributes,
-} from '../../redux/types/attributes';
-import { InputType } from '../../redux/types/enums';
+
+import {css, customElement, html, LitElement, property} from 'lit-element';
+import {styleMap} from 'lit-html/directives/style-map';
+
+import {AttributeMetaData, DEFAULT_SHARED_ATTRIBUTES, DefaultAttributesType, getDefaultAttributes,} from '../../redux/types/attributes';
+import {InputType} from '../../redux/types/enums';
 
 @customElement('ui-textbox')
 export class Textbox extends LitElement {
@@ -34,46 +48,43 @@ export class Textbox extends LitElement {
     },
   };
 
-  static DEFAULT_TEXTBOX_ATTRIBUTES: DefaultAttributesType = getDefaultAttributes(
-    Textbox.attributes
-  );
+  static DEFAULT_TEXTBOX_ATTRIBUTES: DefaultAttributesType =
+      getDefaultAttributes(Textbox.attributes);
 
   /**
    * Additional custom styles.
    */
-  @property({ type: Object }) styles = DEFAULT_SHARED_ATTRIBUTES;
+  @property({type: Object}) styles = DEFAULT_SHARED_ATTRIBUTES;
 
   /**
    * Value of input.
    */
-  @property({ type: String }) value = '';
+  @property({type: String}) value = '';
 
   /**
    * Sets textbox label.
    */
-  @property({ type: String }) label = '';
+  @property({type: String}) label = '';
 
   /**
    * Sets textbox placeholder.
    */
-  @property({ type: String }) placeholder = '';
+  @property({type: String}) placeholder = '';
 
   /**
    * Type of input.
    */
-  @property({ type: String }) type = 'text';
+  @property({type: String}) type = 'text';
 
   /**
    * Handler for keyup events.
    */
-  @property({ type: Object })
-  onKeyupChangeHandler: (e: Event) => void = () => {};
+  @property({type: Object}) onKeyupChangeHandler: (e: Event) => void = () => {};
 
   /**
    * Handler for change events.
    */
-  @property({ type: Object })
-  onChangeHandler: (e: Event) => void = () => {};
+  @property({type: Object}) onChangeHandler: (e: Event) => void = () => {};
 
   render() {
     const {
@@ -126,7 +137,7 @@ export class Textbox extends LitElement {
     this.requestUpdate();
   }
 
-  setStyle(style: { [key: string]: string }) {
+  setStyle(style: {[key: string]: string}) {
     this.styles = style;
     this.requestUpdate();
   }

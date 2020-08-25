@@ -1,16 +1,32 @@
 /**
- *  @fileoverview The search-bar widget allows users to filter through different elements
- *  using a search query.
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @fileoverview The search-bar widget allows users to filter through different
+ * elements using a search query.
  */
-import { css, customElement, html, LitElement, property } from 'lit-element';
-import { styleMap } from 'lit-html/directives/style-map';
-import { debounce } from '../../utils/debounce';
+
 import '@polymer/iron-icon/iron-icon';
 
+import {css, customElement, html, LitElement, property} from 'lit-element';
+import {styleMap} from 'lit-html/directives/style-map';
+
+import {debounce} from '../../utils/debounce';
+
 export interface onSearchEvent {
-  detail: {
-    query: string;
-  };
+  detail: {query: string;};
 }
 
 @customElement('search-bar')
@@ -53,25 +69,23 @@ export class Searchbar extends LitElement {
   /**
    * Additional custom styles.
    */
-  @property({ type: Object }) styles = {};
+  @property({type: Object}) styles = {};
 
   /**
    * Sets search bar placeholder.
    */
-  @property({ type: String }) placeholder = 'Search...';
+  @property({type: String}) placeholder = 'Search...';
 
   /**
    * Callback triggered on input change.
    */
-  @property({ type: Object })
+  @property({type: Object})
   debouncedSearchEvent: ({
     target,
-  }: {
-    target: EventTarget;
-  }) => void = () => {};
+  }: {target: EventTarget;}) => void = () => {};
 
   render() {
-    const { placeholder, styles, debouncedSearchEvent } = this;
+    const {placeholder, styles, debouncedSearchEvent} = this;
     return html`
       <div id="container" style=${styleMap(styles)}>
         <iron-icon id="search-icon" icon="search"></iron-icon>
@@ -88,7 +102,7 @@ export class Searchbar extends LitElement {
   /**
    * Dispatches onsearch event when input query changes.
    */
-  dispatchSearchEvent({ target }: { target: EventTarget }) {
+  dispatchSearchEvent({target}: {target: EventTarget}) {
     const event = new CustomEvent('onsearch', {
       bubbles: true,
       cancelable: true,

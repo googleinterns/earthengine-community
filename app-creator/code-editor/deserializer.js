@@ -1,3 +1,20 @@
+/**
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 var mapStyles = require('users/msibrahim/app-creator:map-styles');
 var sidemenu = require('users/msibrahim/app-creator:sidemenu');
 
@@ -10,9 +27,10 @@ function createApp(template) {
   var app = {};
 
   /**
-   * Allow users to further customize the generated widgets by providing a reference to each element created.
-   * Type: {[key: WidgetID]: {node: EEWidget, map?: ui.Map}}, for map widgets, we wrap them with a panel widget and return
-   * both elements.
+   * Allow users to further customize the generated widgets by providing a
+   * reference to each element created. Type: {[key: WidgetID]: {node: EEWidget,
+   * map?: ui.Map}}, for map widgets, we wrap them with a panel widget and
+   * return both elements.
    */
   app.widgetInterface = ui.data.ActiveDictionary();
 
@@ -24,21 +42,22 @@ function createApp(template) {
   /**
    * Adds new template variation.
    */
-  app.addTemplate = function (device, theme, language, template) {
+  app.addTemplate = function(device, theme, language, template) {
     app.templates[device][theme][language] = app.deserializeUI(template);
   };
 
   /**
    * Returns reference to the widget interface.
    */
-  app.widgets = function () {
+  app.widgets = function() {
     return app.widgetInterface;
   };
 
   /**
-   * Recursively traverses the widget tree starting at panel-template-0 and creates ee ui widgets accordingly.
+   * Recursively traverses the widget tree starting at panel-template-0 and
+   * creates ee ui widgets accordingly.
    */
-  app.deserializeUI = function (widgetTreeJSON) {
+  app.deserializeUI = function(widgetTreeJSON) {
     function helper(nodeObj) {
       var obj = app.createUIElement(nodeObj);
       if (!obj) {
@@ -48,9 +67,8 @@ function createApp(template) {
       var map = null;
       if (obj instanceof ui.Panel) {
         // If the panel is a map wrapper, we want to extract the map itself.
-        var isMapWrapper =
-          obj.widgets().length() === 1 &&
-          obj.widgets().get(0) instanceof ui.Map;
+        var isMapWrapper = obj.widgets().length() === 1 &&
+            obj.widgets().get(0) instanceof ui.Map;
         map = isMapWrapper ? obj.widgets().get(0) : null;
       }
 
@@ -84,15 +102,15 @@ function createApp(template) {
       return helper(widgetTree.widgets['panel-template-0']);
     } catch (e) {
       print(
-        'Template JSON is incorrectly formatted. Please check that the JSON is formatted correctly.'
-      );
+          'Template JSON is incorrectly formatted. Please check that the JSON is formatted correctly.');
     }
   };
 
   /**
-   * Takes in a node object containing meta data about a node and returns the created ui element.
+   * Takes in a node object containing meta data about a node and returns the
+   * created ui element.
    */
-  app.createUIElement = function (nodeObj) {
+  app.createUIElement = function(nodeObj) {
     var type = nodeObj.id.slice(0, nodeObj.id.indexOf('-'));
     var filteredStyles = app.filterStyleObject(nodeObj.style);
     switch (type) {
@@ -124,7 +142,7 @@ function createApp(template) {
   /**
    * Helper function for creating slider elements.
    */
-  app.createSliderElement = function (obj, style) {
+  app.createSliderElement = function(obj, style) {
     var uniqueAttributes = obj.uniqueAttributes;
 
     var min = parseFloat(uniqueAttributes.min);
@@ -160,13 +178,13 @@ function createApp(template) {
 
     var dataTable = {
       cols: [
-        { id: 'task', label: 'Task', type: 'string' },
-        { id: 'hours', label: 'Hours per Day', type: 'number' },
+        {id: 'task', label: 'Task', type: 'string'},
+        {id: 'hours', label: 'Hours per Day', type: 'number'},
       ],
       rows: [
-        { c: [{ v: 'Eat' }, { v: 2 }] },
-        { c: [{ v: 'Write EE Code' }, { v: 9 }] },
-        { c: [{ v: 'Sleep' }, { v: 7, f: '7.000' }] },
+        {c: [{v: 'Eat'}, {v: 2}]},
+        {c: [{v: 'Write EE Code'}, {v: 9}]},
+        {c: [{v: 'Sleep'}, {v: 7, f: '7.000'}]},
       ],
     };
 
@@ -179,7 +197,7 @@ function createApp(template) {
     var colors = [''];
     try {
       colors = JSON.parse(uniqueAttributes.color);
-      colors = colors.map(function (color) {
+      colors = colors.map(function(color) {
         return color.trim();
       });
     } catch (e) {
@@ -205,13 +223,13 @@ function createApp(template) {
   /**
    * Helper function for creating select elements.
    */
-  app.createSelectElement = function (obj, style) {
+  app.createSelectElement = function(obj, style) {
     var uniqueAttributes = obj.uniqueAttributes;
 
     var items = [''];
     try {
       items = JSON.parse(uniqueAttributes.items);
-      items = items.map(function (item) {
+      items = items.map(function(item) {
         return item.trim();
       });
     } catch (e) {
@@ -231,7 +249,7 @@ function createApp(template) {
   /**
    * Helper function for creating textbox elements.
    */
-  app.createTextboxElement = function (obj, style) {
+  app.createTextboxElement = function(obj, style) {
     var uniqueAttributes = obj.uniqueAttributes;
 
     var textbox = ui.Textbox({
@@ -247,7 +265,7 @@ function createApp(template) {
   /**
    * Helper function for creating checkbox elements.
    */
-  app.createCheckboxElement = function (obj, style) {
+  app.createCheckboxElement = function(obj, style) {
     var uniqueAttributes = obj.uniqueAttributes;
 
     var checkbox = ui.Checkbox({
@@ -263,7 +281,7 @@ function createApp(template) {
   /**
    * Helper function for creating button elements.
    */
-  app.createButtonElement = function (obj, style) {
+  app.createButtonElement = function(obj, style) {
     var uniqueAttributes = obj.uniqueAttributes;
 
     var button = ui.Button({
@@ -278,10 +296,10 @@ function createApp(template) {
   /**
    * Helper function for creating label elements.
    */
-  app.createLabelElement = function (obj, style) {
+  app.createLabelElement = function(obj, style) {
     var uniqueAttributes = obj.uniqueAttributes;
 
-    var label = ui.Label({ value: uniqueAttributes.value, style: style });
+    var label = ui.Label({value: uniqueAttributes.value, style: style});
 
     var targetUrl = uniqueAttributes.targetUrl;
     if (targetUrl.trim() !== '') {
@@ -294,21 +312,20 @@ function createApp(template) {
   /**
    * Helper function for creating panel elements.
    */
-  app.createPanelElement = function (obj, style) {
+  app.createPanelElement = function(obj, style) {
     var uniqueAttributes = obj.uniqueAttributes;
 
-    var layout =
-      uniqueAttributes.layout === 'row'
-        ? ui.Panel.Layout.Flow('horizontal')
-        : ui.Panel.Layout.Flow('vertical');
+    var layout = uniqueAttributes.layout === 'row' ?
+        ui.Panel.Layout.Flow('horizontal') :
+        ui.Panel.Layout.Flow('vertical');
 
-    return ui.Panel({ style: style, layout: layout });
+    return ui.Panel({style: style, layout: layout});
   };
 
   /**
    * Helper function for creating sidemenu elements.
    */
-  app.createSidemenuElement = function (obj, style) {
+  app.createSidemenuElement = function(obj, style) {
     // Sidemenu is an object with the properties: sidePanel and contentPanel.
     var mobileMenu = sidemenu.createSidemenu(style);
     return mobileMenu.init();
@@ -317,7 +334,7 @@ function createApp(template) {
   /**
    * Helper function for getting the correct position.
    */
-  app.getPosition = function (style) {
+  app.getPosition = function(style) {
     if ('bottom' in style && 'left' in style) {
       return 'bottom-left';
     } else if ('bottom' in style && 'right' in style) {
@@ -334,18 +351,18 @@ function createApp(template) {
   /**
    * Helper function for creating map elements.
    */
-  app.createMapElement = function (obj, style) {
+  app.createMapElement = function(obj, style) {
     // Wrap map widget with panel.
     var mapHeight = style.height;
     var mapWidth = style.width;
-    var panelStyle = { height: mapHeight, width: mapWidth };
+    var panelStyle = {height: mapHeight, width: mapWidth};
 
     // Update map dimensions to take up all the panel space.
     style.width = '100%';
     style.height = '100%';
 
-    var map = ui.Map({ style: style });
-    var panel = ui.Panel({ style: panelStyle, widgets: [map] });
+    var map = ui.Map({style: style});
+    var panel = ui.Panel({style: panelStyle, widgets: [map]});
 
     var uniqueAttributes = obj.uniqueAttributes;
 
@@ -381,17 +398,17 @@ function createApp(template) {
       }
     }
 
-    var appliedStyles =
-      customMapStyles === '' || customMapStylesJSON === null
-        ? mapStyles[defaultMapStyles]
-        : customMapStylesJSON;
-    map.setOptions({ styles: { custom: appliedStyles } });
+    var appliedStyles = customMapStyles === '' || customMapStylesJSON === null ?
+        mapStyles[defaultMapStyles] :
+        customMapStylesJSON;
+    map.setOptions({styles: {custom: appliedStyles}});
 
     return panel;
   };
 
   /**
-   * Since Sets are not supported here, we are using an object for constant time access. The boolean values are meaningless.
+   * Since Sets are not supported here, we are using an object for constant time
+   * access. The boolean values are meaningless.
    */
   var unsupportedKeys = {
     borderWidth: true,
@@ -410,7 +427,7 @@ function createApp(template) {
   /**
    * Takes in a style object and returns all the unsupported keys.
    */
-  app.filterStyleObject = function (obj) {
+  app.filterStyleObject = function(obj) {
     var clone = {};
 
     // Combine border properties.
@@ -438,7 +455,7 @@ function createApp(template) {
   /**
    * Create in-memory widget tree.
    */
-  app.init = function (template) {
+  app.init = function(template) {
     app.root = app.deserializeUI(template);
     app.templates.default = app.root;
   };
@@ -446,7 +463,7 @@ function createApp(template) {
   /**
    * Draw UI to the screen by adding the root to ui.Root.
    */
-  app.draw = function () {
+  app.draw = function() {
     ui.root.widgets().reset([app.root]);
   };
 

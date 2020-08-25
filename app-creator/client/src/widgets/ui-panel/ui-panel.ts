@@ -1,15 +1,34 @@
 /**
- *  @fileoverview The ui-panel widget lets users add a panel to their templates. Panels
- *  are essentially containers that can align their children vertically, horizontally, and in a grid.
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @fileoverview The ui-panel widget lets users add a panel to their templates.
+ * Panels are essentially containers that can align their children vertically,
+ * horizontally, and in a grid.
  */
-import { css, customElement, html, LitElement, property } from 'lit-element';
-import { store } from '../../redux/store';
-import { setEditingWidget } from '../../redux/actions';
-import { DraggableWidget } from '../draggable-widget/draggable-widget';
-import { Dropzone } from '../dropzone-widget/dropzone-widget';
-import { classMap } from 'lit-html/directives/class-map';
-import { Layout } from '../../redux/types/enums';
+
 import '../dropzone-widget/dropzone-widget';
+
+import {css, customElement, html, LitElement, property} from 'lit-element';
+import {classMap} from 'lit-html/directives/class-map';
+
+import {setEditingWidget} from '../../redux/actions';
+import {store} from '../../redux/store';
+import {Layout} from '../../redux/types/enums';
+import {DraggableWidget} from '../draggable-widget/draggable-widget';
+import {Dropzone} from '../dropzone-widget/dropzone-widget';
 
 @customElement('ui-panel')
 export class Panel extends LitElement {
@@ -68,7 +87,7 @@ export class Panel extends LitElement {
   /**
    * Additional custom styles for the panel.
    */
-  @property({ type: Object }) styles = {};
+  @property({type: Object}) styles = {};
 
   /**
    * Sets the flex layout of child widgets.
@@ -76,27 +95,27 @@ export class Panel extends LitElement {
    * column layout will append widgets below the last child element.
    * row layout will append widgets to the right of the last child element.
    */
-  @property({ type: String }) layout = Layout.COLUMN;
+  @property({type: String}) layout = Layout.COLUMN;
 
   /**
    * Adds a border and shadow to panel.
    */
-  @property({ type: Boolean }) isRaised = false;
+  @property({type: Boolean}) isRaised = false;
 
   /**
    * Contains an inner dropzone-widget.
    */
-  @property({ type: Boolean }) hasDropzone = false;
+  @property({type: Boolean}) hasDropzone = false;
 
   /**
    * Adds padding to panel.
    */
-  @property({ type: Boolean }) padded = false;
+  @property({type: Boolean}) padded = false;
 
   /**
    * Sets editable property.
    */
-  @property({ type: Boolean }) editable = false;
+  @property({type: Boolean}) editable = false;
 
   connectedCallback() {
     super.connectedCallback();
@@ -104,8 +123,9 @@ export class Panel extends LitElement {
   }
 
   /**
-   * Triggered when the panel is selected. Stores a reference of the selected element in the store and
-   * displays a set of inputs for editing its attributes.
+   * Triggered when the panel is selected. Stores a reference of the selected
+   * element in the store and displays a set of inputs for editing its
+   * attributes.
    */
   handleEditWidget(e: Event) {
     // Prevent event from reaching the background panel.
@@ -117,16 +137,14 @@ export class Panel extends LitElement {
     let dropzone = this.querySelector('dropzone-widget') as Dropzone;
 
     if (dropzone == null) {
-      dropzone = this.querySelector('slot')
-        ?.assignedNodes()
-        .find((node) => node.nodeName === 'DROPZONE-WIDGET') as Dropzone;
+      dropzone = this.querySelector('slot')?.assignedNodes().find(
+                     (node) => node.nodeName === 'DROPZONE-WIDGET') as Dropzone;
     }
 
     if (dropzone != null) {
-      (dropzone as Dropzone).setStyleProperty(
-        'borderColor',
-        store.getState().selectedPalette.color
-      );
+      (dropzone as Dropzone)
+          .setStyleProperty(
+              'borderColor', store.getState().selectedPalette.color);
     }
 
     // Check if a widgetRef has been set.
@@ -134,12 +152,16 @@ export class Panel extends LitElement {
   }
 
   render() {
-    const { isRaised, layout, padded } = this;
+    const {isRaised, layout, padded} = this;
 
     return html`
       <div
         id="container"
-        class=${classMap({ raised: isRaised, padded, [layout]: true })}
+        class=${classMap({
+      raised: isRaised,
+      padded,
+      [layout]: true
+    })}
       >
         <slot class="${layout}"></slot>
       </div>
@@ -173,7 +195,7 @@ export class Panel extends LitElement {
     return this.styles;
   }
 
-  setStyle(style: { [key: string]: string }) {
+  setStyle(style: {[key: string]: string}) {
     for (const attribute in style) {
       this.style[attribute as any] = style[attribute];
     }

@@ -1,18 +1,32 @@
+// Copyright 2020 The Google Earth Engine Community Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package main
 
 import (
+	"cloud.google.com/go/datastore"
 	"context"
+	"github.com/googleapis/google-cloud-go-testing/datastore/dsiface"
+	"github.com/rs/cors"
 	"log"
+	"modules/handlers"
 	"net/http"
 	"os"
 	"os/signal"
-	"time"
 	"regexp"
-	"github.com/rs/cors"
-	"modules/handlers"
-	"cloud.google.com/go/datastore"
 	"strings"
-	"github.com/googleapis/google-cloud-go-testing/datastore/dsiface"
+	"time"
 )
 
 func main() {
@@ -21,7 +35,7 @@ func main() {
 	*/
 	ctx := context.Background()
 
-	/* 
+	/*
 	  Creating a datastore client. This instance is shared across the application.
 	*/
 	db, err := datastore.NewClient(ctx, os.Getenv("GOOGLE_CLOUD_PROJECT"))
@@ -30,10 +44,10 @@ func main() {
 	}
 
 	/*
-	  Create an adapter around the datastore client. The adapter allows us to 
+	  Create an adapter around the datastore client. The adapter allows us to
 	  switch between the real datastore client instance and the mock instance for testing.
 	*/
-	dbclient := dsiface.AdaptClient(db);
+	dbclient := dsiface.AdaptClient(db)
 
 	/*
 	  Creating shared logger instance.
@@ -49,28 +63,28 @@ func main() {
 	  Strip any leading colons and make sure it only contains numbers.
 	*/
 	re := regexp.MustCompile(`^:?([0-9]+)$`)
-	
+
 	/*
 	  Default to port 8080 if environment variable is not set or is invalid.
 	*/
 	if port == "" || !re.MatchString(port) {
-		invalidPort := port;
+		invalidPort := port
 		port = ":8080"
 		log.Printf("Invalid port number. Received: '%s'. Defaulting to port %s", invalidPort, port)
 	}
-	
+
 	/*
 	  Initializing a new server mux to handle routes.
 	*/
 	serverMux := http.NewServeMux()
-	
+
 	/*
 	  Serving static files.
 	*/
 	fs := http.FileServer(http.Dir("./static"))
 	serverMux.Handle("/", fs)
 	serverMux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
-	
+
 	/*
 	  Setting up handlers.
 	*/
@@ -82,10 +96,10 @@ func main() {
 	serverMux.Handle("/api/v1/templates", handler)
 
 	/*
-	  CORS middleware. Default option allows all origins. 
+	  CORS middleware. Default option allows all origins.
 	  https://github.com/rs/cors
 	  ch - cors handler
-	*/ 
+	*/
 	c := cors.Default().Handler(serverMux)
 
 	// If env variable is set for allowedOrigins, use them instead of the default.
@@ -97,7 +111,7 @@ func main() {
 
 	if len(allowedOrigins) > 0 {
 		c = cors.New(cors.Options{
-			AllowedOrigins: allowedOrigins,
+			AllowedOrigins:   allowedOrigins,
 			AllowCredentials: true,
 		}).Handler(serverMux)
 	}

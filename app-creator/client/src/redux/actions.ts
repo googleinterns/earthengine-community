@@ -1,83 +1,54 @@
 /**
- *  @fileoverview This file contains a set of action creators that modify the state of our application.
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @fileoverview This file contains a set of action creators that modify the
+ * state of our application.
  */
-import {
-  ADD_WIDGET_META_DATA,
-  REMOVE_WIDGET,
-  SetDraggingWidgetAction,
-  SET_DRAGGING_WIDGET,
-  SetEditingWidgetAction,
-  SET_EDITING_WIDGET,
-  SetSelectedTabAction,
-  SET_SELECTED_TAB,
-  ResetDraggingValuesAction,
-  RESET_DRAGGING_VALUES,
-  SetIsElementAddedAction,
-  SET_ELEMENT_ADDED,
-  SetIsReorderingAction,
-  SET_REORDERING,
-  IncrementWidgetAction,
-  INCREMENT_WIDGET_ID,
-  AddWidgetMetaData,
-  RemoveWidget,
-  UPDATE_WIDGET_META_DATA,
-  UpdateWidgetMetaData,
-  SetSelectedTemplate,
-  SET_SELECTED_TEMPLATE,
-  UPDATE_WIDGET_CHILDREN,
-  UpdateWidgetChildren,
-  SetSelectedTemplateIDAction,
-  SET_SELECTED_TEMPLATE_ID,
-  SetPalette,
-  SET_PALETTE,
-  SetEventType,
-  SET_EVENT_TYPE,
-  UpdateWidgetIDs,
-  UPDATE_WIDGET_IDS,
-  UpdateWidgetSharedStatus,
-  UPDATE_WIDGET_SHARED_STATUS,
-} from './types/actions';
-import {
-  DEFAULT_SHARED_ATTRIBUTES,
-  UniqueAttributes,
-} from './types/attributes';
-import {
-  WidgetType,
-  AttributeType,
-  Tab,
-  EventType,
-  PaletteNames,
-} from './types/enums';
-import { getWidgetType } from '../utils/helpers';
-import { Label } from '../widgets/ui-label/ui-label';
-import { Button } from '../widgets/ui-button/ui-button';
-import { Checkbox } from '../widgets/ui-checkbox/ui-checkbox';
-import { Select } from '../widgets/ui-select/ui-select';
-import { Slider } from '../widgets/ui-slider/ui-slider';
-import { Textbox } from '../widgets/ui-textbox/ui-textbox';
-import { Chart } from '../widgets/ui-chart/ui-chart';
-import { Map } from '../widgets/ui-map/ui-map';
-import { AppCreatorStore } from './reducer';
+
+import {getWidgetType} from '../utils/helpers';
+import {Button} from '../widgets/ui-button/ui-button';
+import {Chart} from '../widgets/ui-chart/ui-chart';
+import {Checkbox} from '../widgets/ui-checkbox/ui-checkbox';
+import {Label} from '../widgets/ui-label/ui-label';
+import {Map} from '../widgets/ui-map/ui-map';
+import {Select} from '../widgets/ui-select/ui-select';
+import {Slider} from '../widgets/ui-slider/ui-slider';
+import {Textbox} from '../widgets/ui-textbox/ui-textbox';
+
+import {AppCreatorStore} from './reducer';
+import {ADD_WIDGET_META_DATA, AddWidgetMetaData, INCREMENT_WIDGET_ID, IncrementWidgetAction, REMOVE_WIDGET, RemoveWidget, RESET_DRAGGING_VALUES, ResetDraggingValuesAction, SET_DRAGGING_WIDGET, SET_EDITING_WIDGET, SET_ELEMENT_ADDED, SET_EVENT_TYPE, SET_PALETTE, SET_REORDERING, SET_SELECTED_TAB, SET_SELECTED_TEMPLATE, SET_SELECTED_TEMPLATE_ID, SetDraggingWidgetAction, SetEditingWidgetAction, SetEventType, SetIsElementAddedAction, SetIsReorderingAction, SetPalette, SetSelectedTabAction, SetSelectedTemplate, SetSelectedTemplateIDAction, UPDATE_WIDGET_CHILDREN, UPDATE_WIDGET_IDS, UPDATE_WIDGET_META_DATA, UPDATE_WIDGET_SHARED_STATUS, UpdateWidgetChildren, UpdateWidgetIDs, UpdateWidgetMetaData, UpdateWidgetSharedStatus,} from './types/actions';
+import {DEFAULT_SHARED_ATTRIBUTES, UniqueAttributes,} from './types/attributes';
+import {AttributeType, EventType, PaletteNames, Tab, WidgetType,} from './types/enums';
 
 /**
  * Updates widget attributes.
  */
-export const updateWidgetMetaData = (
-  attributeName: string,
-  value: string,
-  id: string,
-  attributeType: AttributeType
-): UpdateWidgetMetaData => {
-  return {
-    type: UPDATE_WIDGET_META_DATA,
-    payload: {
-      attributeName,
-      value,
-      id,
-      attributeType,
-    },
-  };
-};
+export const updateWidgetMetaData =
+    (attributeName: string, value: string, id: string,
+     attributeType: AttributeType): UpdateWidgetMetaData => {
+      return {
+        type: UPDATE_WIDGET_META_DATA,
+        payload: {
+          attributeName,
+          value,
+          id,
+          attributeType,
+        },
+      };
+    };
 
 /**
  * Sets the shared attribute on the widget object. The shared attribute
@@ -85,50 +56,45 @@ export const updateWidgetMetaData = (
  * TODO: change 'shared' attribute to 'active' for a clearer definition.
  * A widget is active when it is on the template and inactive otherwise.
  */
-export const updateWidgetSharedStatus = (
-  id: string,
-  isShared: boolean
-): UpdateWidgetSharedStatus => {
-  return {
-    type: UPDATE_WIDGET_SHARED_STATUS,
-    payload: {
-      id,
-      isShared,
-    },
-  };
-};
+export const updateWidgetSharedStatus =
+    (id: string, isShared: boolean): UpdateWidgetSharedStatus => {
+      return {
+        type: UPDATE_WIDGET_SHARED_STATUS,
+        payload: {
+          id,
+          isShared,
+        },
+      };
+    };
 
 /**
- * Sets children property to a new array of ids. Dispatched on dragover events for adding and reordering widgets.
+ * Sets children property to a new array of ids. Dispatched on dragover events
+ * for adding and reordering widgets.
  */
-export const updateWidgetChildren = (
-  id: string,
-  childrenIDs: string[]
-): UpdateWidgetChildren => {
-  return {
-    type: UPDATE_WIDGET_CHILDREN,
-    payload: {
-      id,
-      childrenIDs,
-    },
-  };
-};
+export const updateWidgetChildren =
+    (id: string, childrenIDs: string[]): UpdateWidgetChildren => {
+      return {
+        type: UPDATE_WIDGET_CHILDREN,
+        payload: {
+          id,
+          childrenIDs,
+        },
+      };
+    };
 
 /**
  * Removes the widget metadata for the given widget id.
  */
-export const removeWidgetMetaData = (
-  id: string,
-  reordering: boolean = false
-): RemoveWidget => {
-  return {
-    type: REMOVE_WIDGET,
-    payload: {
-      id,
-      reordering,
-    },
-  };
-};
+export const removeWidgetMetaData =
+    (id: string, reordering: boolean = false): RemoveWidget => {
+      return {
+        type: REMOVE_WIDGET,
+        payload: {
+          id,
+          reordering,
+        },
+      };
+    };
 
 /**
  * Sets the template palette.
@@ -145,79 +111,76 @@ export const setPalette = (palette: PaletteNames): SetPalette => {
 /**
  * Adds widget meta data to the store's template representation.
  */
-export const addWidgetMetaData = (
-  id: string,
-  widget: Element,
-  shared?: boolean,
-  uniqueAttributes?: UniqueAttributes,
-  style?: { [key: string]: string }
-): AddWidgetMetaData => {
-  return {
-    type: ADD_WIDGET_META_DATA,
-    payload: {
-      [id]: {
-        id,
-        shared: shared ?? false,
-        widgetRef: widget as HTMLElement,
-        children: [],
-        uniqueAttributes: uniqueAttributes ?? {
-          ...getUniqueAttributes(getWidgetType(id)),
+export const addWidgetMetaData =
+    (id: string, widget: Element, shared?: boolean,
+     uniqueAttributes?: UniqueAttributes,
+     style?: {[key: string]: string}): AddWidgetMetaData => {
+      return {
+        type: ADD_WIDGET_META_DATA,
+        payload: {
+          [id]: {
+            id,
+            shared: shared ?? false,
+            widgetRef: widget as HTMLElement,
+            children: [],
+            uniqueAttributes: uniqueAttributes ?? {
+              ...getUniqueAttributes(getWidgetType(id)),
+            },
+            style: style ?? {...DEFAULT_SHARED_ATTRIBUTES},
+          },
         },
-        style: style ?? { ...DEFAULT_SHARED_ATTRIBUTES },
-      },
-    },
-  };
-};
+      };
+    };
 
 /**
- * Updates widget IDs with new values. This is used after a template change to prevent id conflicts.
+ * Updates widget IDs with new values. This is used after a template change to
+ * prevent id conflicts.
  */
-export const updateWidgetIDs = (
-  updatedIDs: AppCreatorStore['widgetIDs']
-): UpdateWidgetIDs => {
-  return {
-    type: UPDATE_WIDGET_IDS,
-    payload: {
-      updatedIDs,
-    },
-  };
-};
+export const updateWidgetIDs =
+    (updatedIDs: AppCreatorStore['widgetIDs']): UpdateWidgetIDs => {
+      return {
+        type: UPDATE_WIDGET_IDS,
+        payload: {
+          updatedIDs,
+        },
+      };
+    };
 
 /**
  * Sets the currently dragged widget to the element being dragged, or null
  * if there isn't any.
  */
-export const setDraggingWidget = (
-  widget: Element | null
-): SetDraggingWidgetAction => {
-  return {
-    type: SET_DRAGGING_WIDGET,
-    payload: {
-      draggingElement: widget,
-    },
-  };
-};
+export const setDraggingWidget =
+    (widget: Element|null): SetDraggingWidgetAction => {
+      return {
+        type: SET_DRAGGING_WIDGET,
+        payload: {
+          draggingElement: widget,
+        },
+      };
+    };
 
 /**
  * Sets the widget that is currently being edited, or null if there isn't any.
  */
-export const setEditingWidget = (
-  widget: Element | null
-): SetEditingWidgetAction => {
-  return {
-    type: SET_EDITING_WIDGET,
-    payload: {
-      editingElement: widget,
-      /**
-       * If widget is null, then we want to clear the editing state.
-       * This occurs when are dragging a new widget or we are removing the current widget being edited.
-       */
-      eventType: widget == null ? EventType.NONE : EventType.EDITING,
-      // Open attributes tab if we are editing an element (ie. Not clearing state).
-      openAttributesTab: widget != null,
-    },
-  };
-};
+export const setEditingWidget =
+    (widget: Element|null): SetEditingWidgetAction => {
+      return {
+        type: SET_EDITING_WIDGET,
+        payload: {
+          editingElement: widget,
+          /**
+           * If widget is null, then we want to clear the editing state.
+           * This occurs when are dragging a new widget or we are removing the
+           * current widget being edited.
+           */
+          eventType: widget == null ? EventType.NONE : EventType.EDITING,
+          // Open attributes tab if we are editing an element (ie. Not clearing
+          // state).
+          openAttributesTab: widget != null,
+        },
+      };
+    };
 
 /**
  * Sets the actions-panel's selected tab to the index passed in.
@@ -234,16 +197,15 @@ export const setSelectedTab = (index: Tab): SetSelectedTabAction => {
 /**
  * Sets the actions-panel's selected tab to the index passed in.
  */
-export const setSelectedTemplate = (
-  template: AppCreatorStore['template']
-): SetSelectedTemplate => {
-  return {
-    type: SET_SELECTED_TEMPLATE,
-    payload: {
-      template,
-    },
-  };
-};
+export const setSelectedTemplate =
+    (template: AppCreatorStore['template']): SetSelectedTemplate => {
+      return {
+        type: SET_SELECTED_TEMPLATE,
+        payload: {
+          template,
+        },
+      };
+    };
 
 /**
  * Resets dragging values on dragend.
@@ -259,8 +221,8 @@ export const resetDraggingValues = (): ResetDraggingValuesAction => {
 };
 
 /**
- * Sets state to true if an element has been added to a dropzone. This is used to increment
- * a specified widget's ID.
+ * Sets state to true if an element has been added to a dropzone. This is used
+ * to increment a specified widget's ID.
  * @param value true if an element has been added and false otherwise.
  */
 export const setElementAdded = (value: boolean): SetIsElementAddedAction => {
@@ -273,8 +235,9 @@ export const setElementAdded = (value: boolean): SetIsElementAddedAction => {
 };
 
 /**
- * Sets state to true if we are reordering widgets and false otherwise. Reordering state is used to determine
- * if a widget should be cloned and if we should increment the widget's ID.
+ * Sets state to true if we are reordering widgets and false otherwise.
+ * Reordering state is used to determine if a widget should be cloned and if we
+ * should increment the widget's ID.
  * @param value true if we are reordering elements and false otherwise.
  */
 export const setReordering = (value: boolean): SetIsReorderingAction => {
@@ -289,18 +252,16 @@ export const setReordering = (value: boolean): SetIsReorderingAction => {
 /**
  * Sets event state to a particular value.
  */
-export const setEventType = (
-  eventType: EventType,
-  value: boolean = true
-): SetEventType => {
-  return {
-    type: SET_EVENT_TYPE,
-    payload: {
-      eventType,
-      value,
-    },
-  };
-};
+export const setEventType =
+    (eventType: EventType, value: boolean = true): SetEventType => {
+      return {
+        type: SET_EVENT_TYPE,
+        payload: {
+          eventType,
+          value,
+        },
+      };
+    };
 
 /**
  * Increments the widget's ID so that each widget can have a unique identifier.
@@ -317,16 +278,15 @@ export const incrementWidgetID = (id: string): IncrementWidgetAction => {
 /**
  * Sets selected template id.
  */
-export const setSelectedTemplateID = (
-  id: string
-): SetSelectedTemplateIDAction => {
-  return {
-    type: SET_SELECTED_TEMPLATE_ID,
-    payload: {
-      id,
-    },
-  };
-};
+export const setSelectedTemplateID =
+    (id: string): SetSelectedTemplateIDAction => {
+      return {
+        type: SET_SELECTED_TEMPLATE_ID,
+        payload: {
+          id,
+        },
+      };
+    };
 
 /**
  * Returns default values for a specified widget type (ie. label, button, etc).

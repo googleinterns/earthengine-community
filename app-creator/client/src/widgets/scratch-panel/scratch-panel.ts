@@ -1,16 +1,23 @@
 /**
- *  @fileoverview The scratch-panel widget is the right side panel that stores intermediary widgets.
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @fileoverview The scratch-panel widget is the right side panel that stores
+ * intermediary widgets.
  */
-import { LitElement, html, customElement, css, query } from 'lit-element';
-import { IronIconElement } from '@polymer/iron-icon';
-import { connect } from 'pwa-helpers';
-import { store } from '../../redux/store';
-import { AppCreatorStore, WidgetMetaData } from '../../redux/reducer';
-import { EventType } from '../../redux/types/enums';
-import { setEventType } from '../../redux/actions';
-import { DraggableWidget } from '../draggable-widget/draggable-widget';
-import { Dropzone } from '../dropzone-widget/dropzone-widget';
-import { addBackgroundColorToSharedWidget } from '../../utils/helpers';
+
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/paper-tabs/paper-tabs';
@@ -18,8 +25,20 @@ import '@polymer/paper-tabs/paper-tab';
 import '../tab-container/tab-container';
 import '../dropzone-widget/dropzone-widget';
 
-@customElement('scratch-panel')
-export class ScratchPanel extends connect(store)(LitElement) {
+import {IronIconElement} from '@polymer/iron-icon';
+import {css, customElement, html, LitElement, query} from 'lit-element';
+import {connect} from 'pwa-helpers';
+
+import {setEventType} from '../../redux/actions';
+import {AppCreatorStore, WidgetMetaData} from '../../redux/reducer';
+import {store} from '../../redux/store';
+import {EventType} from '../../redux/types/enums';
+import {addBackgroundColorToSharedWidget} from '../../utils/helpers';
+import {DraggableWidget} from '../draggable-widget/draggable-widget';
+import {Dropzone} from '../dropzone-widget/dropzone-widget';
+
+@customElement('scratch-panel') export class ScratchPanel extends connect
+(store)(LitElement) {
   static styles = css`
     #container {
       width: var(--actions-panel-width);
@@ -68,7 +87,7 @@ export class ScratchPanel extends connect(store)(LitElement) {
   stateChanged(state: AppCreatorStore) {
     if (state.eventType === EventType.SHAREDWIDGETS) {
       const {
-        template: { widgets },
+        template: {widgets},
       } = state;
       this.populateDropzone(widgets);
       store.dispatch(setEventType(EventType.NONE));
@@ -78,7 +97,7 @@ export class ScratchPanel extends connect(store)(LitElement) {
   /**
    * Populates dropzone with shared widgets from the store.
    */
-  private populateDropzone(widgets: { [key: string]: WidgetMetaData }) {
+  private populateDropzone(widgets: {[key: string]: WidgetMetaData}) {
     /*
      * We need to clear the dropzone because we lose widget references
      * when we serialize and deserialize the template. As a result, we
@@ -107,7 +126,7 @@ export class ScratchPanel extends connect(store)(LitElement) {
   /**
    * Collapses/Expands the actions panel.
    */
-  private togglePanel({ target }: { target: EventTarget }) {
+  private togglePanel({target}: {target: EventTarget}) {
     const panel = this.shadowRoot?.getElementById('container');
 
     if (panel == null) {

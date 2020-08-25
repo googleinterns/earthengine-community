@@ -1,13 +1,31 @@
 /**
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
  * Creates a responsive and collapsible mobile panel.
  */
 function createSidemenu(style) {
   var sidemenu = {};
 
   /**
-   * Initializes panel and returns a reference to the sidePanel (outer level widget) and contentPanel (panel were widgets are added).
+   * Initializes panel and returns a reference to the sidePanel (outer level
+   * widget) and contentPanel (panel were widgets are added).
    */
-  sidemenu.init = function () {
+  sidemenu.init = function() {
     var sidePanel = ui.Panel({
       layout: ui.Panel.Layout.flow('horizontal'),
       style: {
@@ -20,13 +38,11 @@ function createSidemenu(style) {
 
     var menuButton = sidemenu.createMenuButton(sidePanel, contentPanel);
 
-    var verticalMenuButtonWrapper = sidemenu.createVerticalMenuButtonWrapper(
-      menuButton
-    );
+    var verticalMenuButtonWrapper =
+        sidemenu.createVerticalMenuButtonWrapper(menuButton);
 
-    var horizontalMenuButtonWrapper = sidemenu.createHorizontalMenuButtonWrapper(
-      verticalMenuButtonWrapper
-    );
+    var horizontalMenuButtonWrapper =
+        sidemenu.createHorizontalMenuButtonWrapper(verticalMenuButtonWrapper);
 
     sidePanel.widgets().add(contentPanel);
 
@@ -39,9 +55,10 @@ function createSidemenu(style) {
   };
 
   /**
-   * Creates contentPanel which hosts user defined widgets (i.e. label, textbox, select, etc...).
+   * Creates contentPanel which hosts user defined widgets (i.e. label, textbox,
+   * select, etc...).
    */
-  sidemenu.createContentPanel = function (style) {
+  sidemenu.createContentPanel = function(style) {
     // Overwriting mandatory properties.
     style.width = 0;
     style.height = '100%';
@@ -53,21 +70,20 @@ function createSidemenu(style) {
   };
 
   /**
-   * Uses an underlying checkbox to create a menu button that expands and collapses.
+   * Uses an underlying checkbox to create a menu button that expands and
+   * collapses.
    */
-  sidemenu.createMenuButton = function (sidePanel, contentPanel) {
+  sidemenu.createMenuButton = function(sidePanel, contentPanel) {
     return ui.Checkbox({
       label: '| ▶',
-      onChange: function () {
+      onChange: function() {
         var sidePanelWidth = sidePanel.style().get('width');
-        sidePanel
-          .style()
-          .set('width', sidePanelWidth === '30px' ? '80%' : '30px');
+        sidePanel.style().set(
+            'width', sidePanelWidth === '30px' ? '80%' : '30px');
 
         var contentPanelWidth = contentPanel.style().get('width');
-        contentPanel
-          .style()
-          .set('width', contentPanelWidth ? 0 : 'calc(100% - 30px)');
+        contentPanel.style().set(
+            'width', contentPanelWidth ? 0 : 'calc(100% - 30px)');
         contentPanel.style().set('padding', contentPanelWidth ? '0px' : '16px');
       },
       style: {
@@ -79,9 +95,10 @@ function createSidemenu(style) {
   };
 
   /**
-   * Creates vertical and horizontal spacers for centering items. Used for centering menu button vertically and horizontally.
+   * Creates vertical and horizontal spacers for centering items. Used for
+   * centering menu button vertically and horizontally.
    */
-  sidemenu.makeSpacer = function (direction) {
+  sidemenu.makeSpacer = function(direction) {
     return ui.Label({
       value: ' ',
       style: {
@@ -95,7 +112,7 @@ function createSidemenu(style) {
   /*
    * Creates a vertical wrapper for the button that centers it vertically.
    */
-  sidemenu.createVerticalMenuButtonWrapper = function (menuButton) {
+  sidemenu.createVerticalMenuButtonWrapper = function(menuButton) {
     return ui.Panel({
       widgets: [
         sidemenu.makeSpacer('vertical'),
@@ -114,9 +131,8 @@ function createSidemenu(style) {
   /*
    * Creates a horizontal wrapper for the button that centers it horizontally.
    */
-  sidemenu.createHorizontalMenuButtonWrapper = function (
-    verticalMenuButtonWrapper
-  ) {
+  sidemenu.createHorizontalMenuButtonWrapper = function(
+      verticalMenuButtonWrapper) {
     return ui.Panel({
       widgets: [
         sidemenu.makeSpacer('horizontal'),

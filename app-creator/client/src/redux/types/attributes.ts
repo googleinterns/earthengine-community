@@ -1,33 +1,38 @@
 /**
- *  @fileoverview This file contains interface types for the different style attributes.
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @fileoverview This file contains interface types for the different style
+ * attributes.
  */
-import { InputType } from './enums';
-import { Label } from '../../widgets/ui-label/ui-label';
-import { Button } from '../../widgets/ui-button/ui-button';
-import { Checkbox } from '../../widgets/ui-checkbox/ui-checkbox';
-import { Select } from '../../widgets/ui-select/ui-select';
-import { Slider } from '../../widgets/ui-slider/ui-slider';
-import { Textbox } from '../../widgets/ui-textbox/ui-textbox';
-import { Chart } from '../../widgets/ui-chart/ui-chart';
-import { Map } from '../../widgets/ui-map/ui-map';
+
+import {Button} from '../../widgets/ui-button/ui-button';
+import {Chart} from '../../widgets/ui-chart/ui-chart';
+import {Checkbox} from '../../widgets/ui-checkbox/ui-checkbox';
+import {Label} from '../../widgets/ui-label/ui-label';
+import {Map} from '../../widgets/ui-map/ui-map';
+import {Select} from '../../widgets/ui-select/ui-select';
+import {Slider} from '../../widgets/ui-slider/ui-slider';
+import {Textbox} from '../../widgets/ui-textbox/ui-textbox';
+
+import {InputType} from './enums';
 
 export type SharedAttributes =
-  | 'height'
-  | 'width'
-  | 'padding'
-  | 'margin'
-  | 'color'
-  | 'backgroundColor'
-  | 'backgroundOpacity'
-  | 'borderWidth'
-  | 'borderStyle'
-  | 'borderColor'
-  | 'fontSize'
-  | 'fontWeight'
-  | 'fontFamily'
-  | 'textAlign'
-  | 'whiteSpace'
-  | 'shown';
+    |'height'|'width'|'padding'|'margin'|'color'|'backgroundColor'|
+    'backgroundOpacity'|'borderWidth'|'borderStyle'|'borderColor'|'fontSize'|
+    'fontWeight'|'fontFamily'|'textAlign'|'whiteSpace'|'shown';
 
 export interface Tooltip {
   text?: string;
@@ -42,8 +47,7 @@ export interface AttributeMetaData {
     unit?: string;
     step?: number;
     min?: number;
-    max?: number;
-    type: InputType;
+    max?: number; type: InputType;
     items?: string[];
     validator?: (value: string) => boolean;
   };
@@ -68,12 +72,12 @@ export const sharedAttributes: AttributeMetaData = {
   },
   padding: {
     value: '0px',
-    placeholder: "ie. '8px', '8px 8px', '8px 8px 8px 8px'",
+    placeholder: 'ie. \'8px\', \'8px 8px\', \'8px 8px 8px 8px\'',
     type: InputType.TEXT,
   },
   margin: {
     value: '8px',
-    placeholder: "ie. '8px', '8px 8px', '8px 8px 8px 8px'",
+    placeholder: 'ie. \'8px\', \'8px 8px\', \'8px 8px 8px 8px\'',
     type: InputType.TEXT,
   },
   color: {
@@ -160,36 +164,32 @@ export const pxAttributes = new Set([
   'fontSize',
 ]);
 
-export const DEFAULT_SHARED_ATTRIBUTES: DefaultAttributesType = Object.keys(
-  sharedAttributes
-).reduce((attributes: DefaultAttributesType, key) => {
-  if (key in pxAttributes) {
-    attributes[key] = sharedAttributes[key].value + 'px';
-    return attributes;
-  }
+export const DEFAULT_SHARED_ATTRIBUTES: DefaultAttributesType =
+    Object.keys(sharedAttributes)
+        .reduce((attributes: DefaultAttributesType, key) => {
+          if (key in pxAttributes) {
+            attributes[key] = sharedAttributes[key].value + 'px';
+            return attributes;
+          }
 
-  attributes[key] = sharedAttributes[key].value;
-  return attributes;
-}, {});
+          attributes[key] = sharedAttributes[key].value;
+          return attributes;
+        }, {});
 
-export function getDefaultAttributes(
-  attributes: AttributeMetaData
-): DefaultAttributesType {
-  return Object.keys(attributes).reduce(
-    (defaultAttributes: DefaultAttributesType, key) => {
-      defaultAttributes[key] = attributes[key].value;
-      return defaultAttributes;
-    },
-    {}
-  );
+export function getDefaultAttributes(attributes: AttributeMetaData):
+    DefaultAttributesType {
+  return Object.keys(attributes)
+      .reduce((defaultAttributes: DefaultAttributesType, key) => {
+        defaultAttributes[key] = attributes[key].value;
+        return defaultAttributes;
+      }, {});
 }
 
 export type UniqueAttributes =
-  | typeof Label.DEFAULT_LABEL_ATTRIBUTES
-  | typeof Button.DEFAULT_BUTTON_ATTRIBUTES
-  | typeof Checkbox.DEFAULT_CHECKBOX_ATTRIBUTES
-  | typeof Select.DEFAULT_SELECT_ATTRIBUTES
-  | typeof Slider.DEFAULT_SLIDER_ATTRIBUTES
-  | typeof Textbox.DEFAULT_TEXTBOX_ATTRIBUTES
-  | typeof Chart.DEFAULT_CHART_ATTRIBUTES
-  | typeof Map.DEFAULT_MAP_ATTRIBUTES;
+    |typeof Label.DEFAULT_LABEL_ATTRIBUTES|
+    typeof Button.DEFAULT_BUTTON_ATTRIBUTES|
+    typeof Checkbox.DEFAULT_CHECKBOX_ATTRIBUTES|
+    typeof Select.DEFAULT_SELECT_ATTRIBUTES|
+    typeof Slider.DEFAULT_SLIDER_ATTRIBUTES|
+    typeof Textbox.DEFAULT_TEXTBOX_ATTRIBUTES|
+    typeof Chart.DEFAULT_CHART_ATTRIBUTES|typeof Map.DEFAULT_MAP_ATTRIBUTES;

@@ -1,28 +1,40 @@
 /**
- * @fileoverview The template wizard widget allows the user to select their desired configuration setting and select a particular template.
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @fileoverview The template wizard widget allows the user to select their
+ * desired configuration setting and select a particular template.
  */
-import {
-  customElement,
-  LitElement,
-  css,
-  property,
-  query,
-  html,
-} from 'lit-element';
-import { nothing, TemplateResult } from 'lit-html';
-import { DeviceType, PaletteNames } from '../../redux/types/enums';
-import { TemplateItem } from '../../client/fetch-templates';
-import { PaperDialogElement } from '@polymer/paper-dialog';
-import { templatesManager } from '../../data/templates';
-import { PaperToastElement } from '@polymer/paper-toast';
-import { TemplatesTabItem, TemplatesTab } from '../templates-tab/templates-tab';
-import { onSearchEvent } from '../search-bar/search-bar';
-import { generateRandomId } from '../../utils/helpers';
-import { store } from '../../redux/store';
-import { setSelectedTemplate, setPalette } from '../../redux/actions';
-import { transferData } from '../../utils/template-generation';
+
 import '@polymer/paper-progress/paper-progress';
 import '@cwmr/paper-chip/paper-chip.js';
+
+import {PaperDialogElement} from '@polymer/paper-dialog';
+import {PaperToastElement} from '@polymer/paper-toast';
+import {css, customElement, html, LitElement, property, query,} from 'lit-element';
+import {nothing, TemplateResult} from 'lit-html';
+
+import {TemplateItem} from '../../client/fetch-templates';
+import {templatesManager} from '../../data/templates';
+import {setPalette, setSelectedTemplate} from '../../redux/actions';
+import {store} from '../../redux/store';
+import {DeviceType, PaletteNames} from '../../redux/types/enums';
+import {generateRandomId} from '../../utils/helpers';
+import {transferData} from '../../utils/template-generation';
+import {onSearchEvent} from '../search-bar/search-bar';
+import {TemplatesTab, TemplatesTabItem} from '../templates-tab/templates-tab';
 
 @customElement('template-wizard')
 export class TemplateWizard extends LitElement {
@@ -208,22 +220,22 @@ export class TemplateWizard extends LitElement {
   /**
    * Sets template dialog search query.
    */
-  @property({ type: String }) query = '';
+  @property({type: String}) query = '';
 
   /**
    * Sets device filter.
    */
-  @property({ type: String }) deviceFilter: DeviceType = DeviceType.ALL;
+  @property({type: String}) deviceFilter: DeviceType = DeviceType.ALL;
 
   /**
    * Array of templates.
    */
-  @property({ type: Array }) templates: TemplateItem[] = [];
+  @property({type: Array}) templates: TemplateItem[] = [];
 
   /**
    * Loading state.
    */
-  @property({ type: Boolean }) loading = false;
+  @property({type: Boolean}) loading = false;
 
   /**
    * Reference to dialog element.
@@ -238,12 +250,13 @@ export class TemplateWizard extends LitElement {
   /**
    * ID of the currently selected template.
    */
-  @property({ type: String }) selectedTemplateID = '';
+  @property({type: String}) selectedTemplateID = '';
 
   /**
    * Configuration object that stores metadata about a template.
    */
-  @property({ type: Object }) config: { [key: string]: string } = {
+  @property({type: Object})
+  config: {[key: string]: string} = {
     id: generateRandomId(),
     name: '',
     palette: PaletteNames.LIGHT,
@@ -259,8 +272,7 @@ export class TemplateWizard extends LitElement {
       }
     } catch (e) {
       const fetchErrorToast = this.shadowRoot?.getElementById(
-        'fetch-error-toast'
-      ) as PaperToastElement;
+                                  'fetch-error-toast') as PaperToastElement;
 
       if (fetchErrorToast != null) {
         fetchErrorToast.open();
@@ -305,7 +317,7 @@ export class TemplateWizard extends LitElement {
    * Returns an array of template cards.
    */
   private getTemplateCards(showTitle = false): Array<TemplatesTabItem> {
-    return this.templates.map(({ id, name, imageUrl, device }) => {
+    return this.templates.map(({id, name, imageUrl, device}) => {
       return {
         id,
         name,
@@ -329,7 +341,7 @@ export class TemplateWizard extends LitElement {
    * Sets the query property when an onsearch event is dispatched from the
    * searchbar widget.
    */
-  private handleSearch({ detail: { query } }: onSearchEvent) {
+  private handleSearch({detail: {query}}: onSearchEvent) {
     this.query = query.trim();
   }
 
@@ -337,13 +349,8 @@ export class TemplateWizard extends LitElement {
    * Creates a text input element.
    */
   private createTextInput(
-    title: string,
-    value: string,
-    placeholder: string,
-    key: string,
-    disabled: boolean,
-    required?: boolean
-  ): TemplateResult {
+      title: string, value: string, placeholder: string, key: string,
+      disabled: boolean, required?: boolean): TemplateResult {
     return html`
     <div class="config-input-container">
         ${this.createInputHeader(title)}
@@ -351,9 +358,9 @@ export class TemplateWizard extends LitElement {
             class='config-input text-input'
             placeholder=${placeholder}
             @keyup=${(e: Event) => {
-              this.config[key] = (e.target as HTMLInputElement).value;
-              this.requestUpdate();
-            }}
+      this.config[key] = (e.target as HTMLInputElement).value;
+      this.requestUpdate();
+    }}
             ?disabled=${disabled}
             ?required=${required}
             value=${value}
@@ -368,9 +375,9 @@ export class TemplateWizard extends LitElement {
   private handleContinueClick() {
     try {
       // Get template from database.
-      const template = templatesManager
-        .getTemplates()
-        .find(({ id }) => id === this.selectedTemplateID)?.template;
+      const template = templatesManager.getTemplates()
+                           .find(({id}) => id === this.selectedTemplateID)
+                           ?.template;
 
       if (template) {
         // Parse template and apply configuration properties.
@@ -388,7 +395,7 @@ export class TemplateWizard extends LitElement {
         transferData();
 
         // Close dialog.
-        const { dialog } = this;
+        const {dialog} = this;
         if (dialog != null) {
           dialog.close();
         }
@@ -403,8 +410,8 @@ export class TemplateWizard extends LitElement {
 
   /*
    * TODO: Add elements to differentiate duplication flow from regular flow.
-   * Examples: populate text input with 'Copy of <previous-template>', or skip template wizard and go
-   * straight to app creation.
+   * Examples: populate text input with 'Copy of <previous-template>', or skip
+   * template wizard and go straight to app creation.
    */
   render() {
     const {
@@ -421,11 +428,8 @@ export class TemplateWizard extends LitElement {
      * Get a list of template cards.
      */
     const templateCards = getTemplateCards.call(this, true);
-    const filteredTemplates = TemplatesTab.filterTemplates(
-      templateCards,
-      query,
-      deviceFilter
-    );
+    const filteredTemplates =
+        TemplatesTab.filterTemplates(templateCards, query, deviceFilter);
 
     const emptyNotice = html`
       <empty-notice
@@ -437,41 +441,36 @@ export class TemplateWizard extends LitElement {
       ></empty-notice>
     `;
 
-    const contentMarkup = loading
-      ? nothing
-      : html`
+    const contentMarkup = loading ? nothing : html`
           <div id="cards-container">
-            ${filteredTemplates.map(({ markup }) => markup)}
+            ${filteredTemplates.map(({markup}) => markup)}
             ${filteredTemplates.length === 0 ? emptyNotice : nothing}
           </div>
         `;
 
-    const loadingBar = loading
-      ? html`<paper-progress indeterminate></paper-progress>`
-      : nothing;
+    const loadingBar = loading ?
+        html`<paper-progress indeterminate></paper-progress>` :
+        nothing;
 
     const sortingChips = html`
       <div id="chips-container">
         <paper-chip
           selectable
-          class="${this.deviceFilter === DeviceType.ALL
-            ? 'selected-paper-chip'
-            : ''}"
+          class="${
+        this.deviceFilter === DeviceType.ALL ? 'selected-paper-chip' : ''}"
           @click=${() => handleDeviceFilters.call(this, DeviceType.ALL)}
           >All</paper-chip
         >
         <paper-chip
           selectable
-          class="${this.deviceFilter === DeviceType.DESKTOP
-            ? 'selected-paper-chip'
-            : ''}"
+          class="${
+        this.deviceFilter === DeviceType.DESKTOP ? 'selected-paper-chip' : ''}"
           @click=${() => handleDeviceFilters.call(this, DeviceType.DESKTOP)}
           >Web</paper-chip
         ><paper-chip
           selectable
-          class="${this.deviceFilter === DeviceType.MOBILE
-            ? 'selected-paper-chip'
-            : ''}"
+          class="${
+        this.deviceFilter === DeviceType.MOBILE ? 'selected-paper-chip' : ''}"
           @click=${() => handleDeviceFilters.call(this, DeviceType.MOBILE)}
           >Mobile</paper-chip
         >
@@ -482,19 +481,15 @@ export class TemplateWizard extends LitElement {
       <div id="configuration-form">
         <h3>Settings</h3>
         <div class="form-inputs">
-          ${this.createTextInput(
-            'Template Name:',
-            this.config.name,
-            'Enter Name',
-            'name',
-            false,
-            true
-          )}
+          ${
+        this.createTextInput(
+            'Template Name:', this.config.name, 'Enter Name', 'name', false,
+            true)}
           <palette-picker
             class="config-input-container config-select-input"
             @palette-change=${(e: CustomEvent) => {
-              this.config.palette = e.detail.selectedPalette;
-            }}
+      this.config.palette = e.detail.selectedPalette;
+    }}
           ></palette-picker>
         </div>
       </div>

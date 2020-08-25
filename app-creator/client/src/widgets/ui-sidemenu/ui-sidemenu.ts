@@ -1,22 +1,33 @@
 /**
- *  @fileoverview The ui-sidemenu is used as a wrapper for the different tabs
- *  in the actions-panel.
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @fileoverview The ui-sidemenu is used as a wrapper for the different tabs
+ * in the actions-panel.
  */
-import {
-  LitElement,
-  html,
-  customElement,
-  css,
-  property,
-  query,
-} from 'lit-element';
-import { Panel } from '../ui-panel/ui-panel';
-import { styleMap } from 'lit-html/directives/style-map';
-import { classMap } from 'lit-html/directives/class-map';
-import { Layout } from '../../redux/types/enums';
+
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '../ui-panel/ui-panel';
+
+import {css, customElement, html, LitElement, property, query,} from 'lit-element';
+import {classMap} from 'lit-html/directives/class-map';
+import {styleMap} from 'lit-html/directives/style-map';
+
+import {Layout} from '../../redux/types/enums';
+import {Panel} from '../ui-panel/ui-panel';
 
 @customElement('ui-sidemenu')
 export class SideMenu extends LitElement {
@@ -70,22 +81,22 @@ export class SideMenu extends LitElement {
    * column layout will append widgets below the last child element.
    * row layout will append widgets to the right of the last child element.
    */
-  @property({ type: String }) layout = Layout.COLUMN;
+  @property({type: String}) layout = Layout.COLUMN;
 
   /**
    * Contains an inner dropzone-widget.
    */
-  @property({ type: Boolean }) hasDropzone = false;
+  @property({type: Boolean}) hasDropzone = false;
 
   /**
    * Additional custom styles
    */
-  @property({ type: Object }) styles: { [key: string]: string } = {};
+  @property({type: Object}) styles: {[key: string]: string} = {};
 
   /**
    * Sets editable property.
    */
-  @property({ type: Boolean }) editable = false;
+  @property({type: Boolean}) editable = false;
 
   /**
    * Reference to ui panel widget.
@@ -101,7 +112,7 @@ export class SideMenu extends LitElement {
   private toggleMenu(e: Event) {
     e.stopPropagation();
 
-    const { panel } = this;
+    const {panel} = this;
     if (!panel) {
       return;
     }
@@ -111,7 +122,7 @@ export class SideMenu extends LitElement {
     panel.style.display = isZeroWidth ? 'block' : 'none';
   }
 
-  setStyle(style: { [key: string]: string }) {
+  setStyle(style: {[key: string]: string}) {
     const filteredStyles = new Set(['position', 'top', 'left', 'width']);
 
     for (const attr in style) {
@@ -137,11 +148,13 @@ export class SideMenu extends LitElement {
   }
 
   render() {
-    const { toggleMenu, layout, styles } = this;
+    const {toggleMenu, layout, styles} = this;
     return html`
       <div id="container">
         <ui-panel style=${styleMap(styles)}>
-          <slot class=${classMap({ [layout]: true })}></slot>
+          <slot class=${classMap({
+      [layout]: true
+    })}></slot>
         </ui-panel>
         <paper-icon-button
           icon="icons:menu"

@@ -1,38 +1,52 @@
 /**
- * @fileoverview This file contains helper functions that are specific to the reducer itself.
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @fileoverview This file contains helper functions that are specific to the
+ * reducer itself.
  */
-import { AppCreatorStore, WidgetMetaData } from './reducer';
-import { PaletteNames, WidgetType } from './types/enums';
-import { PalettePicker } from '../widgets/palette-picker/palette-picker';
-import { EEWidget } from './types/types';
-import { UpdateWidgetMetaData } from './types/actions';
-import { ROOT_ID, SCRATCH_PANEL } from '../utils/constants';
+
+import {ROOT_ID, SCRATCH_PANEL} from '../utils/constants';
+import {PalettePicker} from '../widgets/palette-picker/palette-picker';
+
+import {AppCreatorStore, WidgetMetaData} from './reducer';
+import {UpdateWidgetMetaData} from './types/actions';
+import {PaletteNames, WidgetType} from './types/enums';
+import {EEWidget} from './types/types';
 
 /**
  * Removes widget meta data from the current template.
  */
 export function removeWidgetHelper(
-  template: AppCreatorStore['template'],
-  reordering: boolean,
-  widgetToRemoveId: string
-) {
+    template: AppCreatorStore['template'], reordering: boolean,
+    widgetToRemoveId: string) {
   if (!reordering) {
-    // In the case of reordering widgets, we do not want to remove the widget meta data.
+    // In the case of reordering widgets, we do not want to remove the widget
+    // meta data.
     delete template.widgets[widgetToRemoveId];
   }
 
-  // Iterate over all widgets and remove the current widget id from the children's list.
-  const { widgets } = template;
+  // Iterate over all widgets and remove the current widget id from the
+  // children's list.
+  const {widgets} = template;
   for (const key in widgets) {
     const widget = widgets[key];
-    if (
-      typeof widget === 'object' &&
-      !Array.isArray(widget) &&
-      'children' in widget
-    ) {
-      widget.children = widget.children.filter(
-        (id: string) => id !== widgetToRemoveId
-      );
+    if (typeof widget === 'object' && !Array.isArray(widget) &&
+        'children' in widget) {
+      widget.children =
+          widget.children.filter((id: string) => id !== widgetToRemoveId);
     }
   }
 }
@@ -41,21 +55,18 @@ export function removeWidgetHelper(
  * Takes in a widgets object and applies a selected color palette to it.
  */
 export function applyPalette(
-  widgets: { [id: string]: WidgetMetaData },
-  color: PaletteNames
-) {
+    widgets: {[id: string]: WidgetMetaData}, color: PaletteNames) {
   for (const widgetId in widgets) {
     if (widgetId === SCRATCH_PANEL || widgets[widgetId].shared) {
       continue;
     }
 
-    // Set the background color of panel elements. Non-panel elements start with a transparent background.
-    if (
-      widgetId.startsWith(WidgetType.PANEL) ||
-      widgetId.startsWith(WidgetType.SIDEMENU)
-    ) {
+    // Set the background color of panel elements. Non-panel elements start with
+    // a transparent background.
+    if (widgetId.startsWith(WidgetType.PANEL) ||
+        widgetId.startsWith(WidgetType.SIDEMENU)) {
       widgets[widgetId].style.backgroundColor =
-        PalettePicker.palette[color].backgroundColor;
+          PalettePicker.palette[color].backgroundColor;
       if (widgetId === ROOT_ID) {
         widgets[widgetId].style.color = PalettePicker.palette[color].color;
       }
@@ -63,11 +74,10 @@ export function applyPalette(
     } else if (widgetId.startsWith(WidgetType.MAP)) {
       // Apply map styling.
       widgets[widgetId].uniqueAttributes.mapStyles =
-        PalettePicker.palette[color].map;
+          PalettePicker.palette[color].map;
     } else if (
-      !widgetId.startsWith(WidgetType.PANEL) &&
-      !widgetId.startsWith(WidgetType.BUTTON)
-    ) {
+        !widgetId.startsWith(WidgetType.PANEL) &&
+        !widgetId.startsWith(WidgetType.BUTTON)) {
       // Apply color property on non-panel elements.
       widgets[widgetId].style.color = PalettePicker.palette[color].color;
       // Setting transparent background.
@@ -75,32 +85,29 @@ export function applyPalette(
     } else if (widgetId.startsWith(WidgetType.BUTTON)) {
       // Apply styles for button elements.
       widgets[widgetId].style.backgroundColor =
-        PalettePicker.palette[color].color;
+          PalettePicker.palette[color].color;
       widgets[widgetId].style.color =
-        PalettePicker.palette[color].backgroundColor;
+          PalettePicker.palette[color].backgroundColor;
       widgets[widgetId].style.backgroundOpacity = '100';
     }
-    (widgets[widgetId].widgetRef as EEWidget)?.setStyle(
-      widgets[widgetId].style
-    );
+    (widgets[widgetId].widgetRef as EEWidget)
+        ?.setStyle(widgets[widgetId].style);
   }
 }
 
 /**
  * Adds default styles to all widgets.
  */
-export function addDefaultStyles(template: { [key: string]: any }) {
+export function addDefaultStyles(template: {[key: string]: any}) {
   // Extract widgets from template.
-  const { widgets } = template;
+  const {widgets} = template;
 
   // Merge default styles with each widget's style object. Styles defined under
   // the widget itself has a higher presedence and thus overwrites any defaults.
   for (const id in widgets) {
     // Create a copy of the style object.
-    const styleCopy: { [key: string]: string } = Object.assign(
-      {},
-      DEFAULT_STYLES
-    );
+    const styleCopy: {[key: string]: string} =
+        Object.assign({}, DEFAULT_STYLES);
 
     // Apply any styles defined in the widget's style object.
     for (const attribute in widgets[id].style) {
@@ -116,23 +123,19 @@ export function addDefaultStyles(template: { [key: string]: any }) {
  * Updates DOM element with unique attributes.
  */
 export function updateUniqueAttributesInDOM(
-  widget: HTMLElement,
-  template: AppCreatorStore['template']
-) {
+    widget: HTMLElement, template: AppCreatorStore['template']) {
   for (const attr of Object.keys(
-    template.widgets[widget.id].uniqueAttributes
-  )) {
+           template.widgets[widget.id].uniqueAttributes)) {
     widget.setAttribute(
-      attr,
-      template.widgets[widget.id].uniqueAttributes[attr]
-    );
+        attr, template.widgets[widget.id].uniqueAttributes[attr]);
   }
 }
 
 /**
- * Return hex code for background color with the last two values indicating opacity.
+ * Return hex code for background color with the last two values indicating
+ * opacity.
  */
-export function getBackgroundColor(style: { [key: string]: any }): string {
+export function getBackgroundColor(style: {[key: string]: any}): string {
   // Stringified number from 0 - 100 (only integers) or an empty string.
   let backgroundOpacityStr = style.backgroundOpacity;
 
@@ -151,24 +154,25 @@ export function getBackgroundColor(style: { [key: string]: any }): string {
   let hexNumberString = ('0' + hexFraction.toString(16)).slice(-2);
 
   const newBackgroundColor =
-    style.backgroundColor.slice(0, 7) + hexNumberString.toLowerCase();
+      style.backgroundColor.slice(0, 7) + hexNumberString.toLowerCase();
 
   // Example: #ffffff00, where the last two hex numbers represent the opacity.
   return newBackgroundColor;
 }
 
 /**
- * This function updates the attribute value of a particular widget (i.e. width: 80px -> 50px).
- * It also considers unit changes (i.e. width: 80px -> 80%).
+ * This function updates the attribute value of a particular widget (i.e. width:
+ * 80px -> 50px). It also considers unit changes (i.e. width: 80px -> 80%).
  */
 export function updateWidgetAttribute(
-  template: AppCreatorStore['template'],
-  { attributeName, value, id, attributeType }: UpdateWidgetMetaData['payload']
-) {
+    template: AppCreatorStore['template'],
+    {attributeName, value, id, attributeType}:
+        UpdateWidgetMetaData['payload']) {
   /**
    * If the attribute name ends with unit, it means that we are dealing with
    * an attribute that accepts multiple units (i.e. px, %, etc...). And we want
-   * to edit the unit itself (i.e. width: 80px -> 80%, where the value stays the same).
+   * to edit the unit itself (i.e. width: 80px -> 80%, where the value stays the
+   * same).
    */
   if (attributeName.endsWith('unit')) {
     // Retrieve prefix (i.e. width-unit -> width).
@@ -180,22 +184,21 @@ export function updateWidgetAttribute(
     // Check what the previous unit was. If it was px, then we replace it with
     // the updated value (It could be 'px' again or '%').
     if (attributeValue.endsWith('px')) {
-      template.widgets[id][attributeType][
-        attributePrefix
-      ] = attributeValue.replace('px', value);
+      template.widgets[id][attributeType][attributePrefix] =
+          attributeValue.replace('px', value);
     } else {
-      template.widgets[id][attributeType][
-        attributePrefix
-      ] = attributeValue.replace('%', value);
+      template.widgets[id][attributeType][attributePrefix] =
+          attributeValue.replace('%', value);
     }
   } else {
     /**
-     * In the case where the attribute name does not end with unit, we want to edit the value itself
-     * and append whatever unit was previously set (i.e. 80px -> 50px, where the unit does not change).
+     * In the case where the attribute name does not end with unit, we want to
+     * edit the value itself and append whatever unit was previously set (i.e.
+     * 80px -> 50px, where the unit does not change).
      */
 
-    // Retrieve attribute value from the template. We will use this to extract the
-    // unit value.
+    // Retrieve attribute value from the template. We will use this to extract
+    // the unit value.
     const attributeValue = template.widgets[id][attributeType][attributeName];
 
     // Update the template with the new value from the payload.
@@ -204,15 +207,14 @@ export function updateWidgetAttribute(
     /**
      * attributeValue -> previous value
      * value -> updated value
-     * We check if attribute value has a unit at the end. If it does, we check if the
-     * new value contains a unit. If it does not, then we append the corresponding unit from
-     * the previous value.
+     * We check if attribute value has a unit at the end. If it does, we check
+     * if the new value contains a unit. If it does not, then we append the
+     * corresponding unit from the previous value.
      */
     if (attributeValue.endsWith('px') || attributeValue.endsWith('%')) {
       if (!value.endsWith('px') && !value.endsWith('%')) {
-        template.widgets[id][attributeType][
-          attributeName
-        ] += attributeValue.endsWith('px') ? 'px' : '%';
+        template.widgets[id][attributeType][attributeName] +=
+            attributeValue.endsWith('px') ? 'px' : '%';
       }
     }
   }
@@ -235,7 +237,7 @@ export function getAttributePrefix(attribute: string): string {
 /**
  * List of default styles shared across all widgets.
  */
-export const DEFAULT_STYLES: { [key: string]: string } = {
+export const DEFAULT_STYLES: {[key: string]: string} = {
   height: 'px',
   width: 'px',
   padding: '0px',

@@ -1,13 +1,30 @@
+/**
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @fileoverview The ui-button widget allows users to add a button element to
+ * their template.
+ */
+
 import '@polymer/paper-button';
-import { css, customElement, html, LitElement, property } from 'lit-element';
-import { styleMap } from 'lit-html/directives/style-map';
-import {
-  DEFAULT_SHARED_ATTRIBUTES,
-  AttributeMetaData,
-  DefaultAttributesType,
-  getDefaultAttributes,
-} from '../../redux/types/attributes';
-import { InputType } from '../../redux/types/enums';
+
+import {css, customElement, html, LitElement, property} from 'lit-element';
+import {styleMap} from 'lit-html/directives/style-map';
+
+import {AttributeMetaData, DEFAULT_SHARED_ATTRIBUTES, DefaultAttributesType, getDefaultAttributes,} from '../../redux/types/attributes';
+import {InputType} from '../../redux/types/enums';
 
 @customElement('ui-button')
 export class Button extends LitElement {
@@ -44,43 +61,42 @@ export class Button extends LitElement {
     },
   };
 
-  static DEFAULT_BUTTON_ATTRIBUTES: DefaultAttributesType = getDefaultAttributes(
-    Button.attributes
-  );
+  static DEFAULT_BUTTON_ATTRIBUTES: DefaultAttributesType =
+      getDefaultAttributes(Button.attributes);
 
   /**
    * Additional custom styles.
    */
-  @property({ type: Object }) styles = DEFAULT_SHARED_ATTRIBUTES;
+  @property({type: Object}) styles = DEFAULT_SHARED_ATTRIBUTES;
 
   /**
    * If true, the user cannot interact with this element.
    */
-  @property({ type: Boolean }) disabled = false;
+  @property({type: Boolean}) disabled = false;
 
   /**
    * Adds a button border and shadow when true.
    */
-  @property({ type: Boolean }) raised = true;
+  @property({type: Boolean}) raised = true;
 
   /**
    * Sets the button label.
    */
-  @property({ type: String }) label = '';
+  @property({type: String}) label = '';
 
   /**
    * Sets the theme of the button including background and text color.
    * Options available "primary" | "secondary".
    */
-  @property({ type: String }) color = 'primary';
+  @property({type: String}) color = 'primary';
 
   /**
    * Callback triggered on button click.
    */
-  @property({ type: Object }) onClickHandler: () => void = () => {};
+  @property({type: Object}) onClickHandler: () => void = () => {};
 
   render() {
-    const { label, color, disabled, onClickHandler, raised, styles } = this;
+    const {label, color, disabled, onClickHandler, raised, styles} = this;
 
     return html`
       <paper-button
@@ -136,7 +152,7 @@ export class Button extends LitElement {
     return this.styles;
   }
 
-  setStyle(style: { [key: string]: string }) {
+  setStyle(style: {[key: string]: string}) {
     this.styles = style;
     this.requestUpdate();
   }

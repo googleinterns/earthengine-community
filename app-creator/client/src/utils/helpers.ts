@@ -1,15 +1,33 @@
-import {
-  DeviceType,
-  WidgetType,
-  WidgetsRequiringBackground,
-} from '../redux/types/enums';
-import { AppCreatorStore } from '../redux/reducer';
-import { WIDGET_REF, TEMPLATE_SNAPSHOTS } from './constants';
-import { store } from '../redux/store';
-import { html, TemplateResult } from 'lit-element';
+/**
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @fileoverview A set of generic helper methods.
+ */
+
 import '@polymer/paper-toast/paper-toast';
-import { EEWidget } from '../redux/types/types';
-import { sharedAttributes } from '../redux/types/attributes';
+
+import {html, TemplateResult} from 'lit-element';
+
+import {AppCreatorStore} from '../redux/reducer';
+import {store} from '../redux/store';
+import {sharedAttributes} from '../redux/types/attributes';
+import {DeviceType, WidgetsRequiringBackground, WidgetType,} from '../redux/types/enums';
+import {EEWidget} from '../redux/types/types';
+
+import {TEMPLATE_SNAPSHOTS, WIDGET_REF} from './constants';
 
 const WIDGET_REF_KEYS = new Set([
   'draggingElement',
@@ -77,10 +95,7 @@ export const chips = [
 ];
 
 export function createToastMessage(
-  id: string,
-  message: string,
-  duration?: number
-): TemplateResult {
+    id: string, message: string, duration?: number): TemplateResult {
   return html`<paper-toast
     id=${id}
     text=${message}
@@ -93,23 +108,22 @@ export function createToastMessage(
  */
 export function generateRandomId() {
   return [...Array(32)]
-    .map((_) => (~~(Math.random() * 36)).toString(36))
-    .join('');
+      .map((_) => (~~(Math.random() * 36)).toString(36))
+      .join('');
 }
 
 /**
  * Returns a deep clone of template without widgetRefs.
  */
 export function deepCloneTemplate(
-  template: AppCreatorStore['template'],
-  skipRefs: boolean = true
-): AppCreatorStore['template'] {
+    template: AppCreatorStore['template'],
+    skipRefs: boolean = true): AppCreatorStore['template'] {
   const clone: AppCreatorStore['template'] = {};
   for (const key in template) {
     /**
-     * Widget refs are only needed in the context of the app creator. Once we serialize the data,
-     * we no longer need to keep the refs. As a result, we skip over them when we are producing the
-     * output string.
+     * Widget refs are only needed in the context of the app creator. Once we
+     * serialize the data, we no longer need to keep the refs. As a result, we
+     * skip over them when we are producing the output string.
      */
     if (skipRefs && WIDGET_REF_KEYS.has(key)) {
       continue;
@@ -133,7 +147,8 @@ export function deepCloneTemplate(
 export function storeSnapshotInLocalStorage(timestamp: number) {
   try {
     /**
-     * Saving current store snapshot as a string in localStorage so we can transfer data across.
+     * Saving current store snapshot as a string in localStorage so we can
+     * transfer data across.
      */
     const storeSnapshot = JSON.stringify(deepCloneTemplate(store.getState()));
 
@@ -145,9 +160,10 @@ export function storeSnapshotInLocalStorage(timestamp: number) {
      */
     const templateSnapshots = localStorage.getItem(TEMPLATE_SNAPSHOTS);
 
-    let templates: { [timestamp: string]: string } = {};
+    let templates: {[timestamp: string]: string} = {};
     if (templateSnapshots) {
-      // If templateSnapshots exist, we want to retrieve it and convert it into an object.
+      // If templateSnapshots exist, we want to retrieve it and convert it into
+      // an object.
       templates = JSON.parse(templateSnapshots);
     }
 
@@ -169,7 +185,7 @@ export function setUrlParam(key: string, value: string): URL {
   url.searchParams.set(key, value);
 
   if (window.history.replaceState) {
-    //prevents browser from storing history with each change:
+    // prevents browser from storing history with each change:
     window.history.replaceState(null, '', url.href);
   }
 
@@ -177,21 +193,17 @@ export function setUrlParam(key: string, value: string): URL {
 }
 
 export function addBackgroundColorToSharedWidget(element: HTMLElement) {
-  const elementStyle: { [key: string]: string } = Object.assign(
-    {},
-    store.getState().template.widgets[element.id].style
-  );
+  const elementStyle: {[key: string]: string} =
+      Object.assign({}, store.getState().template.widgets[element.id].style);
 
   const type = getWidgetType(element.id);
-  if (
-    elementStyle.color === '#ffffff' &&
-    elementStyle.backgroundColor.length === 9 &&
-    elementStyle.backgroundColor.endsWith('00') &&
-    Object.values(WidgetsRequiringBackground).includes(type)
-  ) {
+  if (elementStyle.color === '#ffffff' &&
+      elementStyle.backgroundColor.length === 9 &&
+      elementStyle.backgroundColor.endsWith('00') &&
+      Object.values(WidgetsRequiringBackground).includes(type)) {
     const paletteBackground = store.getState().selectedPalette.backgroundColor;
     elementStyle.backgroundColor =
-      paletteBackground === '#ffffff' ? '#000000' : paletteBackground;
+        paletteBackground === '#ffffff' ? '#000000' : paletteBackground;
     elementStyle.borderRadius = '8px';
     elementStyle.padding = '8px';
     (element as EEWidget).setStyle(elementStyle);
@@ -199,13 +211,12 @@ export function addBackgroundColorToSharedWidget(element: HTMLElement) {
 }
 
 /**
- * Removes background color from an element. Used when adding elements to the scratch panel.
+ * Removes background color from an element. Used when adding elements to the
+ * scratch panel.
  */
 export function removeBackgroundColorFromSharedWidget(element: HTMLElement) {
-  const elementStyle: { [key: string]: string } = Object.assign(
-    {},
-    store.getState().template.widgets[element.id].style
-  );
+  const elementStyle: {[key: string]: string} =
+      Object.assign({}, store.getState().template.widgets[element.id].style);
 
   elementStyle.borderRadius = elementStyle.borderRadius ?? '4px';
   elementStyle.padding = elementStyle.padding ?? sharedAttributes.padding.value;

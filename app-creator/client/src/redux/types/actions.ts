@@ -1,8 +1,26 @@
 /**
- *  @fileoverview This file contains the type interfaces for each action in our store.
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @fileoverview This file contains the type interfaces for each action in our
+ * store.
  */
-import { EventType, AttributeType, Tab, PaletteNames } from './enums';
-import { AppCreatorStore } from '../reducer';
+
+import {AppCreatorStore} from '../reducer';
+
+import {AttributeType, EventType, PaletteNames, Tab} from './enums';
 
 export const SET_DRAGGING_WIDGET = 'SET_DRAGGING_WIDGET';
 export const SET_EDITING_WIDGET = 'SET_EDITING_WIDGET';
@@ -24,65 +42,44 @@ export const UPDATE_WIDGET_SHARED_STATUS = 'UPDATE_WIDGET_SHARED_STATUS';
 
 export interface UpdateWidgetChildren {
   type: typeof UPDATE_WIDGET_CHILDREN;
-  payload: {
-    id: string;
-    childrenIDs: string[];
-  };
+  payload: {id: string; childrenIDs: string[];};
 }
 
 export interface UpdateWidgetSharedStatus {
   type: typeof UPDATE_WIDGET_SHARED_STATUS;
-  payload: {
-    id: string;
-    isShared: boolean;
-  };
+  payload: {id: string; isShared: boolean;};
 }
 
 export interface RemoveWidget {
   type: typeof REMOVE_WIDGET;
-  payload: {
-    id: string;
-    reordering: boolean;
-  };
+  payload: {id: string; reordering: boolean;};
 }
 
 export interface SetSelectedTemplateIDAction {
   type: typeof SET_SELECTED_TEMPLATE_ID;
-  payload: {
-    id: string;
-  };
+  payload: {id: string;};
 }
 
 export interface SetEventType {
   type: typeof SET_EVENT_TYPE;
-  payload: {
-    eventType: EventType;
-    value: boolean;
-  };
+  payload: {eventType: EventType; value: boolean;};
 }
 
 export interface SetPalette {
   type: typeof SET_PALETTE;
-  payload: {
-    palette: PaletteNames;
-  };
+  payload: {palette: PaletteNames;};
 }
 
 export interface SetSelectedTemplate {
   type: typeof SET_SELECTED_TEMPLATE;
-  payload: {
-    template: AppCreatorStore['template'];
-  };
+  payload: {template: AppCreatorStore['template'];};
 }
 
 export interface AddWidgetMetaData {
   type: typeof ADD_WIDGET_META_DATA;
   payload: {
     [id: string]: {
-      id: string;
-      shared: boolean;
-      widgetRef: HTMLElement;
-      children: string[];
+      id: string; shared: boolean; widgetRef: HTMLElement; children: string[];
       uniqueAttributes: {};
       style: {};
     };
@@ -91,87 +88,58 @@ export interface AddWidgetMetaData {
 
 export interface UpdateWidgetIDs {
   type: typeof UPDATE_WIDGET_IDS;
-  payload: {
-    updatedIDs: AppCreatorStore['widgetIDs'];
-  };
+  payload: {updatedIDs: AppCreatorStore['widgetIDs'];};
 }
 
 export interface UpdateWidgetMetaData {
   type: typeof UPDATE_WIDGET_META_DATA;
   payload: {
-    attributeName: string;
-    value: string;
-    id: string;
+    attributeName: string; value: string; id: string;
     attributeType: AttributeType;
   };
 }
 
 export interface SetDraggingWidgetAction {
   type: typeof SET_DRAGGING_WIDGET;
-  payload: {
-    draggingElement: Element | null;
-  };
+  payload: {draggingElement: Element|null;};
 }
 
 export interface SetEditingWidgetAction {
   type: typeof SET_EDITING_WIDGET;
   payload: {
-    editingElement: Element | null;
-    eventType: EventType;
+    editingElement: Element|null; eventType: EventType;
     openAttributesTab: boolean;
   };
 }
 
 export interface SetSelectedTabAction {
   type: typeof SET_SELECTED_TAB;
-  payload: {
-    selectedTab: Tab;
-  };
+  payload: {selectedTab: Tab;};
 }
 
 export interface ResetDraggingValuesAction {
   type: typeof RESET_DRAGGING_VALUES;
-  payload: {
-    draggingElement: null;
-    eventType: EventType;
-  };
+  payload: {draggingElement: null; eventType: EventType;};
 }
 
 export interface SetIsElementAddedAction {
   type: typeof SET_ELEMENT_ADDED;
-  payload: {
-    value: boolean;
-  };
+  payload: {value: boolean;};
 }
 
 export interface IncrementWidgetAction {
   type: typeof INCREMENT_WIDGET_ID;
-  payload: {
-    id: string;
-  };
+  payload: {id: string;};
 }
 
 export interface SetIsReorderingAction {
   type: typeof SET_REORDERING;
-  payload: {
-    value: boolean;
-  };
+  payload: {value: boolean;};
 }
 
 export type AppCreatorAction =
-  | SetDraggingWidgetAction
-  | SetEditingWidgetAction
-  | SetIsElementAddedAction
-  | SetSelectedTabAction
-  | SetIsReorderingAction
-  | SetSelectedTemplate
-  | SetSelectedTemplateIDAction
-  | SetPalette
-  | SetEventType
-  | AddWidgetMetaData
-  | ResetDraggingValuesAction
-  | RemoveWidget
-  | IncrementWidgetAction
-  | UpdateWidgetMetaData
-  | UpdateWidgetChildren
-  | UpdateWidgetIDs;
+    |SetDraggingWidgetAction|SetEditingWidgetAction|SetIsElementAddedAction|
+    SetSelectedTabAction|SetIsReorderingAction|SetSelectedTemplate|
+    SetSelectedTemplateIDAction|SetPalette|SetEventType|AddWidgetMetaData|
+    ResetDraggingValuesAction|RemoveWidget|IncrementWidgetAction|
+    UpdateWidgetMetaData|UpdateWidgetChildren|UpdateWidgetIDs;

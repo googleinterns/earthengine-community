@@ -1,8 +1,24 @@
-import { DeviceType } from '../redux/types/enums';
-
 /**
- *  @fileoverview This file acts as a mock database storing our templates.
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @fileoverview This file acts as a mock database storing our templates.
  */
+
+import {DeviceType} from '../redux/types/enums';
+
 export interface TemplateItem {
   id: string;
   name: string;
@@ -12,14 +28,15 @@ export interface TemplateItem {
 }
 
 /**
- * Placeholder database. This data will be stored on Datastore and will be fetched from an API endpoint.
+ * Placeholder database. This data will be stored on Datastore and will be
+ * fetched from an API endpoint.
  */
 export const database: TemplateItem[] = [
   {
     id: 'left-side-panel',
     name: 'Left Side Panel',
     imageUrl:
-      'https://storage.cloud.google.com/ee-app-creator.appspot.com/left-panel.png',
+        'https://storage.cloud.google.com/ee-app-creator.appspot.com/left-panel.png',
     device: DeviceType.DESKTOP,
     template: `{
         "config": {
@@ -91,7 +108,7 @@ export const database: TemplateItem[] = [
     id: 'left-drawer-mobile',
     name: 'Left Drawer Mobile',
     imageUrl:
-      'https://storage.googleapis.com/ee-app-creator.appspot.com/left-drawer-mobile.png',
+        'https://storage.googleapis.com/ee-app-creator.appspot.com/left-drawer-mobile.png',
     device: DeviceType.MOBILE,
     template: `{
         "config": {
@@ -170,7 +187,7 @@ export const database: TemplateItem[] = [
     id: 'right-side-panel',
     name: 'Right Side Panel',
     imageUrl:
-      'https://storage.cloud.google.com/ee-app-creator.appspot.com/right-panel.png',
+        'https://storage.cloud.google.com/ee-app-creator.appspot.com/right-panel.png',
     device: DeviceType.DESKTOP,
     template: `{
         "config": {
@@ -242,7 +259,7 @@ export const database: TemplateItem[] = [
     id: 'map-with-legend',
     name: 'Map With Legend',
     imageUrl:
-      'https://storage.cloud.google.com/ee-app-creator.appspot.com/legend-example.png',
+        'https://storage.cloud.google.com/ee-app-creator.appspot.com/legend-example.png',
     device: DeviceType.DESKTOP,
     template: `{
         "config": {
@@ -320,7 +337,7 @@ export const database: TemplateItem[] = [
     id: 'two-maps',
     name: 'Two Maps',
     imageUrl:
-      'https://storage.cloud.google.com/ee-app-creator.appspot.com/two-map.png',
+        'https://storage.cloud.google.com/ee-app-creator.appspot.com/two-map.png',
     device: DeviceType.DESKTOP,
     template: `{
         "config": {
