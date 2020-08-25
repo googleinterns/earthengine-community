@@ -84,7 +84,7 @@ export class TemplateWizard extends LitElement {
       flex-wrap: wrap;
       align-items: center;
       justify-content: center;
-      margin-top: var(--tight);
+      margin-top: var(--regular);
     }
 
     .selected-paper-chip {
