@@ -19,7 +19,211 @@ var mapStyles = require('users/msibrahim/app-creator:map-styles');
 var sidemenu = require('users/msibrahim/app-creator:sidemenu');
 
 exports.createApp = createApp;
+exports.createResponsiveApp = createResponsiveApp;
+exports.createMultiSelectorApp = createMultiSelectorApp;
 
+/**
+ * Creates a multiSelectorApp instance given an optional object with the following format.
+ * {[key: string]: AppInstance (could be from createApp or responsiveApp)}.
+ */
+function createMultiSelectorApp(apps) {
+  var multiSelectorApp = {};
+
+  multiSelectorApp.apps = apps;
+  multiSelectorApp.selectedApp = null;
+
+  /**
+   * Panel containing entire app including toolbar at the top.
+   */
+
+  multiSelectorApp.appContainer = createAppContainer();
+
+  function createAppContainer() {
+    return ui.Panel({
+      style: {
+        height: '100%',
+        width: '100%',
+      },
+    });
+  }
+
+  /**
+   * Panel containing currently rendered app.
+   */
+  multiSelectorApp.appBody = createAppBody();
+
+  function createAppBody() {
+    return ui.Panel({
+      style: {
+        height: 'calc(100% - 45px)',
+        width: '100%',
+      },
+    });
+  }
+
+  /**
+   * Creates a ui.Selector element using the keys from the apps object.
+   */
+  function createSelector() {
+    return ui.Select({
+      items: Object.keys(multiSelectorApp.apps),
+      value: multiSelectorApp.selectedApp,
+      onChange: function (value) {
+        /**
+         * We set the active state of the app to be switched out to false to avoid rendering on window resize.
+         * We use this property to conditionaly call the onResize handler on the responsive app instance.
+         */
+        multiSelectorApp.apps[multiSelectorApp.selectedApp].active = false;
+        multiSelectorApp.selectedApp = value;
+        multiSelectorApp.draw();
+      },
+    });
+  }
+
+  /**
+   * Create a panel with height 1px that acts as a bottom border for the toolbar.
+   */
+  function createBottomBorder() {
+    return ui.Panel({
+      style: {
+        height: '1px',
+        backgroundColor: multiSelectorApp.apps[
+          multiSelectorApp.selectedApp
+        ].root
+          .style()
+          .get('color'),
+      },
+    });
+  }
+
+  /**
+   * Top bar containing select element for template switching.
+   */
+  function createToolbar() {
+    return ui.Panel({
+      widgets: [makeSpacer('horizontal'), createSelector()],
+      layout: ui.Panel.Layout.flow('horizontal'),
+      style: {
+        width: '100%',
+        height: '45px',
+        backgroundColor: multiSelectorApp.apps[
+          multiSelectorApp.selectedApp
+        ].root
+          .style()
+          .get('backgroundColor'),
+      },
+    });
+  }
+
+  /**
+   * Adds a new entry to the apps object with the name as the key and value as the app instance passed to the argument.
+   */
+  multiSelectorApp.set = function (name, app) {
+    if (!name || !app) {
+      return;
+    }
+
+    // If we have not initialized the apps object yet, we do so and add the new template.
+    if (!multiSelectorApp.apps) {
+      multiSelectorApp.apps = {};
+      multiSelectorApp.apps[name] = app;
+      return;
+    }
+
+    // If the object already exists, we set a new entry on it.
+    multiSelectorApp.apps[name] = app;
+  };
+
+  /*
+   * Render app to screen.
+   */
+  multiSelectorApp.draw = function () {
+    if (!multiSelectorApp.apps) {
+      return;
+    }
+
+    var appNames = Object.keys(multiSelectorApp.apps);
+    if (appNames.length === 0) {
+      return;
+    } else if (appNames.length === 1) {
+      // If there is only one app instance set, we render it just like a normal createApp instance (i.e. Without the toolbar).
+      multiSelectorApp.selectedApp = appNames[0];
+      multiSelectorApp.apps[appNames[0]].draw();
+    } else {
+      // Set the currently selectedApp to the first app in our object by default.
+      if (!multiSelectorApp.selectedApp) {
+        multiSelectorApp.selectedApp = appNames[0];
+      }
+
+      /**
+       * In the case that we have at least two apps in our multiSelectorApp instance, we draw the currently selected app
+       * passing in the app body as a render root. This allows child apps to draw on the app body rather
+       * than on ui.root. This is needed because we want to keep the Toolbar displayed and just swap the
+       * apps instead.
+       */
+      multiSelectorApp.apps[multiSelectorApp.selectedApp].draw(
+        multiSelectorApp.appBody
+      );
+      multiSelectorApp.appContainer
+        .widgets()
+        .reset([
+          createToolbar(),
+          createBottomBorder(),
+          multiSelectorApp.appBody,
+        ]);
+
+      ui.root.widgets().reset([multiSelectorApp.appContainer]);
+    }
+  };
+
+  return multiSelectorApp;
+}
+
+/**
+ * Creates a reponsive app instance given desktop and mobile apps.
+ */
+function createResponsiveApp(apps) {
+  var responsiveApp = {};
+
+  responsiveApp.desktop = apps.desktop;
+  responsiveApp.mobile = apps.mobile;
+
+  responsiveApp.root = apps.desktop.root;
+
+  /**
+   * Callback triggered on window resize to conditionally render mobile and desktop templates.
+   */
+  responsiveApp.resizeHandler = function (deviceInfo) {
+    /**
+     * We use the active property to know if this app is currently rendered.
+     * If it is not, we don't execute the onResize logic.
+     */
+    if (responsiveApp.active) {
+      if (!deviceInfo.is_desktop || deviceInfo.width < 900) {
+        responsiveApp.root = responsiveApp.mobile.root;
+        responsiveApp.mobile.draw(responsiveApp.renderRoot);
+      } else {
+        responsiveApp.root = responsiveApp.desktop.root;
+        responsiveApp.desktop.draw(responsiveApp.renderRoot);
+      }
+    }
+  };
+
+  /**
+   * Render responsive app to the screen.
+   */
+  responsiveApp.draw = function (container) {
+    responsiveApp.active = true;
+    responsiveApp.renderRoot = container;
+    ui.root.onResize(responsiveApp.resizeHandler);
+  };
+
+  return responsiveApp;
+}
+
+/**
+ * Creates a single app instance given a template string.
+ */
 function createApp(template) {
   /**
    * The namespace for the application. All the state is kept in here.
@@ -27,24 +231,11 @@ function createApp(template) {
   var app = {};
 
   /**
-   * Allow users to further customize the generated widgets by providing a
-   * reference to each element created. Type: {[key: WidgetID]: {node: EEWidget,
-   * map?: ui.Map}}, for map widgets, we wrap them with a panel widget and
-   * return both elements.
+   * Allow users to further customize the generated widgets by providing a reference to each element created.
+   * Type: {[key: WidgetID]: {node: EEWidget, map?: ui.Map}}, for map widgets, we wrap them with a panel widget and return
+   * both elements.
    */
   app.widgetInterface = ui.data.ActiveDictionary();
-
-  /**
-   * Object containing template variations (i.e. mobile, dark, english).
-   */
-  app.templates = {};
-
-  /**
-   * Adds new template variation.
-   */
-  app.addTemplate = function(device, theme, language, template) {
-    app.templates[device][theme][language] = app.deserializeUI(template);
-  };
 
   /**
    * Returns reference to the widget interface.
@@ -286,7 +477,7 @@ function createApp(template) {
 
     var button = ui.Button({
       label: uniqueAttributes.label,
-      disabled: uniqueAttributes.disabled,
+      disabled: uniqueAttributes.disabled === 'true',
       style: style,
     });
 
@@ -327,8 +518,7 @@ function createApp(template) {
    */
   app.createSidemenuElement = function(obj, style) {
     // Sidemenu is an object with the properties: sidePanel and contentPanel.
-    var mobileMenu = sidemenu.createSidemenu(style);
-    return mobileMenu.init();
+    return sidemenu.createSidemenu(style);
   };
 
   /**
@@ -457,17 +647,35 @@ function createApp(template) {
    */
   app.init = function(template) {
     app.root = app.deserializeUI(template);
-    app.templates.default = app.root;
   };
 
   /**
    * Draw UI to the screen by adding the root to ui.Root.
    */
-  app.draw = function() {
-    ui.root.widgets().reset([app.root]);
+  app.draw = function (container) {
+    if (!container) {
+      ui.root.widgets().reset([app.root]);
+      return;
+    }
+
+    container.widgets().reset([app.root]);
   };
 
   app.init(template);
 
   return app;
+}
+
+/**
+ * Creates a spacer for the given direction ('horizontal', 'vertical').
+ */
+function makeSpacer(direction) {
+  return ui.Label({
+    value: ' ',
+    style: {
+      margin: 0,
+      padding: 0,
+      stretch: direction,
+    },
+  });
 }

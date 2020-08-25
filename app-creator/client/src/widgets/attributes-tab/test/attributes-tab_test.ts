@@ -16,10 +16,10 @@
  *
  * @fileoverview This file tests the attributes-tab widget.
  */
-
-import {assert, expect, fixture, html} from '@open-wc/testing';
-
-import {AttributesTab} from '../attributes-tab';
+import { AttributesTab } from '../attributes-tab';
+import { fixture, html, expect, assert } from '@open-wc/testing';
+import { DEFAULT_STYLES } from '../../../redux/helpers';
+import { SharedAttributes } from '../../../redux/types/attributes';
 
 suite('attributes-tab', () => {
   test('is defined', () => {
@@ -40,5 +40,40 @@ suite('attributes-tab', () => {
   test('renders correct tag', async () => {
     const el = await fixture(html`<attributes-tab></attributes-tab>`);
     expect(el.tagName).to.equal('ATTRIBUTES-TAB');
+  });
+
+  test('disabled styles are not part of style attributes', async () => {
+    const attributesTab = new AttributesTab();
+    const styles: { [key in SharedAttributes]: string } = Object.assign(
+      {},
+      DEFAULT_STYLES
+    );
+
+    const disabledStyles = new Set<SharedAttributes>([
+      'backgroundColor',
+      'fontSize',
+      'fontFamily',
+      'fontWeight',
+    ]);
+
+    const filteredStyles = attributesTab.filterDisabledStyles(
+      styles,
+      disabledStyles
+    );
+
+    expect(filteredStyles).deep.equal({
+      height: 'px',
+      width: 'px',
+      padding: '0px',
+      margin: '8px',
+      borderWidth: '0px',
+      borderStyle: 'solid',
+      borderColor: '#000000',
+      color: '#000000',
+      backgroundOpacity: '0',
+      textAlign: 'left',
+      whiteSpace: 'normal',
+      shown: 'true',
+    });
   });
 });

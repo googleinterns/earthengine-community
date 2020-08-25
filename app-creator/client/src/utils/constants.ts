@@ -43,6 +43,11 @@ export const TEMPLATE_SNAPSHOTS = 'template_snapshots';
 export const SCRATCH_PANEL = 'scratch-panel';
 
 /**
+ * Version of the application.
+ */
+export const VERSION = '0.0.0';
+
+/**
  * List of default map styles.
  */
 export const MAP_STYLES = [

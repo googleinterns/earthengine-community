@@ -19,20 +19,24 @@
  */
 
 import {} from 'googlemaps';
-import {css, customElement, html, LitElement} from 'lit-element';
-
-import {aubergine} from '../../map-styles/aubergine';
-import {dark} from '../../map-styles/dark';
-import {night} from '../../map-styles/night';
-import {retro} from '../../map-styles/retro';
-import {silver} from '../../map-styles/silver';
-import {standard} from '../../map-styles/standard';
-import {setEditingWidget, setSelectedTab} from '../../redux/actions';
-import {store} from '../../redux/store';
-import {AttributeMetaData, DefaultAttributesType, getDefaultAttributes,} from '../../redux/types/attributes';
-import {InputType, Tab} from '../../redux/types/enums';
-import {MAP_STYLES} from '../../utils/constants';
-import {DraggableWidget} from '../draggable-widget/draggable-widget';
+import { customElement, html, LitElement, css } from 'lit-element';
+import { InputType, Tab } from '../../redux/types/enums';
+import {
+  AttributeMetaData,
+  DefaultAttributesType,
+  getDefaultAttributes,
+  SharedAttributes,
+} from '../../redux/types/attributes';
+import { store } from '../../redux/store';
+import { setEditingWidget, setSelectedTab } from '../../redux/actions';
+import { aubergine } from '../../map-styles/aubergine';
+import { standard } from '../../map-styles/standard';
+import { silver } from '../../map-styles/silver';
+import { retro } from '../../map-styles/retro';
+import { night } from '../../map-styles/night';
+import { dark } from '../../map-styles/dark';
+import { DraggableWidget } from '../draggable-widget/draggable-widget';
+import { MAP_STYLES } from '../../utils/constants';
 
 declare global {
   interface Window {
@@ -149,8 +153,25 @@ export class Map extends LitElement {
     },
   };
 
-  static DEFAULT_MAP_ATTRIBUTES: DefaultAttributesType =
-      getDefaultAttributes(Map.attributes);
+  static disabledStyles: Set<SharedAttributes> = new Set([
+    'height',
+    'width',
+    'padding',
+    'margin',
+    'color',
+    'backgroundColor',
+    'backgroundOpacity',
+    'fontSize',
+    'fontWeight',
+    'fontFamily',
+    'textAlign',
+    'whiteSpace',
+    'shown',
+  ]);
+
+  static DEFAULT_MAP_ATTRIBUTES: DefaultAttributesType = getDefaultAttributes(
+    Map.attributes
+  );
 
   /**
    * Map api key.

@@ -20,7 +20,6 @@
 
 import '@polymer/paper-progress/paper-progress.js';
 import '@polymer/paper-toast/paper-toast.js';
-import '@cwmr/paper-chip/paper-chip.js';
 import './tool-bar/tool-bar';
 import './actions-panel/actions-panel';
 import './tab-container/tab-container';

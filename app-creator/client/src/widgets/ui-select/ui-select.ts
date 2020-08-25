@@ -21,12 +21,16 @@
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu';
 import '@polymer/paper-item/paper-item';
 import '@polymer/paper-listbox/paper-listbox';
-
-import {css, customElement, html, LitElement, property} from 'lit-element';
-import {styleMap} from 'lit-html/directives/style-map';
-
-import {AttributeMetaData, DEFAULT_SHARED_ATTRIBUTES, DefaultAttributesType, getDefaultAttributes,} from '../../redux/types/attributes';
-import {InputType} from '../../redux/types/enums';
+import { css, customElement, html, LitElement, property } from 'lit-element';
+import {
+  DEFAULT_SHARED_ATTRIBUTES,
+  AttributeMetaData,
+  DefaultAttributesType,
+  getDefaultAttributes,
+  SharedAttributes,
+} from '../../redux/types/attributes';
+import { styleMap } from 'lit-html/directives/style-map';
+import { InputType } from '../../redux/types/enums';
 
 @customElement('ui-select')
 export class Select extends LitElement {
@@ -48,11 +52,6 @@ export class Select extends LitElement {
       placeholder: 'Enter placeholder',
       type: InputType.TEXT,
     },
-    value: {
-      value: 'Item 1',
-      placeholder: 'Enter value',
-      type: InputType.TEXT,
-    },
     disabled: {
       value: 'false',
       type: InputType.SELECT,
@@ -60,8 +59,18 @@ export class Select extends LitElement {
     },
   };
 
-  static DEFAULT_SELECT_ATTRIBUTES: DefaultAttributesType =
-      getDefaultAttributes(Select.attributes);
+  static disabledStyles: Set<SharedAttributes> = new Set([
+    'color',
+    'fontSize',
+    'fontWeight',
+    'textAlign',
+    'whiteSpace',
+    'shown',
+  ]);
+
+  static DEFAULT_SELECT_ATTRIBUTES: DefaultAttributesType = getDefaultAttributes(
+    Select.attributes
+  );
 
   /**
    * Additional custom styles.
@@ -98,10 +107,10 @@ export class Select extends LitElement {
     const {styles} = this;
     return html`
       <paper-dropdown-menu
+        style=${styleMap(styles)}
         label="${this.placeholder}"
         ?disabled=${this.disabled}
         @value-changed=${this.handleSelectionChange}
-        style=${styleMap(styles)}
       >
         <paper-listbox
           slot="dropdown-content"

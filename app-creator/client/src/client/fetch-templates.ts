@@ -73,7 +73,7 @@ export const database: TemplateItem[] = [
                 },
                 "style": {
                     "height": "100%",
-                    "width": "40%",
+                    "width": "30%",
                     "margin": "0px",
                     "borderColor": "#e28b59",
                     "boxSizing": "border-box"
@@ -96,7 +96,7 @@ export const database: TemplateItem[] = [
                 },
                 "style": {
                     "height": "100%",
-                    "width": "60%",
+                    "width": "auto",
                     "margin": "0px",
                     "boxSizing": "border-box"
                 }
@@ -223,7 +223,7 @@ export const database: TemplateItem[] = [
                 },
                 "style": {
                     "height": "100%",
-                    "width": "40%",
+                    "width": "30%",
                     "margin": "0px",
                     "boxSizing": "border-box"
                 }
@@ -245,7 +245,7 @@ export const database: TemplateItem[] = [
                 },
                 "style": {
                     "height": "100%",
-                    "width": "60%",
+                    "width": "auto",
                     "margin": "0px",
                     "backgroundColor": "#FFFFFFFF",
                     "backgroundOpacity": "100",
@@ -256,18 +256,18 @@ export const database: TemplateItem[] = [
     }`,
   },
   {
-    id: 'map-with-legend',
-    name: 'Map With Legend',
+    id: 'left-side-legend',
+    name: 'Left Side Legend',
     imageUrl:
         'https://storage.cloud.google.com/ee-app-creator.appspot.com/legend-example.png',
     device: DeviceType.DESKTOP,
     template: `{
         "config": {
-            "parentID": "map-with-legend",
-            "parentName": "Map with legend",
-            "id": "map-with-legend-desktop",
+            "parentID": "left-side-legend",
+            "parentName": "Left Side Legend",
+            "id": "left-side-legend-desktop",
             "device": "desktop",
-            "name": "Map with legend Desktop"
+            "name": "Left Side Legend Desktop"
         },
         "widgets": {
             "panel-template-0": {
@@ -305,6 +305,84 @@ export const database: TemplateItem[] = [
                     "position": "absolute",
                     "bottom": "32px",
                     "left": "16px",
+                    "boxSizing": "border-box"
+                }
+            },
+            "map-template-0": {
+                "id": "map-template-0",
+                "children": ["panel-template-1"],
+                "uniqueAttributes": {
+                    "zoom": "4",
+                    "latitude": "37.419857",
+                    "longitude": "-122.078827",
+                    "zoomControl": "false",
+                    "fullscreenControl": "false",
+                    "scaleControl": "false",
+                    "streetViewControl": "false",
+                    "mapTypeControl": "false",
+                    "mapStyles": "aubergine",
+                    "customMapStyles": ""
+                },
+                "style": {
+                    "height": "100%",
+                    "width": "100%",
+                    "margin": "0px",
+                    "boxSizing": "border-box"
+                }
+            }
+        }
+    }`,
+  },
+  {
+    id: 'right-side-legend',
+    name: 'Right Side Legend',
+    imageUrl:
+      'https://storage.googleapis.com/ee-app-creator.appspot.com/map-with-legend-right-side.png',
+    device: DeviceType.DESKTOP,
+    template: `{
+        "config": {
+            "parentID": "right-side-legend",
+            "parentName": "Right Side Legend",
+            "id": "right-side-legend-desktop",
+            "device": "desktop",
+            "name": "Right Side Legend desktop"
+        },
+        "widgets": {
+            "panel-template-0": {
+                "id": "panel-template-0",
+                "editable": false,
+                "hasDropzone": false,
+                "children": ["map-template-0"],
+                "uniqueAttributes": {
+                    "layout": "column"
+                },
+                "style": {
+                    "height": "100%",
+                    "width": "100%",
+                    "margin": "0px",
+                    "position": "relative",
+                    "boxSizing": "border-box"
+                }
+            },
+            "panel-template-1": {
+                "id": "panel-template-1",
+                "editable": true,
+                "hasDropzone": true,
+                "children": [],
+                "uniqueAttributes": {
+                    "layout": "column"
+                },
+                "style": {
+                    "height": "35%",
+                    "width": "400px",
+                    "margin": "0px",
+                    "backgroundColor": "#0e1626CC",
+                    "backgroundOpacity": "80",
+                    "borderStyle": "solid",
+                    "borderColor": "#85b7b0",
+                    "position": "absolute",
+                    "bottom": "32px",
+                    "right": "16px",
                     "boxSizing": "border-box"
                 }
             },
@@ -455,6 +533,263 @@ export const database: TemplateItem[] = [
                     "backgroundColor": "#FFFFFFFF",
                     "backgroundOpacity": "100",
                     "boxSizing": "border-box"
+                }
+            }
+        }
+           
+    }`,
+  },
+  {
+    id: 'four-maps',
+    name: 'Four Maps',
+    imageUrl:
+      'https://storage.cloud.google.com/ee-app-creator.appspot.com/four-maps.png',
+    device: DeviceType.DESKTOP,
+    template: `{
+        "config": {
+            "parentID": "four-maps",
+            "parentName": "Four Maps",
+            "id": "four-maps-desktop",
+            "name": "Four Maps Desktop",
+            "device": "desktop"
+        },
+        "widgets": {
+            "panel-template-0": {
+                "id": "panel-template-0",
+                "editable": false,
+                "hasDropzone": false,
+                "children": ["panel-template-1", "panel-template-2"],
+                "uniqueAttributes": {
+                    "layout": "column"
+                },
+                "style": {
+                    "height": "100%",
+                    "width": "100%",
+                    "margin": "0px",
+                    "position": "relative",
+                    "boxSizing": "border-box"
+                }
+            },
+            "panel-template-1": {
+                "id": "panel-template-1",
+                "editable": true,
+                "hasDropzone": true,
+                "children": [],
+                "uniqueAttributes": {
+                    "layout": "column"
+                },
+                "style": {
+                    "height": "60px",
+                    "width": "100%",
+                    "margin": "0px",
+                    "padding": "8px",
+                    "position": "relative",
+                    "boxSizing": "border-box"
+                }
+            },
+            "panel-template-2": {
+                "id": "panel-template-2",
+                "editable": false,
+                "hasDropzone": false,
+                "children": ["panel-template-3", "panel-template-4"],
+                "uniqueAttributes": {
+                    "layout": "column"
+                },
+                "style": {
+                    "height": "calc(100% - 60px)",
+                    "width": "100%",
+                    "margin": "0px",
+                    "boxSizing": "border-box"
+                }
+            },
+            "panel-template-3": {
+                "id": "panel-template-3",
+                "editable": false,
+                "hasDropzone": false,
+                "children": ["map-template-0", "map-template-1"],
+                "uniqueAttributes": {
+                    "layout": "row"
+                },
+                "style": {
+                    "height": "50%",
+                    "width": "100%",
+                    "margin": "0px",
+                    "boxSizing": "border-box"
+                }
+            },
+            "map-template-0": {
+                "id": "map-template-0",
+                "children": ["panel-template-5"],
+                "uniqueAttributes": {
+                    "zoom": "10",
+                    "latitude": "37.419857",
+                    "longitude": "-122.078827",
+                    "zoomControl": "false",
+                    "fullscreenControl": "false",
+                    "scaleControl": "false",
+                    "streetViewControl": "false",
+                    "mapTypeControl": "false",
+                    "mapStyles": "standard",
+                    "customMapStyles": ""
+                }, "style": {
+                    "height": "100%",
+                    "width": "50%",
+                    "margin": "0px",
+                    "boxSizing": "border-box"
+                }
+            },
+            "map-template-1": {
+                "id": "map-template-1",
+                "children": ["panel-template-6"],
+                "uniqueAttributes": {
+                    "zoom": "10",
+                    "latitude": "37.419857",
+                    "longitude": "-122.078827",
+                    "zoomControl": "false",
+                    "fullscreenControl": "false",
+                    "scaleControl": "false",
+                    "streetViewControl": "false",
+                    "mapTypeControl": "false",
+                    "mapStyles": "retro",
+                    "customMapStyles": ""
+                }, "style": {
+                    "height": "100%",
+                    "width": "50%",
+                    "margin": "0px",
+                    "boxSizing": "border-box"
+                }
+            },
+            "panel-template-4": {
+                "id": "panel-template-4",
+                "editable": false,
+                "hasDropzone": false,
+                "children": ["map-template-2", "map-template-3"],
+                "uniqueAttributes": {
+                    "layout": "row"
+                },
+                "style": {
+                    "height": "50%",
+                    "width": "100%",
+                    "margin": "0px",
+                    "boxSizing": "border-box"
+                }
+            },
+            "map-template-2": {
+                "id": "map-template-2",
+                "children": ["panel-template-7"],
+                "uniqueAttributes": {
+                    "zoom": "10",
+                    "latitude": "37.419857",
+                    "longitude": "-122.078827",
+                    "zoomControl": "false",
+                    "fullscreenControl": "false",
+                    "scaleControl": "false",
+                    "streetViewControl": "false",
+                    "mapTypeControl": "false",
+                    "mapStyles": "aubergine",
+                    "customMapStyles": ""
+                }, "style": {
+                    "height": "100%",
+                    "width": "50%",
+                    "margin": "0px",
+                    "boxSizing": "border-box"
+                }
+            },
+            "map-template-3": {
+                "id": "map-template-3",
+                "children": ["panel-template-8"],
+                "uniqueAttributes": {
+                    "zoom": "10",
+                    "latitude": "37.419857",
+                    "longitude": "-122.078827",
+                    "zoomControl": "false",
+                    "fullscreenControl": "false",
+                    "scaleControl": "false",
+                    "streetViewControl": "false",
+                    "mapTypeControl": "false",
+                    "mapStyles": "dark",
+                    "customMapStyles": ""
+                }, "style": {
+                    "height": "100%",
+                    "width": "50%",
+                    "margin": "0px",
+                    "boxSizing": "border-box"
+                }
+            },
+            "panel-template-5": {
+                "id": "panel-template-5",
+                "editable": true,
+                "hasDropzone": true,
+                "children": [],
+                "uniqueAttributes": {
+                    "layout": "column"
+                },
+                "style": {
+                    "height": "150px",
+                    "width": "300px",
+                    "margin": "0px",
+                    "position": "absolute",
+                    "top": "16px",
+                    "left": "16px",
+                    "boxSizing": "border-box",
+                    "zIndex": "1"
+                }
+            },
+            "panel-template-6": {
+                "id": "panel-template-6",
+                "editable": true,
+                "hasDropzone": true,
+                "children": [],
+                "uniqueAttributes": {
+                    "layout": "column"
+                },
+                "style": {
+                    "height": "150px",
+                    "width": "300px",
+                    "margin": "0px",
+                    "position": "absolute",
+                    "top": "16px",
+                    "right": "16px",
+                    "boxSizing": "border-box",
+                    "zIndex": "1"
+                }
+            },
+            "panel-template-7": {
+                "id": "panel-template-7",
+                "editable": true,
+                "hasDropzone": true,
+                "children": [],
+                "uniqueAttributes": {
+                    "layout": "column"
+                },
+                "style": {
+                    "height": "150px",
+                    "width": "300px",
+                    "margin": "0px",
+                    "position": "absolute",
+                    "bottom": "16px",
+                    "left": "16px",
+                    "boxSizing": "border-box",
+                    "zIndex": "1"
+                }
+            },
+            "panel-template-8": {
+                "id": "panel-template-8",
+                "editable": true,
+                "hasDropzone": true,
+                "children": [],
+                "uniqueAttributes": {
+                    "layout": "column"
+                },
+                "style": {
+                    "height": "150px",
+                    "width": "300px",
+                    "margin": "0px",
+                    "position": "absolute",
+                    "bottom": "16px",
+                    "right": "16px",
+                    "boxSizing": "border-box",
+                    "zIndex": "1"
                 }
             }
         }

@@ -17,17 +17,20 @@
  * @fileoverview A set of generic helper methods.
  */
 
-import '@polymer/paper-toast/paper-toast';
-
-import {html, TemplateResult} from 'lit-element';
-
-import {AppCreatorStore} from '../redux/reducer';
-import {store} from '../redux/store';
-import {sharedAttributes} from '../redux/types/attributes';
-import {DeviceType, WidgetsRequiringBackground, WidgetType,} from '../redux/types/enums';
-import {EEWidget} from '../redux/types/types';
-
 import {TEMPLATE_SNAPSHOTS, WIDGET_REF} from './constants';
+import {
+  DeviceType,
+  WidgetsRequiringBackground,
+  WidgetType,
+} from '../redux/types/enums';
+import { AppCreatorStore } from '../redux/reducer';
+import { WIDGET_REF, TEMPLATE_SNAPSHOTS } from './constants';
+import { store } from '../redux/store';
+import { html, TemplateResult } from 'lit-element';
+import { EEWidget } from '../redux/types/types';
+import { sharedAttributes } from '../redux/types/attributes';
+import json5 from 'json5';
+import '@polymer/paper-toast/paper-toast';
 
 const WIDGET_REF_KEYS = new Set([
   'draggingElement',
@@ -45,17 +48,22 @@ export function camelCaseToTitleCase(text: string) {
 }
 
 /**
+ * Empty set placeholder.
+ */
+export const emptySet = new Set();
+
+/**
  * Returns widget type.
  * id. 'label-0' => 'label'
  */
-export function getWidgetType(id: string): string {
+export function getWidgetType(id: string): WidgetType {
   const index = id.indexOf('-');
 
   if (index === -1) {
-    return id;
+    return id as WidgetType;
   }
 
-  return id.slice(0, index);
+  return id.slice(0, index) as WidgetType;
 }
 
 /**
@@ -94,6 +102,9 @@ export const chips = [
   },
 ];
 
+/**
+ * Creates a toast message element.
+ */
 export function createToastMessage(
     id: string, message: string, duration?: number): TemplateResult {
   return html`<paper-toast
@@ -215,10 +226,99 @@ export function addBackgroundColorToSharedWidget(element: HTMLElement) {
  * scratch panel.
  */
 export function removeBackgroundColorFromSharedWidget(element: HTMLElement) {
-  const elementStyle: {[key: string]: string} =
-      Object.assign({}, store.getState().template.widgets[element.id].style);
+  const type = getWidgetType(element.id);
+  if (!Object.values(WidgetsRequiringBackground).includes(type)) {
+    return;
+  }
+  const elementStyle: { [key: string]: string } = Object.assign(
+    {},
+    store.getState().template.widgets[element.id].style
+  );
 
   elementStyle.borderRadius = elementStyle.borderRadius ?? '4px';
   elementStyle.padding = elementStyle.padding ?? sharedAttributes.padding.value;
   (element as EEWidget).setStyle(elementStyle);
+}
+
+/**
+ * Get sample code snippet for creating an app on the code editor.
+ */
+export function getCodeSnippet(template: string) {
+  return `var AppCreator = require('users/msibrahim/app-creator:app-creator-deserializer');
+
+/**
+ * Create app instance.
+ */
+var app = AppCreator.createApp('${template}');
+
+/**
+ * Draw app to screen. 
+ */
+app.draw();    
+    `;
+}
+
+/**
+ * Normalize template.
+ */
+export function normalizeTemplate(template: AppCreatorStore['template']) {
+  const { widgets } = template;
+  for (const id in widgets) {
+    const type = getWidgetType(id);
+    if (type === WidgetType.SELECT) {
+      const items = widgets[id].uniqueAttributes.items;
+      widgets[
+        id
+      ].uniqueAttributes.items = getArrayStringFromCommaSeparatedValues(items);
+    } else if (type === WidgetType.CHART) {
+      const colors = widgets[id].uniqueAttributes.color;
+      widgets[
+        id
+      ].uniqueAttributes.color = getArrayStringFromCommaSeparatedValues(colors);
+
+      const dataTable = widgets[id].uniqueAttributes.dataTable;
+      widgets[id].uniqueAttributes.dataTable = normalizeDataTable(dataTable);
+    }
+  }
+
+  return template;
+}
+
+/**
+   * Correctly formats dataTable into JSON string.
+   * Example:
+   * {
+    cols: [{id: 'task', label: 'Task', type: 'string'},
+           {id: 'hours', label: 'Hours per Day', type: 'number'}],
+    rows: [{c:[{v: 'Work'}, {v: 11}]},
+           {c:[{v: 'Eat'}, {v: 2}]},
+           {c:[{v: 'Commute'}, {v: 2}]},
+           {c:[{v: 'Watch TV'}, {v:2}]},
+           {c:[{v: 'Sleep'}, {v:7, f:'7.000'}]}]
+    }
+   */
+export function normalizeDataTable(dataTable: string) {
+  try {
+    return JSON.stringify(json5.parse(dataTable)).replace(/\"/g, '\\"');
+  } catch (e) {
+    console.error(e);
+    return '';
+  }
+}
+
+/**
+ * Converts a string of comma separated values to a serialized array.
+ * "Javascript, python" => "["Javascript","Python"]".
+ */
+export function getArrayStringFromCommaSeparatedValues(values: string) {
+  const result = [];
+  const valuesArray = values.split(',');
+  for (const value of valuesArray) {
+    const trimmedValue = value.trim();
+    if (trimmedValue !== '') {
+      result.push(`\\"${trimmedValue}\\"`);
+    }
+  }
+
+  return result.length > 0 ? `[${result.join(',')}]` : '';
 }

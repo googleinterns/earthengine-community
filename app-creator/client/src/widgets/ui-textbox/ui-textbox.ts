@@ -19,12 +19,16 @@
  */
 
 import '@polymer/paper-input/paper-input.js';
-
-import {css, customElement, html, LitElement, property} from 'lit-element';
-import {styleMap} from 'lit-html/directives/style-map';
-
-import {AttributeMetaData, DEFAULT_SHARED_ATTRIBUTES, DefaultAttributesType, getDefaultAttributes,} from '../../redux/types/attributes';
-import {InputType} from '../../redux/types/enums';
+import { css, customElement, html, LitElement, property } from 'lit-element';
+import { styleMap } from 'lit-html/directives/style-map';
+import {
+  DEFAULT_SHARED_ATTRIBUTES,
+  AttributeMetaData,
+  DefaultAttributesType,
+  getDefaultAttributes,
+  SharedAttributes,
+} from '../../redux/types/attributes';
+import { InputType } from '../../redux/types/enums';
 
 @customElement('ui-textbox')
 export class Textbox extends LitElement {
@@ -48,8 +52,17 @@ export class Textbox extends LitElement {
     },
   };
 
-  static DEFAULT_TEXTBOX_ATTRIBUTES: DefaultAttributesType =
-      getDefaultAttributes(Textbox.attributes);
+  static disabledStyles: Set<SharedAttributes> = new Set([
+    'fontSize',
+    'fontFamily',
+    'textAlign',
+    'whiteSpace',
+    'shown',
+  ]);
+
+  static DEFAULT_TEXTBOX_ATTRIBUTES: DefaultAttributesType = getDefaultAttributes(
+    Textbox.attributes
+  );
 
   /**
    * Additional custom styles.

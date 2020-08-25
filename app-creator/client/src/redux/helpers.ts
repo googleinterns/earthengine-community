@@ -18,13 +18,13 @@
  * reducer itself.
  */
 
-import {ROOT_ID, SCRATCH_PANEL} from '../utils/constants';
-import {PalettePicker} from '../widgets/palette-picker/palette-picker';
-
-import {AppCreatorStore, WidgetMetaData} from './reducer';
-import {UpdateWidgetMetaData} from './types/actions';
-import {PaletteNames, WidgetType} from './types/enums';
-import {EEWidget} from './types/types';
+import { AppCreatorStore, WidgetMetaData } from './reducer';
+import { PaletteNames, WidgetType } from './types/enums';
+import { PalettePicker } from '../widgets/palette-picker/palette-picker';
+import { EEWidget } from './types/types';
+import { UpdateWidgetMetaData } from './types/actions';
+import { ROOT_ID, SCRATCH_PANEL } from '../utils/constants';
+import { SharedAttributes } from './types/attributes';
 
 /**
  * Removes widget meta data from the current template.
@@ -84,10 +84,8 @@ export function applyPalette(
       widgets[widgetId].style.backgroundColor = '#ffffff00';
     } else if (widgetId.startsWith(WidgetType.BUTTON)) {
       // Apply styles for button elements.
-      widgets[widgetId].style.backgroundColor =
-          PalettePicker.palette[color].color;
-      widgets[widgetId].style.color =
-          PalettePicker.palette[color].backgroundColor;
+      // TODO: change when backgroundColor is supported on the code editor.
+      widgets[widgetId].style.backgroundColor = '#ffffff';
       widgets[widgetId].style.backgroundOpacity = '100';
     }
     (widgets[widgetId].widgetRef as EEWidget)
@@ -141,7 +139,7 @@ export function getBackgroundColor(style: {[key: string]: any}): string {
 
   // Empty string case.
   if (backgroundOpacityStr === '') {
-    backgroundOpacityStr = '100';
+    backgroundOpacityStr = '00';
   }
 
   const backgroundOpacity = parseInt(backgroundOpacityStr);
@@ -237,7 +235,7 @@ export function getAttributePrefix(attribute: string): string {
 /**
  * List of default styles shared across all widgets.
  */
-export const DEFAULT_STYLES: {[key: string]: string} = {
+export const DEFAULT_STYLES: { [key in SharedAttributes]: string } = {
   height: 'px',
   width: 'px',
   padding: '0px',
