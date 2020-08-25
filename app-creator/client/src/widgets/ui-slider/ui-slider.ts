@@ -19,16 +19,12 @@
  */
 
 import '@polymer/paper-slider/paper-slider.js';
-import { css, customElement, html, LitElement, property } from 'lit-element';
-import { styleMap } from 'lit-html/directives/style-map';
-import {
-  DEFAULT_SHARED_ATTRIBUTES,
-  AttributeMetaData,
-  DefaultAttributesType,
-  getDefaultAttributes,
-  SharedAttributes,
-} from '../../redux/types/attributes';
-import { InputType } from '../../redux/types/enums';
+
+import {css, customElement, html, LitElement, property} from 'lit-element';
+import {styleMap} from 'lit-html/directives/style-map';
+
+import {AttributeMetaData, DEFAULT_SHARED_ATTRIBUTES, DefaultAttributesType, getDefaultAttributes, SharedAttributes,} from '../../redux/types/attributes';
+import {InputType} from '../../redux/types/enums';
 
 @customElement('ui-slider')
 export class Slider extends LitElement {
@@ -80,9 +76,8 @@ export class Slider extends LitElement {
     'shown',
   ]);
 
-  static DEFAULT_SLIDER_ATTRIBUTES: DefaultAttributesType = getDefaultAttributes(
-    Slider.attributes
-  );
+  static DEFAULT_SLIDER_ATTRIBUTES: DefaultAttributesType =
+      getDefaultAttributes(Slider.attributes);
 
   /**
    * Additional custom styles.
@@ -112,17 +107,17 @@ export class Slider extends LitElement {
   /**
    * Displays input field next to slider for editing.
    */
-  @property({ type: Boolean }) editable = false;
+  @property({type: Boolean}) editable = false;
 
   render() {
     const {value, max, min, editable, disabled, styles} = this;
     return html`
       <paper-slider
         style=${styleMap({
-          ...styles,
-          '--paper-slider-active-color': styles.color,
-          '--paper-slider-knob-color': styles.color,
-        })}
+      ...styles,
+      '--paper-slider-active-color': styles.color,
+      '--paper-slider-knob-color': styles.color,
+    })}
         value=${value}
         max=${max}
         min=${min}

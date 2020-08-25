@@ -20,30 +20,17 @@
  * and import into the code editor.
  */
 
-import {
-  LitElement,
-  html,
-  customElement,
-  css,
-  query,
-  property,
-} from 'lit-element';
-import { nothing } from 'lit-html';
-import { store } from '../../redux/store';
-import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog.js';
-import { ROOT_ID, TEMPLATE_TIMESTAMP } from '../../utils/constants';
-import { setSelectedTemplate, setEventType } from '../../redux/actions';
-import { PaperToastElement } from '@polymer/paper-toast/paper-toast.js';
-import {
-  deepCloneTemplate,
-  storeSnapshotInLocalStorage,
-  createToastMessage,
-  setUrlParam,
-  getCodeSnippet,
-  normalizeTemplate,
-} from '../../utils/helpers';
-import { incrementWidgetIDs } from '../../utils/template-generation';
-import { EventType, ExportTab } from '../../redux/types/enums';
+import {PaperDialogElement} from '@polymer/paper-dialog/paper-dialog.js';
+import {PaperToastElement} from '@polymer/paper-toast/paper-toast.js';
+import {css, customElement, html, LitElement, property, query,} from 'lit-element';
+import {nothing} from 'lit-html';
+
+import {setEventType, setSelectedTemplate} from '../../redux/actions';
+import {store} from '../../redux/store';
+import {EventType, ExportTab} from '../../redux/types/enums';
+import {ROOT_ID, TEMPLATE_TIMESTAMP} from '../../utils/constants';
+import {createToastMessage, deepCloneTemplate, getCodeSnippet, normalizeTemplate, setUrlParam, storeSnapshotInLocalStorage,} from '../../utils/helpers';
+import {incrementWidgetIDs} from '../../utils/template-generation';
 
 @customElement('tool-bar')
 export class ToolBar extends LitElement {
@@ -139,7 +126,7 @@ export class ToolBar extends LitElement {
   /**
    * Sets currently selected tab on the export dialog.
    */
-  @property({ type: Number }) selectedTab = ExportTab.CODE;
+  @property({type: Number}) selectedTab = ExportTab.CODE;
 
   /**
    * Reference to the export dialog element.
@@ -186,9 +173,8 @@ export class ToolBar extends LitElement {
    * or the JSON string based on the selected tab index.
    */
   private populateSnippet() {
-    const jsonSnippetContainer = this.shadowRoot?.getElementById(
-      'json-snippet'
-    );
+    const jsonSnippetContainer =
+        this.shadowRoot?.getElementById('json-snippet');
 
     if (this.exportDialog == null || jsonSnippetContainer == null) {
       return;
@@ -196,9 +182,8 @@ export class ToolBar extends LitElement {
 
     if (this.selectedTab === ExportTab.CODE) {
       // Display code snippet.
-      jsonSnippetContainer.textContent = getCodeSnippet(
-        this.getTemplateString()
-      );
+      jsonSnippetContainer.textContent =
+          getCodeSnippet(this.getTemplateString());
     } else if (this.selectedTab === ExportTab.JSON) {
       // Display JSON string.
       jsonSnippetContainer.textContent = this.getTemplateString(3);
@@ -241,13 +226,13 @@ export class ToolBar extends LitElement {
    */
   private copy() {
     const textArea = document.createElement('textarea');
-    // We get the template string without indentation and with escaped single quotes.
+    // We get the template string without indentation and with escaped single
+    // quotes.
     if (this.selectedTab === ExportTab.CODE) {
-      textArea.value = getCodeSnippet(
-        this.getTemplateString().replace(/'/g, "\\'")
-      );
+      textArea.value =
+          getCodeSnippet(this.getTemplateString().replace(/'/g, '\\\''));
     } else if (this.selectedTab === ExportTab.JSON) {
-      textArea.value = this.getTemplateString().replace(/'/g, "\\'");
+      textArea.value = this.getTemplateString().replace(/'/g, '\\\'');
     }
 
     document.body.appendChild(textArea);
@@ -349,21 +334,19 @@ export class ToolBar extends LitElement {
         <h2>Paste string in the Earth Engine Code Editor</h2>
         <paper-tabs selected=${this.selectedTab} noink>
           ${Object.keys(ExportTab).map((key) => {
-            if (!isNaN(Number(key))) {
-              return nothing;
-            }
-            return html`
+      if (!isNaN(Number(key))) {
+        return nothing;
+      }
+      return html`
               <paper-tab
-                @click=${() =>
-                  handleSnippetToggle.call(
-                    this,
-                    ExportTab[key as keyof typeof ExportTab] as number
-                  )}
+                @click=${
+          () => handleSnippetToggle.call(
+              this, ExportTab[key as keyof typeof ExportTab] as number)}
               >
                 ${key}
               </paper-tab>
             `;
-          })}
+    })}
         </paper-tabs>
         <paper-dialog-scrollable id="json-string-container">
           <pre><code id="json-snippet"></code
@@ -414,10 +397,7 @@ export class ToolBar extends LitElement {
         'failed-local-storage-toast', 'Failed to duplicate template.');
 
     const copyConfirmationToast = createToastMessage(
-      'copy-confirmation-toast',
-      'Snippet copied to clipboard.',
-      5000
-    );
+        'copy-confirmation-toast', 'Snippet copied to clipboard.', 5000);
 
     return html`
       <div id="container">

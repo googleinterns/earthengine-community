@@ -21,16 +21,12 @@
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu';
 import '@polymer/paper-item/paper-item';
 import '@polymer/paper-listbox/paper-listbox';
-import { css, customElement, html, LitElement, property } from 'lit-element';
-import {
-  DEFAULT_SHARED_ATTRIBUTES,
-  AttributeMetaData,
-  DefaultAttributesType,
-  getDefaultAttributes,
-  SharedAttributes,
-} from '../../redux/types/attributes';
-import { styleMap } from 'lit-html/directives/style-map';
-import { InputType } from '../../redux/types/enums';
+
+import {css, customElement, html, LitElement, property} from 'lit-element';
+import {styleMap} from 'lit-html/directives/style-map';
+
+import {AttributeMetaData, DEFAULT_SHARED_ATTRIBUTES, DefaultAttributesType, getDefaultAttributes, SharedAttributes,} from '../../redux/types/attributes';
+import {InputType} from '../../redux/types/enums';
 
 @customElement('ui-select')
 export class Select extends LitElement {
@@ -68,9 +64,8 @@ export class Select extends LitElement {
     'shown',
   ]);
 
-  static DEFAULT_SELECT_ATTRIBUTES: DefaultAttributesType = getDefaultAttributes(
-    Select.attributes
-  );
+  static DEFAULT_SELECT_ATTRIBUTES: DefaultAttributesType =
+      getDefaultAttributes(Select.attributes);
 
   /**
    * Additional custom styles.

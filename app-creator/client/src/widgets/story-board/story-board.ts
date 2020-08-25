@@ -17,30 +17,6 @@
  * @fileoverview The story-board widget lets users preview and edit their
  * templates.
  */
-import {
-  css,
-  customElement,
-  html,
-  LitElement,
-  property,
-  query,
-} from 'lit-element';
-import { styleMap } from 'lit-html/directives/style-map';
-import { classMap } from 'lit-html/directives/class-map';
-import { connect } from 'pwa-helpers';
-import { DeviceType, EventType, PaletteNames } from '../../redux/types/enums';
-import { store } from '../../redux/store';
-import { AppCreatorStore } from '../../redux/reducer';
-import { PaperCardElement } from '@polymer/paper-card/paper-card.js';
-import { generateUI } from '../../utils/template-generation';
-import {
-  setSelectedTemplateID,
-  setEventType,
-  setPalette,
-} from '../../redux/actions';
-import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog';
-import { createToastMessage } from '../../utils/helpers';
-import { PaperToastElement } from '@polymer/paper-toast';
 import '@polymer/paper-card/paper-card.js';
 import '@polymer/iron-icons/hardware-icons.js';
 import '@polymer/paper-tabs/paper-tabs';
@@ -50,6 +26,21 @@ import '../dropzone-widget/dropzone-widget';
 import '../ui-map/ui-map';
 import '../ui-panel/ui-panel';
 import '@polymer/paper-dialog/paper-dialog';
+
+import {PaperCardElement} from '@polymer/paper-card/paper-card.js';
+import {PaperDialogElement} from '@polymer/paper-dialog/paper-dialog';
+import {PaperToastElement} from '@polymer/paper-toast';
+import {css, customElement, html, LitElement, property, query,} from 'lit-element';
+import {classMap} from 'lit-html/directives/class-map';
+import {styleMap} from 'lit-html/directives/style-map';
+import {connect} from 'pwa-helpers';
+
+import {setEventType, setPalette, setSelectedTemplateID,} from '../../redux/actions';
+import {AppCreatorStore} from '../../redux/reducer';
+import {store} from '../../redux/store';
+import {DeviceType, EventType, PaletteNames} from '../../redux/types/enums';
+import {createToastMessage} from '../../utils/helpers';
+import {generateUI} from '../../utils/template-generation';
 
 const STORYBOARD_ID = 'storyboard';
 
@@ -196,8 +187,9 @@ const STORYBOARD_ID = 'storyboard';
     }
 
     /**
-     * We want to re-render the storyboard when we switch the template color palette.
-     * We do this by checking if the CHANGINGPALETTE event has been emitted.
+     * We want to re-render the storyboard when we switch the template color
+     * palette. We do this by checking if the CHANGINGPALETTE event has been
+     * emitted.
      */
     if (state.eventType === EventType.CHANGINGPALETTE) {
       this.renderNewTemplate(template);

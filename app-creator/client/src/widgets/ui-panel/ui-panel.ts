@@ -20,13 +20,13 @@
  */
 
 import '../dropzone-widget/dropzone-widget';
-import { SharedAttributes } from '../../redux/types/attributes';
 
 import {css, customElement, html, LitElement, property} from 'lit-element';
 import {classMap} from 'lit-html/directives/class-map';
 
 import {setEditingWidget} from '../../redux/actions';
 import {store} from '../../redux/store';
+import {SharedAttributes} from '../../redux/types/attributes';
 import {Layout} from '../../redux/types/enums';
 import {DraggableWidget} from '../draggable-widget/draggable-widget';
 import {Dropzone} from '../dropzone-widget/dropzone-widget';

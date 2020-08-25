@@ -19,16 +19,12 @@
  */
 
 import '@polymer/iron-label';
-import { css, customElement, html, LitElement, property } from 'lit-element';
-import { styleMap } from 'lit-html/directives/style-map';
-import {
-  DEFAULT_SHARED_ATTRIBUTES,
-  AttributeMetaData,
-  DefaultAttributesType,
-  getDefaultAttributes,
-  SharedAttributes,
-} from '../../redux/types/attributes';
-import { InputType } from '../../redux/types/enums';
+
+import {css, customElement, html, LitElement, property} from 'lit-element';
+import {styleMap} from 'lit-html/directives/style-map';
+
+import {AttributeMetaData, DEFAULT_SHARED_ATTRIBUTES, DefaultAttributesType, getDefaultAttributes, SharedAttributes,} from '../../redux/types/attributes';
+import {InputType} from '../../redux/types/enums';
 
 @customElement('ui-label')
 export class Label extends LitElement {
@@ -67,9 +63,8 @@ export class Label extends LitElement {
     'shown',
   ]);
 
-  static DEFAULT_LABEL_ATTRIBUTES: DefaultAttributesType = getDefaultAttributes(
-    Label.attributes
-  );
+  static DEFAULT_LABEL_ATTRIBUTES: DefaultAttributesType =
+      getDefaultAttributes(Label.attributes);
 
   /**
    * Additional custom styles.

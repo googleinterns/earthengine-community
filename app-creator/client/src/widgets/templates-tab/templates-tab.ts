@@ -255,16 +255,16 @@ export interface TemplatesTabItem {
 
     const sortingChips = html`
       <div id="chips-container">
-        ${chips.map(({ label, device }) => {
-          return html`
+        ${chips.map(({label, device}) => {
+      return html`
             <paper-button
               class=${classMap({
-                'selected-paper-chip': this.deviceFilter === device,
-                'button-chip': true,
-              })}
+        'selected-paper-chip': this.deviceFilter === device,
+        'button-chip': true,
+      })}
               @click=${() => {
-                this.deviceFilter = device;
-              }}
+        this.deviceFilter = device;
+      }}
             >
               ${label}
             </paper-button>

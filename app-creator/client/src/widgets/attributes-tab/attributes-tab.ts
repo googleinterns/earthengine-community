@@ -19,38 +19,25 @@
  */
 
 import '../tab-container/tab-container';
-import {
-  sharedAttributes,
-  AttributeMetaData,
-  UniqueAttributes,
-  Tooltip,
-  SharedAttributes,
-} from '../../redux/types/attributes.js';
-import {
-  camelCaseToTitleCase,
-  getWidgetType,
-  emptySet,
-} from '../../utils/helpers.js';
-import { updateWidgetMetaData } from '../../redux/actions.js';
-import {
-  EventType,
-  AttributeType,
-  InputType,
-  WidgetType,
-} from '../../redux/types/enums.js';
-import { Label } from '../ui-label/ui-label.js';
-import { Button } from '../ui-button/ui-button.js';
-import { Checkbox } from '../ui-checkbox/ui-checkbox.js';
-import { Select } from '../ui-select/ui-select.js';
-import { Slider } from '../ui-slider/ui-slider.js';
-import { Textbox } from '../ui-textbox/ui-textbox.js';
-import { Chart } from '../ui-chart/ui-chart.js';
-import { Map } from '../ui-map/ui-map.js';
-import { store } from '../../redux/store';
-import { AppCreatorStore } from '../../redux/reducer';
-import { Panel } from '../ui-panel/ui-panel';
-import { SideMenu } from '../ui-sidemenu/ui-sidemenu';
-import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog.js';
+
+import {PaperDialogElement} from '@polymer/paper-dialog/paper-dialog.js';
+
+import {updateWidgetMetaData} from '../../redux/actions.js';
+import {AppCreatorStore} from '../../redux/reducer';
+import {store} from '../../redux/store';
+import {AttributeMetaData, sharedAttributes, SharedAttributes, Tooltip, UniqueAttributes,} from '../../redux/types/attributes.js';
+import {AttributeType, EventType, InputType, WidgetType,} from '../../redux/types/enums.js';
+import {camelCaseToTitleCase, emptySet, getWidgetType,} from '../../utils/helpers.js';
+import {Button} from '../ui-button/ui-button.js';
+import {Chart} from '../ui-chart/ui-chart.js';
+import {Checkbox} from '../ui-checkbox/ui-checkbox.js';
+import {Label} from '../ui-label/ui-label.js';
+import {Map} from '../ui-map/ui-map.js';
+import {Panel} from '../ui-panel/ui-panel';
+import {Select} from '../ui-select/ui-select.js';
+import {SideMenu} from '../ui-sidemenu/ui-sidemenu';
+import {Slider} from '../ui-slider/ui-slider.js';
+import {Textbox} from '../ui-textbox/ui-textbox.js';
 
 @customElement('attributes-tab') export class AttributesTab extends connect
 (store)(LitElement) {
@@ -175,7 +162,7 @@ import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog.js';
   /**
    * Sets the search query.
    */
-  @property({ type: String }) query = '';
+  @property({type: String}) query = '';
 
   stateChanged(state: AppCreatorStore) {
     if (state.editingElement !== this.editingWidget) {
@@ -281,15 +268,12 @@ import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog.js';
           class='attribute-input text-input'
           placeholder="${placeholder ?? ''}"
           @keyup=${(e: Event) => {
-            this.handleInputKeyup(
-              e,
-              (value: string) =>
-                store.dispatch(
-                  updateWidgetMetaData(key, value.trim(), id, attributeType)
-                ),
-              validator
-            );
-          }}
+      this.handleInputKeyup(
+          e,
+          (value: string) => store.dispatch(
+              updateWidgetMetaData(key, value.trim(), id, attributeType)),
+          validator);
+    }}
             value="${value}"
         ></input>
       </div>
@@ -323,15 +307,12 @@ import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog.js';
           placeholder="${placeholder ?? ''}"
           rows="4"
           @keyup=${(e: Event) => {
-            this.handleTextAreaKeyup(
-              e,
-              (value: string) =>
-                store.dispatch(
-                  updateWidgetMetaData(key, value.trim(), id, attributeType)
-                ),
-              validator
-            );
-          }}
+      this.handleTextAreaKeyup(
+          e,
+          (value: string) => store.dispatch(
+              updateWidgetMetaData(key, value.trim(), id, attributeType)),
+          validator);
+    }}
         >
 ${value}</textarea
         >
@@ -536,7 +517,7 @@ ${value}</textarea
     }
   }
 
-  private getDisabledStyles(type: WidgetType): Set<SharedAttributes> | null {
+  private getDisabledStyles(type: WidgetType): Set<SharedAttributes>|null {
     switch (type) {
       case WidgetType.MAP:
         return Map.disabledStyles;
@@ -568,9 +549,9 @@ ${value}</textarea
    * selected widget filtered out.
    */
   filterDisabledStyles(
-    styleAttributes: { [key in SharedAttributes]: string },
-    disabledStyles: Set<SharedAttributes>
-  ): { [key in SharedAttributes]: string } {
+      styleAttributes: {[key in SharedAttributes]: string},
+      disabledStyles: Set<SharedAttributes>):
+      {[key in SharedAttributes]: string} {
     const styles = Object.assign({}, styleAttributes);
 
     for (const attribute of disabledStyles) {
@@ -580,7 +561,7 @@ ${value}</textarea
     return styles;
   }
 
-  private getStyleAttributes(): Array<TemplateResult | {}> | {} {
+  private getStyleAttributes(): Array<TemplateResult|{}>|{} {
     const widget = this.editingWidget;
     if (widget == null) {
       return nothing;
@@ -591,11 +572,9 @@ ${value}</textarea
     const disabledStyles = this.getDisabledStyles(getWidgetType(widget.id));
 
     const filteredStyleAttributes = this.filterDisabledStyles(
-      styleAttributes,
-      disabledStyles ?? (emptySet as Set<SharedAttributes>)
-    );
+        styleAttributes, disabledStyles ?? (emptySet as Set<SharedAttributes>));
 
-    const inputs: Array<TemplateResult | {}> = [];
+    const inputs: Array<TemplateResult|{}> = [];
     for (const key of Object.keys(sharedAttributes)) {
       if (!filteredStyleAttributes.hasOwnProperty(key)) {
         continue;
@@ -615,75 +594,29 @@ ${value}</textarea
 
       switch (type) {
         case InputType.TEXT:
-          inputs.push(
-            this.getTextInput(
-              key,
-              attributeTitle,
-              value,
-              widget.id,
-              AttributeType.STYLE,
-              placeholder,
-              tooltip,
-              validator
-            )
-          );
+          inputs.push(this.getTextInput(
+              key, attributeTitle, value, widget.id, AttributeType.STYLE,
+              placeholder, tooltip, validator));
           break;
         case InputType.TEXTAREA:
-          inputs.push(
-            this.getTextareaInput(
-              key,
-              attributeTitle,
-              value,
-              widget.id,
-              AttributeType.STYLE,
-              placeholder,
-              tooltip,
-              validator
-            )
-          );
+          inputs.push(this.getTextareaInput(
+              key, attributeTitle, value, widget.id, AttributeType.STYLE,
+              placeholder, tooltip, validator));
           break;
         case InputType.COLOR:
-          inputs.push(
-            this.getColorInput(
-              key,
-              attributeTitle,
-              value,
-              widget.id,
-              AttributeType.STYLE,
-              tooltip
-            )
-          );
+          inputs.push(this.getColorInput(
+              key, attributeTitle, value, widget.id, AttributeType.STYLE,
+              tooltip));
           break;
         case InputType.SELECT:
-          inputs.push(
-            this.getSelectInput(
-              key,
-              attributeTitle,
-              value,
-              widget.id,
-              AttributeType.STYLE,
-              tooltip,
-              items
-            )
-          );
+          inputs.push(this.getSelectInput(
+              key, attributeTitle, value, widget.id, AttributeType.STYLE,
+              tooltip, items));
           break;
         case InputType.NUMBER:
-          inputs.push(
-            this.getNumberInput(
-              key,
-              attributeTitle,
-              value,
-              widget.id,
-              AttributeType.STYLE,
-              placeholder,
-              tooltip,
-              validator,
-              unit,
-              step,
-              min,
-              max
-            )
-          );
+          inputs.push(this.getNumberInput(
+              key, attributeTitle, value, widget.id, AttributeType.STYLE,
+              placeholder, tooltip, validator, unit, step, min, max));
           break;
       }
     }

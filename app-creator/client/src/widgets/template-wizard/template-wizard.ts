@@ -18,27 +18,21 @@
  * desired configuration setting and select a particular template.
  */
 
-import {
-  customElement,
-  LitElement,
-  css,
-  property,
-  query,
-  html,
-} from 'lit-element';
-import { nothing, TemplateResult } from 'lit-html';
-import { classMap } from 'lit-html/directives/class-map';
-import { DeviceType, PaletteNames } from '../../redux/types/enums';
-import { TemplateItem } from '../../client/fetch-templates';
-import { PaperDialogElement } from '@polymer/paper-dialog';
-import { templatesManager } from '../../data/templates';
-import { PaperToastElement } from '@polymer/paper-toast';
-import { TemplatesTabItem, TemplatesTab } from '../templates-tab/templates-tab';
-import { onSearchEvent } from '../search-bar/search-bar';
-import { generateRandomId, chips } from '../../utils/helpers';
-import { store } from '../../redux/store';
-import { setSelectedTemplate, setPalette } from '../../redux/actions';
-import { transferData } from '../../utils/template-generation';
+import {PaperDialogElement} from '@polymer/paper-dialog';
+import {PaperToastElement} from '@polymer/paper-toast';
+import {css, customElement, html, LitElement, property, query,} from 'lit-element';
+import {nothing, TemplateResult} from 'lit-html';
+import {classMap} from 'lit-html/directives/class-map';
+
+import {TemplateItem} from '../../client/fetch-templates';
+import {templatesManager} from '../../data/templates';
+import {setPalette, setSelectedTemplate} from '../../redux/actions';
+import {store} from '../../redux/store';
+import {DeviceType, PaletteNames} from '../../redux/types/enums';
+import {chips, generateRandomId} from '../../utils/helpers';
+import {transferData} from '../../utils/template-generation';
+import {onSearchEvent} from '../search-bar/search-bar';
+import {TemplatesTab, TemplatesTabItem} from '../templates-tab/templates-tab';
 
 @customElement('template-wizard')
 export class TemplateWizard extends LitElement {
@@ -460,19 +454,19 @@ export class TemplateWizard extends LitElement {
 
     const sortingChips = html`
       <div id="chips-container">
-        ${chips.map(({ label, device }) => {
-          return html`
+        ${chips.map(({label, device}) => {
+      return html`
             <paper-button
               class=${classMap({
-                'selected-paper-chip': this.deviceFilter === device,
-                'button-chip': true,
-              })}
+        'selected-paper-chip': this.deviceFilter === device,
+        'button-chip': true,
+      })}
               @click=${() => handleDeviceFilters.call(this, device)}
             >
               ${label}
             </paper-button>
           `;
-        })}
+    })}
       </div>
     `;
 
@@ -480,14 +474,10 @@ export class TemplateWizard extends LitElement {
       <div id="configuration-form">
         <h3>Settings</h3>
         <div class="form-inputs">
-          ${this.createTextInput(
-            'App Name:',
-            this.config.name,
-            'i.e. Global Forest Change',
-            'name',
-            false,
-            true
-          )}
+          ${
+        this.createTextInput(
+            'App Name:', this.config.name, 'i.e. Global Forest Change', 'name',
+            false, true)}
           <palette-picker
             class="config-input-container config-select-input"
             @palette-change=${(e: CustomEvent) => {

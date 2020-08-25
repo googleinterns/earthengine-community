@@ -18,13 +18,14 @@
  * reducer itself.
  */
 
-import { AppCreatorStore, WidgetMetaData } from './reducer';
-import { PaletteNames, WidgetType } from './types/enums';
-import { PalettePicker } from '../widgets/palette-picker/palette-picker';
-import { EEWidget } from './types/types';
-import { UpdateWidgetMetaData } from './types/actions';
-import { ROOT_ID, SCRATCH_PANEL } from '../utils/constants';
-import { SharedAttributes } from './types/attributes';
+import {ROOT_ID, SCRATCH_PANEL} from '../utils/constants';
+import {PalettePicker} from '../widgets/palette-picker/palette-picker';
+
+import {AppCreatorStore, WidgetMetaData} from './reducer';
+import {UpdateWidgetMetaData} from './types/actions';
+import {SharedAttributes} from './types/attributes';
+import {PaletteNames, WidgetType} from './types/enums';
+import {EEWidget} from './types/types';
 
 /**
  * Removes widget meta data from the current template.
@@ -235,7 +236,7 @@ export function getAttributePrefix(attribute: string): string {
 /**
  * List of default styles shared across all widgets.
  */
-export const DEFAULT_STYLES: { [key in SharedAttributes]: string } = {
+export const DEFAULT_STYLES: {[key in SharedAttributes]: string} = {
   height: 'px',
   width: 'px',
   padding: '0px',

@@ -21,12 +21,12 @@
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '../ui-panel/ui-panel';
-import { SharedAttributes } from '../../redux/types/attributes';
 
 import {css, customElement, html, LitElement, property, query,} from 'lit-element';
 import {classMap} from 'lit-html/directives/class-map';
 import {styleMap} from 'lit-html/directives/style-map';
 
+import {SharedAttributes} from '../../redux/types/attributes';
 import {Layout} from '../../redux/types/enums';
 import {Panel} from '../ui-panel/ui-panel';
 

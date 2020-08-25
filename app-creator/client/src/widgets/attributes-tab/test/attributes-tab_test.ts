@@ -16,10 +16,11 @@
  *
  * @fileoverview This file tests the attributes-tab widget.
  */
-import { AttributesTab } from '../attributes-tab';
-import { fixture, html, expect, assert } from '@open-wc/testing';
-import { DEFAULT_STYLES } from '../../../redux/helpers';
-import { SharedAttributes } from '../../../redux/types/attributes';
+import {assert, expect, fixture, html} from '@open-wc/testing';
+
+import {DEFAULT_STYLES} from '../../../redux/helpers';
+import {SharedAttributes} from '../../../redux/types/attributes';
+import {AttributesTab} from '../attributes-tab';
 
 suite('attributes-tab', () => {
   test('is defined', () => {
@@ -44,10 +45,8 @@ suite('attributes-tab', () => {
 
   test('disabled styles are not part of style attributes', async () => {
     const attributesTab = new AttributesTab();
-    const styles: { [key in SharedAttributes]: string } = Object.assign(
-      {},
-      DEFAULT_STYLES
-    );
+    const styles: {[key in SharedAttributes]: string} =
+        Object.assign({}, DEFAULT_STYLES);
 
     const disabledStyles = new Set<SharedAttributes>([
       'backgroundColor',
@@ -56,10 +55,8 @@ suite('attributes-tab', () => {
       'fontWeight',
     ]);
 
-    const filteredStyles = attributesTab.filterDisabledStyles(
-      styles,
-      disabledStyles
-    );
+    const filteredStyles =
+        attributesTab.filterDisabledStyles(styles, disabledStyles);
 
     expect(filteredStyles).deep.equal({
       height: 'px',

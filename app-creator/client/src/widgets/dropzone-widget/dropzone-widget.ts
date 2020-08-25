@@ -17,27 +17,19 @@
  * @fileoverview The dropzone-widget lets users add widgets to the current
  * container.
  */
-import { css, customElement, html, LitElement, property } from 'lit-element';
-import { styleMap } from 'lit-html/directives/style-map';
-import { DraggableWidget } from '../draggable-widget/draggable-widget';
-import { EMPTY_NOTICE_ID } from '../empty-notice/empty-notice';
-import { store } from '../../redux/store';
-import {
-  setElementAdded,
-  setReordering,
-  addWidgetMetaData,
-  removeWidgetMetaData,
-  updateWidgetChildren,
-  updateWidgetSharedStatus,
-} from '../../redux/actions';
-import { EventType } from '../../redux/types/enums';
-import { SCRATCH_PANEL } from '../../utils/constants';
 import '@polymer/iron-icon/iron-icon.js';
 import '../empty-notice/empty-notice';
-import {
-  addBackgroundColorToSharedWidget,
-  removeBackgroundColorFromSharedWidget,
-} from '../../utils/helpers';
+
+import {css, customElement, html, LitElement, property} from 'lit-element';
+import {styleMap} from 'lit-html/directives/style-map';
+
+import {addWidgetMetaData, removeWidgetMetaData, setElementAdded, setReordering, updateWidgetChildren, updateWidgetSharedStatus,} from '../../redux/actions';
+import {store} from '../../redux/store';
+import {EventType} from '../../redux/types/enums';
+import {SCRATCH_PANEL} from '../../utils/constants';
+import {addBackgroundColorToSharedWidget, removeBackgroundColorFromSharedWidget,} from '../../utils/helpers';
+import {DraggableWidget} from '../draggable-widget/draggable-widget';
+import {EMPTY_NOTICE_ID} from '../empty-notice/empty-notice';
 
 export const CONTAINER_ID = 'container';
 

@@ -19,25 +19,14 @@
  */
 
 import '@polymer/paper-checkbox/paper-checkbox.js';
-import {
-  css,
-  customElement,
-  html,
-  LitElement,
-  property,
-  query,
-} from 'lit-element';
-import { styleMap } from 'lit-html/directives/style-map';
-import {
-  DEFAULT_SHARED_ATTRIBUTES,
-  AttributeMetaData,
-  DefaultAttributesType,
-  getDefaultAttributes,
-  SharedAttributes,
-} from '../../redux/types/attributes';
-import { InputType } from '../../redux/types/enums';
-import { PaperCheckboxElement } from '@polymer/paper-checkbox/paper-checkbox.js';
-import { store } from '../../redux/store';
+
+import {PaperCheckboxElement} from '@polymer/paper-checkbox/paper-checkbox.js';
+import {css, customElement, html, LitElement, property, query,} from 'lit-element';
+import {styleMap} from 'lit-html/directives/style-map';
+
+import {store} from '../../redux/store';
+import {AttributeMetaData, DEFAULT_SHARED_ATTRIBUTES, DefaultAttributesType, getDefaultAttributes, SharedAttributes,} from '../../redux/types/attributes';
+import {InputType} from '../../redux/types/enums';
 
 @customElement('ui-checkbox')
 export class Checkbox extends LitElement {
@@ -72,9 +61,8 @@ export class Checkbox extends LitElement {
     'shown',
   ]);
 
-  static DEFAULT_CHECKBOX_ATTRIBUTES: DefaultAttributesType = getDefaultAttributes(
-    Checkbox.attributes
-  );
+  static DEFAULT_CHECKBOX_ATTRIBUTES: DefaultAttributesType =
+      getDefaultAttributes(Checkbox.attributes);
 
   /**
    * Additional custom styles.
@@ -99,18 +87,18 @@ export class Checkbox extends LitElement {
   @query('paper-checkbox') checkbox!: PaperCheckboxElement;
 
   render() {
-    const { label, styles, checked, disabled } = this;
+    const {label, styles, checked, disabled} = this;
 
     return html`
       <paper-checkbox
         style=${styleMap({
-          ...styles,
-          '--paper-checkbox-label-color': styles.color,
-          '--paper-checkbox-unchecked-color': styles.color,
-          '--paper-checkbox-checked-color': styles.color,
-          '--paper-checkbox-checkmark-color': store.getState().selectedPalette
-            .backgroundColor,
-        })}
+      ...styles,
+      '--paper-checkbox-label-color': styles.color,
+      '--paper-checkbox-unchecked-color': styles.color,
+      '--paper-checkbox-checked-color': styles.color,
+      '--paper-checkbox-checkmark-color':
+          store.getState().selectedPalette.backgroundColor,
+    })}
         ?checked=${checked}
         ?disabled=${disabled}
         noink

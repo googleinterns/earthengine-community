@@ -181,22 +181,20 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction|AnyAction> =
           const widgetStyle =
               Object.assign({}, templateToBeUpdated.widgets[id].style);
 
-      /**
-       * For widgets that are on the scratch panel and have a white color,
-       * and their background color is either white or transparent, we
-       * keep the background color from the selected palette.
-       */
-      if (
-        templateToBeUpdated.widgets[id].shared &&
-        widgetStyle.color.startsWith('#ffffff') &&
-        (widgetStyle.backgroundColor.startsWith('#ffffff') ||
-          (widgetStyle.backgroundColor.length === 9 &&
-            widgetStyle.backgroundColor.endsWith('00')))
-      ) {
-        widgetStyle.backgroundColor = state.selectedPalette.backgroundColor;
-        widgetStyle.padding = '8px';
-        widgetStyle.borderRadius = '8px';
-      }
+          /**
+           * For widgets that are on the scratch panel and have a white color,
+           * and their background color is either white or transparent, we
+           * keep the background color from the selected palette.
+           */
+          if (templateToBeUpdated.widgets[id].shared &&
+              widgetStyle.color.startsWith('#ffffff') &&
+              (widgetStyle.backgroundColor.startsWith('#ffffff') ||
+               (widgetStyle.backgroundColor.length === 9 &&
+                widgetStyle.backgroundColor.endsWith('00')))) {
+            widgetStyle.backgroundColor = state.selectedPalette.backgroundColor;
+            widgetStyle.padding = '8px';
+            widgetStyle.borderRadius = '8px';
+          }
 
           widgetRef.setStyle(widgetStyle);
 

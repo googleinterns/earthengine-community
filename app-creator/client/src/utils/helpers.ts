@@ -17,20 +17,19 @@
  * @fileoverview A set of generic helper methods.
  */
 
-import {TEMPLATE_SNAPSHOTS, WIDGET_REF} from './constants';
-import {
-  DeviceType,
-  WidgetsRequiringBackground,
-  WidgetType,
-} from '../redux/types/enums';
-import { AppCreatorStore } from '../redux/reducer';
-import { WIDGET_REF, TEMPLATE_SNAPSHOTS } from './constants';
-import { store } from '../redux/store';
-import { html, TemplateResult } from 'lit-element';
-import { EEWidget } from '../redux/types/types';
-import { sharedAttributes } from '../redux/types/attributes';
-import json5 from 'json5';
 import '@polymer/paper-toast/paper-toast';
+
+import json5 from 'json5';
+import {html, TemplateResult} from 'lit-element';
+
+import {AppCreatorStore} from '../redux/reducer';
+import {store} from '../redux/store';
+import {sharedAttributes} from '../redux/types/attributes';
+import {DeviceType, WidgetsRequiringBackground, WidgetType,} from '../redux/types/enums';
+import {EEWidget} from '../redux/types/types';
+
+import {TEMPLATE_SNAPSHOTS, WIDGET_REF} from './constants';
+import {TEMPLATE_SNAPSHOTS, WIDGET_REF} from './constants';
 
 const WIDGET_REF_KEYS = new Set([
   'draggingElement',
@@ -230,10 +229,8 @@ export function removeBackgroundColorFromSharedWidget(element: HTMLElement) {
   if (!Object.values(WidgetsRequiringBackground).includes(type)) {
     return;
   }
-  const elementStyle: { [key: string]: string } = Object.assign(
-    {},
-    store.getState().template.widgets[element.id].style
-  );
+  const elementStyle: {[key: string]: string} =
+      Object.assign({}, store.getState().template.widgets[element.id].style);
 
   elementStyle.borderRadius = elementStyle.borderRadius ?? '4px';
   elementStyle.padding = elementStyle.padding ?? sharedAttributes.padding.value;
@@ -262,19 +259,17 @@ app.draw();
  * Normalize template.
  */
 export function normalizeTemplate(template: AppCreatorStore['template']) {
-  const { widgets } = template;
+  const {widgets} = template;
   for (const id in widgets) {
     const type = getWidgetType(id);
     if (type === WidgetType.SELECT) {
       const items = widgets[id].uniqueAttributes.items;
-      widgets[
-        id
-      ].uniqueAttributes.items = getArrayStringFromCommaSeparatedValues(items);
+      widgets[id].uniqueAttributes.items =
+          getArrayStringFromCommaSeparatedValues(items);
     } else if (type === WidgetType.CHART) {
       const colors = widgets[id].uniqueAttributes.color;
-      widgets[
-        id
-      ].uniqueAttributes.color = getArrayStringFromCommaSeparatedValues(colors);
+      widgets[id].uniqueAttributes.color =
+          getArrayStringFromCommaSeparatedValues(colors);
 
       const dataTable = widgets[id].uniqueAttributes.dataTable;
       widgets[id].uniqueAttributes.dataTable = normalizeDataTable(dataTable);

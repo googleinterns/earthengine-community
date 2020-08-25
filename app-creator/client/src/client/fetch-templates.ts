@@ -337,7 +337,7 @@ export const database: TemplateItem[] = [
     id: 'right-side-legend',
     name: 'Right Side Legend',
     imageUrl:
-      'https://storage.googleapis.com/ee-app-creator.appspot.com/map-with-legend-right-side.png',
+        'https://storage.googleapis.com/ee-app-creator.appspot.com/map-with-legend-right-side.png',
     device: DeviceType.DESKTOP,
     template: `{
         "config": {
@@ -543,7 +543,7 @@ export const database: TemplateItem[] = [
     id: 'four-maps',
     name: 'Four Maps',
     imageUrl:
-      'https://storage.cloud.google.com/ee-app-creator.appspot.com/four-maps.png',
+        'https://storage.cloud.google.com/ee-app-creator.appspot.com/four-maps.png',
     device: DeviceType.DESKTOP,
     template: `{
         "config": {

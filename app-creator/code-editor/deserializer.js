@@ -23,7 +23,8 @@ exports.createResponsiveApp = createResponsiveApp;
 exports.createMultiSelectorApp = createMultiSelectorApp;
 
 /**
- * Creates a multiSelectorApp instance given an optional object with the following format.
+ * Creates a multiSelectorApp instance given an optional object with the
+ * following format.
  * {[key: string]: AppInstance (could be from createApp or responsiveApp)}.
  */
 function createMultiSelectorApp(apps) {
@@ -68,10 +69,12 @@ function createMultiSelectorApp(apps) {
     return ui.Select({
       items: Object.keys(multiSelectorApp.apps),
       value: multiSelectorApp.selectedApp,
-      onChange: function (value) {
+      onChange: function(value) {
         /**
-         * We set the active state of the app to be switched out to false to avoid rendering on window resize.
-         * We use this property to conditionaly call the onResize handler on the responsive app instance.
+         * We set the active state of the app to be switched out to false to
+         * avoid rendering on window resize. We use this property to
+         * conditionaly call the onResize handler on the responsive app
+         * instance.
          */
         multiSelectorApp.apps[multiSelectorApp.selectedApp].active = false;
         multiSelectorApp.selectedApp = value;
@@ -81,17 +84,16 @@ function createMultiSelectorApp(apps) {
   }
 
   /**
-   * Create a panel with height 1px that acts as a bottom border for the toolbar.
+   * Create a panel with height 1px that acts as a bottom border for the
+   * toolbar.
    */
   function createBottomBorder() {
     return ui.Panel({
       style: {
         height: '1px',
-        backgroundColor: multiSelectorApp.apps[
-          multiSelectorApp.selectedApp
-        ].root
-          .style()
-          .get('color'),
+        backgroundColor: multiSelectorApp.apps[multiSelectorApp.selectedApp]
+                             .root.style()
+                             .get('color'),
       },
     });
   }
@@ -106,24 +108,24 @@ function createMultiSelectorApp(apps) {
       style: {
         width: '100%',
         height: '45px',
-        backgroundColor: multiSelectorApp.apps[
-          multiSelectorApp.selectedApp
-        ].root
-          .style()
-          .get('backgroundColor'),
+        backgroundColor: multiSelectorApp.apps[multiSelectorApp.selectedApp]
+                             .root.style()
+                             .get('backgroundColor'),
       },
     });
   }
 
   /**
-   * Adds a new entry to the apps object with the name as the key and value as the app instance passed to the argument.
+   * Adds a new entry to the apps object with the name as the key and value as
+   * the app instance passed to the argument.
    */
-  multiSelectorApp.set = function (name, app) {
+  multiSelectorApp.set = function(name, app) {
     if (!name || !app) {
       return;
     }
 
-    // If we have not initialized the apps object yet, we do so and add the new template.
+    // If we have not initialized the apps object yet, we do so and add the new
+    // template.
     if (!multiSelectorApp.apps) {
       multiSelectorApp.apps = {};
       multiSelectorApp.apps[name] = app;
@@ -137,7 +139,7 @@ function createMultiSelectorApp(apps) {
   /*
    * Render app to screen.
    */
-  multiSelectorApp.draw = function () {
+  multiSelectorApp.draw = function() {
     if (!multiSelectorApp.apps) {
       return;
     }
@@ -146,31 +148,31 @@ function createMultiSelectorApp(apps) {
     if (appNames.length === 0) {
       return;
     } else if (appNames.length === 1) {
-      // If there is only one app instance set, we render it just like a normal createApp instance (i.e. Without the toolbar).
+      // If there is only one app instance set, we render it just like a normal
+      // createApp instance (i.e. Without the toolbar).
       multiSelectorApp.selectedApp = appNames[0];
       multiSelectorApp.apps[appNames[0]].draw();
     } else {
-      // Set the currently selectedApp to the first app in our object by default.
+      // Set the currently selectedApp to the first app in our object by
+      // default.
       if (!multiSelectorApp.selectedApp) {
         multiSelectorApp.selectedApp = appNames[0];
       }
 
       /**
-       * In the case that we have at least two apps in our multiSelectorApp instance, we draw the currently selected app
-       * passing in the app body as a render root. This allows child apps to draw on the app body rather
-       * than on ui.root. This is needed because we want to keep the Toolbar displayed and just swap the
-       * apps instead.
+       * In the case that we have at least two apps in our multiSelectorApp
+       * instance, we draw the currently selected app passing in the app body as
+       * a render root. This allows child apps to draw on the app body rather
+       * than on ui.root. This is needed because we want to keep the Toolbar
+       * displayed and just swap the apps instead.
        */
       multiSelectorApp.apps[multiSelectorApp.selectedApp].draw(
-        multiSelectorApp.appBody
-      );
-      multiSelectorApp.appContainer
-        .widgets()
-        .reset([
-          createToolbar(),
-          createBottomBorder(),
-          multiSelectorApp.appBody,
-        ]);
+          multiSelectorApp.appBody);
+      multiSelectorApp.appContainer.widgets().reset([
+        createToolbar(),
+        createBottomBorder(),
+        multiSelectorApp.appBody,
+      ]);
 
       ui.root.widgets().reset([multiSelectorApp.appContainer]);
     }
@@ -191,9 +193,10 @@ function createResponsiveApp(apps) {
   responsiveApp.root = apps.desktop.root;
 
   /**
-   * Callback triggered on window resize to conditionally render mobile and desktop templates.
+   * Callback triggered on window resize to conditionally render mobile and
+   * desktop templates.
    */
-  responsiveApp.resizeHandler = function (deviceInfo) {
+  responsiveApp.resizeHandler = function(deviceInfo) {
     /**
      * We use the active property to know if this app is currently rendered.
      * If it is not, we don't execute the onResize logic.
@@ -212,7 +215,7 @@ function createResponsiveApp(apps) {
   /**
    * Render responsive app to the screen.
    */
-  responsiveApp.draw = function (container) {
+  responsiveApp.draw = function(container) {
     responsiveApp.active = true;
     responsiveApp.renderRoot = container;
     ui.root.onResize(responsiveApp.resizeHandler);
@@ -231,9 +234,10 @@ function createApp(template) {
   var app = {};
 
   /**
-   * Allow users to further customize the generated widgets by providing a reference to each element created.
-   * Type: {[key: WidgetID]: {node: EEWidget, map?: ui.Map}}, for map widgets, we wrap them with a panel widget and return
-   * both elements.
+   * Allow users to further customize the generated widgets by providing a
+   * reference to each element created. Type: {[key: WidgetID]: {node: EEWidget,
+   * map?: ui.Map}}, for map widgets, we wrap them with a panel widget and
+   * return both elements.
    */
   app.widgetInterface = ui.data.ActiveDictionary();
 
@@ -652,7 +656,7 @@ function createApp(template) {
   /**
    * Draw UI to the screen by adding the root to ui.Root.
    */
-  app.draw = function (container) {
+  app.draw = function(container) {
     if (!container) {
       ui.root.widgets().reset([app.root]);
       return;
