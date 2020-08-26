@@ -52,9 +52,10 @@ func TestFromJSON(t *testing.T) {
 var TemplatesStub = Templates{
 	&Template{
 		Id: "left-side-panel",
-		Version: "0.0.0",
 		Name: "Left Side Panel",
-		ImageURL: "https://storage.googleapis.com/ee-app-creator.appspot.com/left-side-panel.jpeg",
+		ImageUrl: "https://storage.googleapis.com/ee-app-creator.appspot.com/left-side-panel.jpeg",
+		Order: 1,
+		Device: "desktop",
 		Template: `{
 			"id": "left-side-panel",
 			"name": "Left Side Panel",
