@@ -20,15 +20,19 @@
 import '@polymer/paper-toast/paper-toast';
 
 import json5 from 'json5';
-import {html, TemplateResult} from 'lit-element';
+import { html, TemplateResult } from 'lit-element';
 
-import {AppCreatorStore} from '../redux/reducer';
-import {store} from '../redux/store';
-import {sharedAttributes} from '../redux/types/attributes';
-import {DeviceType, WidgetsRequiringBackground, WidgetType,} from '../redux/types/enums';
-import {EEWidget} from '../redux/types/types';
+import { AppCreatorStore } from '../redux/reducer';
+import { store } from '../redux/store';
+import { sharedAttributes } from '../redux/types/attributes';
+import {
+  DeviceType,
+  WidgetsRequiringBackground,
+  WidgetType,
+} from '../redux/types/enums';
+import { EEWidget } from '../redux/types/types';
 
-import {TEMPLATE_SNAPSHOTS, WIDGET_REF} from './constants';
+import { TEMPLATE_SNAPSHOTS, WIDGET_REF } from './constants';
 
 const WIDGET_REF_KEYS = new Set([
   'draggingElement',
@@ -104,7 +108,10 @@ export const chips = [
  * Creates a toast message element.
  */
 export function createToastMessage(
-    id: string, message: string, duration?: number): TemplateResult {
+  id: string,
+  message: string,
+  duration?: number
+): TemplateResult {
   return html`<paper-toast
     id=${id}
     text=${message}
@@ -117,16 +124,17 @@ export function createToastMessage(
  */
 export function generateRandomId() {
   return [...Array(32)]
-      .map((_) => (~~(Math.random() * 36)).toString(36))
-      .join('');
+    .map((_) => (~~(Math.random() * 36)).toString(36))
+    .join('');
 }
 
 /**
  * Returns a deep clone of template without widgetRefs.
  */
 export function deepCloneTemplate(
-    template: AppCreatorStore['template'],
-    skipRefs: boolean = true): AppCreatorStore['template'] {
+  template: AppCreatorStore['template'],
+  skipRefs: boolean = true
+): AppCreatorStore['template'] {
   const clone: AppCreatorStore['template'] = {};
   for (const key in template) {
     /**
@@ -169,7 +177,7 @@ export function storeSnapshotInLocalStorage(timestamp: number) {
      */
     const templateSnapshots = localStorage.getItem(TEMPLATE_SNAPSHOTS);
 
-    let templates: {[timestamp: string]: string} = {};
+    let templates: { [timestamp: string]: string } = {};
     if (templateSnapshots) {
       // If templateSnapshots exist, we want to retrieve it and convert it into
       // an object.
@@ -202,17 +210,21 @@ export function setUrlParam(key: string, value: string): URL {
 }
 
 export function addBackgroundColorToSharedWidget(element: HTMLElement) {
-  const elementStyle: {[key: string]: string} =
-      Object.assign({}, store.getState().template.widgets[element.id].style);
+  const elementStyle: { [key: string]: string } = Object.assign(
+    {},
+    store.getState().template.widgets[element.id].style
+  );
 
   const type = getWidgetType(element.id);
-  if (elementStyle.color === '#ffffff' &&
-      elementStyle.backgroundColor.length === 9 &&
-      elementStyle.backgroundColor.endsWith('00') &&
-      Object.values(WidgetsRequiringBackground).includes(type)) {
+  if (
+    elementStyle.color === '#ffffff' &&
+    elementStyle.backgroundColor.length === 9 &&
+    elementStyle.backgroundColor.endsWith('00') &&
+    Object.values(WidgetsRequiringBackground).includes(type)
+  ) {
     const paletteBackground = store.getState().selectedPalette.backgroundColor;
     elementStyle.backgroundColor =
-        paletteBackground === '#ffffff' ? '#000000' : paletteBackground;
+      paletteBackground === '#ffffff' ? '#000000' : paletteBackground;
     elementStyle.borderRadius = '8px';
     elementStyle.padding = '8px';
     (element as EEWidget).setStyle(elementStyle);
@@ -228,8 +240,10 @@ export function removeBackgroundColorFromSharedWidget(element: HTMLElement) {
   if (!Object.values(WidgetsRequiringBackground).includes(type)) {
     return;
   }
-  const elementStyle: {[key: string]: string} =
-      Object.assign({}, store.getState().template.widgets[element.id].style);
+  const elementStyle: { [key: string]: string } = Object.assign(
+    {},
+    store.getState().template.widgets[element.id].style
+  );
 
   elementStyle.borderRadius = elementStyle.borderRadius ?? '4px';
   elementStyle.padding = elementStyle.padding ?? sharedAttributes.padding.value;
@@ -258,23 +272,39 @@ app.draw();
  * Normalize template.
  */
 export function normalizeTemplate(template: AppCreatorStore['template']) {
-  const {widgets} = template;
+  const { widgets } = template;
   for (const id in widgets) {
     const type = getWidgetType(id);
     if (type === WidgetType.SELECT) {
       const items = widgets[id].uniqueAttributes.items;
-      widgets[id].uniqueAttributes.items =
-          getArrayStringFromCommaSeparatedValues(items);
+      widgets[
+        id
+      ].uniqueAttributes.items = getArrayStringFromCommaSeparatedValues(items);
     } else if (type === WidgetType.CHART) {
       const colors = widgets[id].uniqueAttributes.color;
-      widgets[id].uniqueAttributes.color =
-          getArrayStringFromCommaSeparatedValues(colors);
+      widgets[
+        id
+      ].uniqueAttributes.color = getArrayStringFromCommaSeparatedValues(colors);
       const dataTable = widgets[id].uniqueAttributes.dataTable;
       widgets[id].uniqueAttributes.dataTable = normalizeDataTable(dataTable);
+    } else if (type === WidgetType.MAP) {
+      const customMapStyles = widgets[id].uniqueAttributes.customMapStyles;
+      if (customMapStyles !== '') {
+        widgets[id].uniqueAttributes.customMapStyles = normalizeCustomMapStyles(
+          customMapStyles
+        );
+      }
     }
   }
 
   return template;
+}
+
+/**
+ * Removes white spaces and adds the necessary escape characters for parsing.
+ */
+function normalizeCustomMapStyles(customMapStyles: string) {
+  return customMapStyles.replace(/[\t\n\r ]/g, '').replace(/\"/g, '\\"');
 }
 
 /**
