@@ -29,7 +29,6 @@ import {DeviceType, WidgetsRequiringBackground, WidgetType,} from '../redux/type
 import {EEWidget} from '../redux/types/types';
 
 import {TEMPLATE_SNAPSHOTS, WIDGET_REF} from './constants';
-import {TEMPLATE_SNAPSHOTS, WIDGET_REF} from './constants';
 
 const WIDGET_REF_KEYS = new Set([
   'draggingElement',

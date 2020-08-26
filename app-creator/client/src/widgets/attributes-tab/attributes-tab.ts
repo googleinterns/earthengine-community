@@ -19,8 +19,13 @@
  */
 
 import '../tab-container/tab-container';
+import '@polymer/paper-dialog/paper-dialog.js';
+import '../empty-notice/empty-notice';
 
 import {PaperDialogElement} from '@polymer/paper-dialog/paper-dialog.js';
+import {css, customElement, html, LitElement, property} from 'lit-element';
+import {nothing, render, TemplateResult} from 'lit-html';
+import {connect} from 'pwa-helpers';
 
 import {updateWidgetMetaData} from '../../redux/actions.js';
 import {AppCreatorStore} from '../../redux/reducer';

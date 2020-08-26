@@ -16,6 +16,7 @@
  *
  * @fileoverview This file tests the helper functions used in the redux store.
  */
+
 import {expect} from '@open-wc/testing';
 
 import {createTemplateStub} from '../../utils/test/helpers_test';
