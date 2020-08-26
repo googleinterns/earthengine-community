@@ -422,7 +422,7 @@ ${value}</textarea
           max=${max ?? Number.MAX_VALUE}
           step="${step ?? 0.01}"
           oninput="${
-        validator == null ? 'validity.valid || (value = \'\')' : ''}"
+        validator == null ? `validity.valid || (value = '')` : ''}"
           value='${value.replace(valueUnit, '')}'
           @keyup=${(e: Event) => {
       this.handleInputKeyup(

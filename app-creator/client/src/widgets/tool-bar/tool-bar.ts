@@ -230,9 +230,9 @@ export class ToolBar extends LitElement {
     // quotes.
     if (this.selectedTab === ExportTab.CODE) {
       textArea.value =
-          getCodeSnippet(this.getTemplateString().replace(/'/g, '\\\''));
+          getCodeSnippet(this.getTemplateString().replace(/'/g, `\\'`));
     } else if (this.selectedTab === ExportTab.JSON) {
-      textArea.value = this.getTemplateString().replace(/'/g, '\\\'');
+      textArea.value = this.getTemplateString().replace(/'/g, `\\'`);
     }
 
     document.body.appendChild(textArea);
@@ -258,7 +258,7 @@ export class ToolBar extends LitElement {
     }
 
     // Get template json string.
-    let template = this.importTextArea.value.replace(/\\'/g, '\'').trim();
+    let template = this.importTextArea.value.replace(/\\'/g, `'`).trim();
     template =
         template.slice(template.indexOf('{'), template.lastIndexOf('}') + 1);
 
