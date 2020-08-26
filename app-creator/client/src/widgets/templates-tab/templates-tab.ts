@@ -1,7 +1,14 @@
 /**
  *  @fileoverview The templates-tab widget contains the different templates that the user can use for their earth engine app.
  */
-import { LitElement, html, customElement, css, property } from 'lit-element';
+import {
+  LitElement,
+  html,
+  customElement,
+  css,
+  property,
+  query,
+} from 'lit-element';
 import { nothing, TemplateResult } from 'lit-html';
 import { onSearchEvent } from '../search-bar/search-bar';
 import { store } from '../../redux/store';
@@ -11,7 +18,14 @@ import { connect } from 'pwa-helpers';
 import { AppCreatorStore } from '../../redux/reducer';
 import { DeviceType } from '../../redux/types/enums';
 import { classMap } from 'lit-html/directives/class-map';
-import { chips } from '../../utils/helpers';
+import {
+  chips,
+  storeSnapshotInLocalStorage,
+  setUrlParam,
+} from '../../utils/helpers';
+import { transferData } from '../../utils/template-generation';
+import { PaperDialogElement } from '@polymer/paper-dialog';
+import { TEMPLATE_TIMESTAMP } from '../../utils/constants';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '../tab-container/tab-container';
@@ -27,7 +41,6 @@ import '../ui-chart/ui-chart';
 import '../search-bar/search-bar';
 import '../empty-notice/empty-notice';
 import '../template-card/template-card';
-import '@cwmr/paper-chip/paper-chip.js';
 
 export interface TemplatesTabItem {
   id: string;
@@ -39,6 +52,23 @@ export interface TemplatesTabItem {
 @customElement('templates-tab')
 export class TemplatesTab extends connect(store)(LitElement) {
   static styles = css`
+    paper-button {
+      color: var(--accent-color);
+    }
+
+    .selected-paper-chip {
+      background-color: var(--accent-color);
+      color: var(--primary-color);
+    }
+
+    .button-chip {
+      padding: var(--tight) 0px;
+      height: 24px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      text-transform: none;
+    }
+
     .subtitle {
       margin: var(--regular) 0px var(--tight) 0px;
       color: var(--accent-color);
@@ -56,29 +86,20 @@ export class TemplatesTab extends connect(store)(LitElement) {
       margin-top: var(--tight);
     }
 
-    paper-chip {
-      margin: 0px var(--extra-tight);
-      background-color: var(--primary-color);
-      color: var(--accent-color);
-    }
-
-    .selected-paper-chip {
-      background-color: var(--accent-color);
-      color: var(--primary-color);
+    #template-change-confirmation-dialog {
+      border-radius: var(--tight);
     }
   `;
-
-  stateChanged(state: AppCreatorStore) {
-    if (state.template.config.parentID !== this.selectedTemplateID) {
-      this.selectedTemplateID = state.template.config.parentID;
-      this.requestUpdate();
-    }
-  }
 
   /**
    * Represents the id of the currently selected template. Used to rerender templates tab.
    */
   @property({ type: String }) selectedTemplateID: string = '';
+
+  /**
+   * ID of template to be selected.
+   */
+  @property({ type: String }) requestedTemplateID: string = '';
 
   /**
    * Sets the search query.
@@ -90,9 +111,22 @@ export class TemplatesTab extends connect(store)(LitElement) {
    */
   @property({ type: String }) deviceFilter = DeviceType.ALL;
 
-  getTemplateCards(showTitle = false) {
+  /**
+   * Reference to template change confirmation dialog.
+   */
+  @query('#template-change-confirmation-dialog')
+  templateChangeConfirmationDialog!: PaperDialogElement;
+
+  stateChanged(state: AppCreatorStore) {
+    if (state.template.config.parentID !== this.selectedTemplateID) {
+      this.selectedTemplateID = state.template.config.parentID;
+      this.requestUpdate();
+    }
+  }
+
+  private getTemplateCards(showTitle = false) {
     const templates = templatesManager.getTemplates();
-    return templates.map(({ id, name, imageUrl, device, template }) => {
+    return templates.map(({ id, name, imageUrl, device }) => {
       return {
         id,
         name,
@@ -105,7 +139,7 @@ export class TemplatesTab extends connect(store)(LitElement) {
             imageUrl="${imageUrl}"
             ?showTitle=${showTitle}
             ?selected=${store.getState().template.config.parentID === id}
-            .onSelection=${this.createSelectionCallback(template)}
+            .onSelection=${this.handleTemplateCardSelection(id)}
           ></template-card>
         `,
       };
@@ -134,23 +168,64 @@ export class TemplatesTab extends connect(store)(LitElement) {
     });
   }
 
-  createSelectionCallback(template: string): VoidFunction {
+  /**
+   * Callback triggered on template card selection.
+   */
+  private handleTemplateCardSelection(id: string) {
     return () => {
-      store.dispatch(setSelectedTemplate(JSON.parse(template)));
-      this.requestUpdate();
+      this.requestedTemplateID = id;
+      if (this.templateChangeConfirmationDialog) {
+        this.templateChangeConfirmationDialog.open();
+      }
     };
+  }
+
+  /**
+   * Callback triggered on template change confirmation.
+   */
+  private handleTemplateChangeConfirmation() {
+    const template = templatesManager
+      .getTemplates()
+      .find(({ id }) => id === this.requestedTemplateID)?.template;
+
+    if (template) {
+      try {
+        const timestamp = Date.now();
+
+        setUrlParam(TEMPLATE_TIMESTAMP, timestamp.toString());
+
+        storeSnapshotInLocalStorage(timestamp);
+
+        // Replace the redux store with the new template and trigger a re-render.
+        const templateJSON = JSON.parse(template);
+
+        store.dispatch(setSelectedTemplate(templateJSON));
+
+        transferData();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    this.templateChangeConfirmationDialog.close();
+
+    this.requestUpdate();
+  }
+
+  /**
+   * Callback triggered on template change dismiss.
+   */
+  private handleTemplateChangeDismiss() {
+    this.requestedTemplateID = '';
+    this.templateChangeConfirmationDialog.close();
   }
 
   /**
    * Sets the query property when an onsearch event is dispatched from the
    * searchbar widget.
    */
-  handleSearch({ detail: { query } }: onSearchEvent) {
+  private handleSearch({ detail: { query } }: onSearchEvent) {
     this.query = query.trim();
-  }
-
-  handleDeviceFilters(device: DeviceType) {
-    this.deviceFilter = device;
   }
 
   render() {
@@ -178,19 +253,39 @@ export class TemplatesTab extends connect(store)(LitElement) {
       <div id="chips-container">
         ${chips.map(({ label, device }) => {
           return html`
-            <paper-chip
-              selectable
+            <paper-button
               class=${classMap({
                 'selected-paper-chip': this.deviceFilter === device,
+                'button-chip': true,
               })}
               @click=${() => {
                 this.deviceFilter = device;
               }}
-              >${label}</paper-chip
             >
+              ${label}
+            </paper-button>
           `;
         })}
       </div>
+    `;
+
+    const templateChangeConfirmationDialog = html`
+      <paper-dialog with-backdrop id="template-change-confirmation-dialog">
+        <h2>Are you sure?</h2>
+        <p>
+          Changing templates will discard any applied styles or layouts.
+        </p>
+        <div class="buttons">
+          <paper-button @click=${this.handleTemplateChangeDismiss}
+            >Decline</paper-button
+          >
+          <paper-button
+            @click=${this.handleTemplateChangeConfirmation}
+            autofocus
+            >Accept</paper-button
+          >
+        </div>
+      </paper-dialog>
     `;
 
     return html`
@@ -204,6 +299,7 @@ export class TemplatesTab extends connect(store)(LitElement) {
           ${filteredTemplates.map(({ markup }) => markup)}
           ${filteredTemplates.length === 0 ? emptyNotice : nothing}
         </div>
+        ${templateChangeConfirmationDialog}
       </tab-container>
     `;
   }

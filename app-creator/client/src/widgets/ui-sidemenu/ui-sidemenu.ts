@@ -17,6 +17,7 @@ import { Layout } from '../../redux/types/enums';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '../ui-panel/ui-panel';
+import { SharedAttributes } from '../../redux/types/attributes';
 
 @customElement('ui-sidemenu')
 export class SideMenu extends LitElement {
@@ -28,6 +29,7 @@ export class SideMenu extends LitElement {
       margin: var(--tight);
       pointer-events: auto;
       background-color: white;
+      color: #000000;
       border-radius: 50%;
       z-index: 10;
     }
@@ -91,13 +93,30 @@ export class SideMenu extends LitElement {
    */
   @query('ui-panel') panel!: Panel;
 
+  static disabledStyles: Set<SharedAttributes> = new Set([
+    'height',
+    'width',
+    'margin',
+    'color',
+    'fontSize',
+    'fontWeight',
+    'fontFamily',
+    'textAlign',
+    'whiteSpace',
+    'shown',
+    'backgroundOpacity',
+    'borderWidth',
+    'borderStyle',
+    'borderColor',
+  ]);
+
   firstUpdated() {
     if (this.panel) {
       this.panel.id = this.id;
     }
   }
 
-  toggleMenu(e: Event) {
+  private toggleMenu(e: Event) {
     e.stopPropagation();
 
     const { panel } = this;
@@ -107,6 +126,7 @@ export class SideMenu extends LitElement {
 
     const isZeroWidth = panel.style.width.match(/^\s*0(px|%)?/);
     panel.style.width = isZeroWidth ? '80%' : '0%';
+    panel.style.display = isZeroWidth ? 'block' : 'none';
   }
 
   setStyle(style: { [key: string]: string }) {

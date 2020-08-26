@@ -19,12 +19,22 @@ export const UPDATE_WIDGET_CHILDREN = 'UPDATE_WIDGET_CHILDREN';
 export const SET_SELECTED_TEMPLATE_ID = 'SET_SELECTED_TEMPLATE_ID';
 export const SET_PALETTE = 'SET_PALETTE';
 export const SET_EVENT_TYPE = 'SET_EVENT_TYPE';
+export const UPDATE_WIDGET_IDS = 'UPDATE_WIDGET_IDS';
+export const UPDATE_WIDGET_SHARED_STATUS = 'UPDATE_WIDGET_SHARED_STATUS';
 
 export interface UpdateWidgetChildren {
   type: typeof UPDATE_WIDGET_CHILDREN;
   payload: {
     id: string;
     childrenIDs: string[];
+  };
+}
+
+export interface UpdateWidgetSharedStatus {
+  type: typeof UPDATE_WIDGET_SHARED_STATUS;
+  payload: {
+    id: string;
+    isShared: boolean;
   };
 }
 
@@ -70,11 +80,19 @@ export interface AddWidgetMetaData {
   payload: {
     [id: string]: {
       id: string;
+      shared: boolean;
       widgetRef: HTMLElement;
       children: string[];
       uniqueAttributes: {};
       style: {};
     };
+  };
+}
+
+export interface UpdateWidgetIDs {
+  type: typeof UPDATE_WIDGET_IDS;
+  payload: {
+    updatedIDs: AppCreatorStore['widgetIDs'];
   };
 }
 
@@ -147,12 +165,13 @@ export type AppCreatorAction =
   | SetSelectedTabAction
   | SetIsReorderingAction
   | SetSelectedTemplate
-  | IncrementWidgetAction
-  | ResetDraggingValuesAction
-  | AddWidgetMetaData
-  | RemoveWidget
-  | UpdateWidgetMetaData
-  | UpdateWidgetChildren
   | SetSelectedTemplateIDAction
   | SetPalette
-  | SetEventType;
+  | SetEventType
+  | AddWidgetMetaData
+  | ResetDraggingValuesAction
+  | RemoveWidget
+  | IncrementWidgetAction
+  | UpdateWidgetMetaData
+  | UpdateWidgetChildren
+  | UpdateWidgetIDs;

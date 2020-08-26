@@ -223,6 +223,34 @@ function createApp(template) {
   app.widgetInterface = ui.data.ActiveDictionary();
 
   /**
+   * Render responsive app to the screen.
+   */
+  responsiveApp.draw = function (container) {
+    responsiveApp.active = true;
+    responsiveApp.renderRoot = container;
+    ui.root.onResize(responsiveApp.resizeHandler);
+  };
+
+  return responsiveApp;
+}
+
+/**
+ * Creates a single app instance given a template string.
+ */
+function createApp(template) {
+  /**
+   * The namespace for the application. All the state is kept in here.
+   */
+  var app = {};
+
+  /**
+   * Allow users to further customize the generated widgets by providing a reference to each element created.
+   * Type: {[key: WidgetID]: {node: EEWidget, map?: ui.Map}}, for map widgets, we wrap them with a panel widget and return
+   * both elements.
+   */
+  app.widgetInterface = ui.data.ActiveDictionary();
+
+  /**
    * Returns reference to the widget interface.
    */
   app.widgets = function () {

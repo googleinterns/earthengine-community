@@ -163,7 +163,7 @@ export class DraggableWidget extends LitElement {
    * Triggered when the edit icon is clicked. Stores a reference of the selected element in the store and
    * displays a set of inputs for editing its attributes.
    */
-  handleEditWidget(e: Event) {
+  private handleEditWidget(e: Event) {
     e.stopPropagation();
     if (!this.editable) {
       /**
@@ -186,14 +186,14 @@ export class DraggableWidget extends LitElement {
 
     store.dispatch(setEditingWidget(widget));
 
-    container.style.borderColor = 'var(--accent-color)';
+    container.style.borderColor = store.getState().selectedPalette.color;
   }
 
   /**
    * Returns the widget inside the draggable wrapper.
    * @param target draggable wrapper element.
    */
-  extractChildWidget(target: HTMLElement): Element | undefined {
+  private extractChildWidget(target: HTMLElement): Element | undefined {
     // We want to unwrap the draggable wrapper and only reference the the inner element.
     return target.querySelector('slot')?.assignedElements()[0];
   }
@@ -201,7 +201,7 @@ export class DraggableWidget extends LitElement {
   /**
    * Triggered when the trash icon is clicked.
    */
-  handleRemoveWidget(e: Event) {
+  private handleRemoveWidget(e: Event) {
     e.stopPropagation();
     const container = this.shadowRoot?.getElementById(
       CONTAINER_ID
@@ -231,7 +231,7 @@ export class DraggableWidget extends LitElement {
    * dragged element in a global state.
    * @param e dragstart event
    */
-  handleDragstart(e: Event) {
+  private handleDragstart(e: Event) {
     const target = e.target as DraggableWidget;
     if (target == null) {
       return;
@@ -254,7 +254,7 @@ export class DraggableWidget extends LitElement {
    * in a dropzone.
    * @param e dragend event
    */
-  handleDragend() {
+  private handleDragend() {
     const addedElement =
       store.getState().eventType === EventType.ADDING
         ? store.getState().draggingElement

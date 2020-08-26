@@ -50,13 +50,13 @@ export const database: TemplateItem[] = [
                 "id": "panel-template-1",
                 "editable": true,
                 "hasDropzone": true,
-                "children": ["label-template-0", "label-template-1", "button-template-0"],
+                "children": [],
                 "uniqueAttributes": {
                     "layout": "column"
                 },
                 "style": {
                     "height": "100%",
-                    "width": "40%",
+                    "width": "30%",
                     "margin": "0px",
                     "borderColor": "#e28b59",
                     "boxSizing": "border-box"
@@ -79,42 +79,10 @@ export const database: TemplateItem[] = [
                 },
                 "style": {
                     "height": "100%",
-                    "width": "60%",
+                    "width": "auto",
                     "margin": "0px",
                     "boxSizing": "border-box"
                 }
-            },
-            "label-template-0": {
-                "id": "label-template-0",
-                "children": [],
-                "uniqueAttributes": {
-                    "value": "Earth Engine",
-                    "targetUrl": ""
-                },
-                "style": {
-                    "fontSize": "32px",
-                    "fontWeight": "700"
-                }
-            },
-            "label-template-1": {
-                "id": "label-template-1",
-                "children": [],
-                "uniqueAttributes": {
-                    "value": "Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities and makes it available for scientists, researchers, and developers to detect changes, map trends, and quantify differences on the Earth\'s surface.",
-                    "targetUrl": ""
-                },
-                "style": {
-                    "fontSize": "14px"
-                }
-            },
-            "button-template-0": {
-                "id": "button-template-0",
-                "children": [],
-                "uniqueAttributes": {
-                    "label": "Button",
-                    "disabled": "false"
-                },
-                "style": {}
             }
         }
     }`,
@@ -155,11 +123,7 @@ export const database: TemplateItem[] = [
                 "id": "sidemenu-template-0",
                 "editable": true,
                 "hasDropzone": true,
-                "children": [
-                    "label-template-0",
-                    "label-template-1",
-                    "button-template-0"
-                ],
+                "children": [],
                 "uniqueAttributes": {
                     "layout": "column"
                 },
@@ -176,38 +140,6 @@ export const database: TemplateItem[] = [
                     "zIndex": 10
                 }
             },
-            "label-template-0": {
-                "id": "label-template-0",
-                "children": [],
-                "uniqueAttributes": {
-                   "value": "Earth Engine",
-                   "targetUrl": ""
-                },
-                "style": {
-                   "fontSize": "32px",
-                   "fontWeight": "700"
-                }
-             },
-             "label-template-1": {
-                "id": "label-template-1",
-                "children": [],
-                "uniqueAttributes": {
-                   "value": "Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities and makes it available for scientists, researchers, and developers to detect changes, map trends, and quantify differences on the Earth's surface.",
-                   "targetUrl": ""
-                },
-                "style": {
-                   "backgroundColor": "#FFFFFF00"
-                }
-             },
-             "button-template-0": {
-                "id": "button-template-0",
-                "children": [],
-                "uniqueAttributes": {
-                   "label": "Button",
-                   "disabled": "false"
-                },
-                "style": {}
-             },
             "map-template-0": {
                 "id": "map-template-0",
                 "children": [],
@@ -268,13 +200,13 @@ export const database: TemplateItem[] = [
                 "id": "panel-template-1",
                 "editable": true,
                 "hasDropzone": true,
-                "children": ["label-template-0", "label-template-1", "button-template-0"],
+                "children": [],
                 "uniqueAttributes": {
                     "layout": "column"
                 },
                 "style": {
                     "height": "100%",
-                    "width": "40%",
+                    "width": "30%",
                     "margin": "0px",
                     "boxSizing": "border-box"
                 }
@@ -296,67 +228,29 @@ export const database: TemplateItem[] = [
                 },
                 "style": {
                     "height": "100%",
-                    "width": "60%",
+                    "width": "auto",
                     "margin": "0px",
                     "backgroundColor": "#FFFFFFFF",
                     "backgroundOpacity": "100",
                     "boxSizing": "border-box"
-                }
-            },
-            "label-template-0": {
-                "id": "label-template-0",
-                "children": [],
-                "uniqueAttributes": {
-                    "value": "Earth Engine",
-                    "targetUrl": ""
-                },
-                "style": {
-                    "margin": "8px",
-                    "backgroundColor": "#FFFFFF00",
-                    "fontSize": "32px",
-                    "fontWeight": "700"
-                }
-            },
-            "label-template-1": {
-                "id": "label-template-1",
-                "children": [],
-                "uniqueAttributes": {
-                    "value": "Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities and makes it available for scientists, researchers, and developers to detect changes, map trends, and quantify differences on the Earth\'s surface.",
-                    "targetUrl": ""
-                },
-                "style": {
-                    "margin": "8px",
-                    "backgroundColor": "#FFFFFF00",
-                    "fontSize": "14px"
-                }
-            },
-            "button-template-0": {
-                "id": "button-template-0",
-                "children": [],
-                "uniqueAttributes": {
-                    "label": "Button",
-                    "disabled": "false"
-                },
-                "style": {
-                    "margin": "8px"
                 }
             }
         }
     }`,
   },
   {
-    id: 'map-with-legend',
-    name: 'Map With Legend',
+    id: 'left-side-legend',
+    name: 'Left Side Legend',
     imageUrl:
       'https://storage.cloud.google.com/ee-app-creator.appspot.com/legend-example.png',
     device: DeviceType.DESKTOP,
     template: `{
         "config": {
-            "parentID": "map-with-legend",
-            "parentName": "Map with legend",
-            "id": "map-with-legend-desktop",
+            "parentID": "left-side-legend",
+            "parentName": "Left Side Legend",
+            "id": "left-side-legend-desktop",
             "device": "desktop",
-            "name": "Map with legend Desktop"
+            "name": "Left Side Legend Desktop"
         },
         "widgets": {
             "panel-template-0": {
@@ -379,7 +273,7 @@ export const database: TemplateItem[] = [
                 "id": "panel-template-1",
                 "editable": true,
                 "hasDropzone": true,
-                "children": ["label-template-1", "label-template-0", "button-template-0"],
+                "children": [],
                 "uniqueAttributes": {
                     "layout": "column"
                 },
@@ -418,41 +312,83 @@ export const database: TemplateItem[] = [
                     "margin": "0px",
                     "boxSizing": "border-box"
                 }
-            },
-            "label-template-0": {
-                "id": "label-template-0",
-                "children": [],
+            }
+        }
+    }`,
+  },
+  {
+    id: 'right-side-legend',
+    name: 'Right Side Legend',
+    imageUrl:
+      'https://storage.googleapis.com/ee-app-creator.appspot.com/map-with-legend-right-side.png',
+    device: DeviceType.DESKTOP,
+    template: `{
+        "config": {
+            "parentID": "right-side-legend",
+            "parentName": "Right Side Legend",
+            "id": "right-side-legend-desktop",
+            "device": "desktop",
+            "name": "Right Side Legend desktop"
+        },
+        "widgets": {
+            "panel-template-0": {
+                "id": "panel-template-0",
+                "editable": false,
+                "hasDropzone": false,
+                "children": ["map-template-0"],
                 "uniqueAttributes": {
-                    "value": "Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities and makes it available for scientists, researchers, and developers to detect changes, map trends, and quantify differences on the surface of the earth.",
-                    "targetUrl": ""
+                    "layout": "column"
                 },
                 "style": {
-                    "margin": "8px",
-                    "fontSize": "16px"
+                    "height": "100%",
+                    "width": "100%",
+                    "margin": "0px",
+                    "position": "relative",
+                    "boxSizing": "border-box"
                 }
             },
-            "button-template-0": {
-                "id": "button-template-0",
+            "panel-template-1": {
+                "id": "panel-template-1",
+                "editable": true,
+                "hasDropzone": true,
                 "children": [],
                 "uniqueAttributes": {
-                    "label": "Button",
-                    "disabled": "false"
+                    "layout": "column"
                 },
                 "style": {
-                    "margin": "8px"
+                    "height": "35%",
+                    "width": "400px",
+                    "margin": "0px",
+                    "backgroundColor": "#0e1626CC",
+                    "backgroundOpacity": "80",
+                    "borderStyle": "solid",
+                    "borderColor": "#85b7b0",
+                    "position": "absolute",
+                    "bottom": "32px",
+                    "right": "16px",
+                    "boxSizing": "border-box"
                 }
             },
-            "label-template-1": {
-                "id": "label-template-1",
-                "children": [],
+            "map-template-0": {
+                "id": "map-template-0",
+                "children": ["panel-template-1"],
                 "uniqueAttributes": {
-                    "value": "Earth Engine",
-                    "targetUrl": ""
+                    "zoom": "4",
+                    "latitude": "37.419857",
+                    "longitude": "-122.078827",
+                    "zoomControl": "false",
+                    "fullscreenControl": "false",
+                    "scaleControl": "false",
+                    "streetViewControl": "false",
+                    "mapTypeControl": "false",
+                    "mapStyles": "aubergine",
+                    "customMapStyles": ""
                 },
                 "style": {
-                    "margin": "8px",
-                    "fontSize": "32px",
-                    "fontWeight": "700"
+                    "height": "100%",
+                    "width": "100%",
+                    "margin": "0px",
+                    "boxSizing": "border-box"
                 }
             }
         }
@@ -493,7 +429,7 @@ export const database: TemplateItem[] = [
                 "id": "panel-template-1",
                 "editable": true,
                 "hasDropzone": true,
-                "children": ["label-template-3", "label-template-2", "button-template-0"],
+                "children": [],
                 "uniqueAttributes": {
                     "layout": "column"
                 },
@@ -516,7 +452,7 @@ export const database: TemplateItem[] = [
                 "id": "panel-template-2",
                 "editable": true,
                 "hasDropzone": true,
-                "children": ["label-template-4", "label-template-0", "button-template-1"],
+                "children": [],
                 "uniqueAttributes": {
                     "layout": "column"
                 },
@@ -581,81 +517,6 @@ export const database: TemplateItem[] = [
                     "backgroundOpacity": "100",
                     "boxSizing": "border-box"
                 }
-            },
-            "label-template-0": {
-                "id": "label-template-0",
-                "children": [],
-                "uniqueAttributes": {
-                    "value": "Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities and makes it available for scientists, researchers, and developers to detect changes, map trends, and quantify differences on the Earth\'s surface.",
-                    "targetUrl": ""
-                },
-                "style": {
-                    "margin": "8px",
-                    "backgroundColor": "#FFFFFF00",
-                    "fontSize": "14px"
-                }
-            },
-            "label-template-2": {
-                "id": "label-template-2",
-                "children": [],
-                "uniqueAttributes": {
-                    "value": "Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities and makes it available for scientists, researchers, and developers to detect changes, map trends, and quantify differences on the Earth\'s surface.",
-                    "targetUrl": ""
-                },
-                "style": {
-                    "margin": "8px",
-                    "color": "#ffffff",
-                    "backgroundColor": "#FFFFFF00",
-                    "fontSize": "14px"
-                }
-            },
-            "button-template-0": {
-                "id": "button-template-0",
-                "children": [],
-                "uniqueAttributes": {
-                    "label": "Button",
-                    "disabled": "false"
-                },
-                "style": {
-                    "margin": "8px"
-                }
-            },
-            "button-template-1": {
-                "id": "button-template-1",
-                "children": [],
-                "uniqueAttributes": {
-                    "label": "Button",
-                    "disabled": "false"
-                },
-                "style": {
-                    "margin": "8px"
-                }
-            },
-            "label-template-3": {
-                "id": "label-template-3",
-                "children": [],
-                "uniqueAttributes": {
-                    "value": "Earth Engine",
-                    "targetUrl": ""
-                },
-                "style": {
-                    "margin": "8px",
-                    "fontSize": "22px",
-                    "fontWeight": "700"
-                }
-            },
-            "label-template-4": {
-                "id": "label-template-4",
-                "children": [],
-                "uniqueAttributes": {
-                    "value": "Earth Engine",
-                    "targetUrl": ""
-                },
-                "style": {
-                    "margin": "8px",
-                    "fontSize": "22px",
-                    "fontWeight": "700"
-                }
             }
         }
            
@@ -696,14 +557,15 @@ export const database: TemplateItem[] = [
                 "id": "panel-template-1",
                 "editable": true,
                 "hasDropzone": true,
-                "children": ["label-template-0"],
+                "children": [],
                 "uniqueAttributes": {
                     "layout": "column"
                 },
                 "style": {
-                    "height": "8%",
+                    "height": "60px",
                     "width": "100%",
                     "margin": "0px",
+                    "padding": "8px",
                     "position": "relative",
                     "boxSizing": "border-box"
                 }
@@ -717,7 +579,7 @@ export const database: TemplateItem[] = [
                     "layout": "column"
                 },
                 "style": {
-                    "height": "92%",
+                    "height": "calc(100% - 60px)",
                     "width": "100%",
                     "margin": "0px",
                     "boxSizing": "border-box"
@@ -911,28 +773,6 @@ export const database: TemplateItem[] = [
                     "right": "16px",
                     "boxSizing": "border-box",
                     "zIndex": "1"
-                }
-            },
-            "label-template-0": {
-                "id": "label-template-0",
-                "children": [],
-                "uniqueAttributes": {
-                   "value": "Earth Engine",
-                   "targetUrl": ""
-                },
-                "style": {
-                   "height": "px",
-                   "width": "98%",
-                   "margin": "8px",
-                   "borderWidth": "0px",
-                   "borderStyle": "solid",
-                   "borderColor": "black",
-                   "fontSize": "24px",
-                   "fontWeight": "700",
-                   "fontFamily": "Roboto",
-                   "textAlign": "center",
-                   "whiteSpace": "normal",
-                   "shown": "true"
                 }
             }
         }

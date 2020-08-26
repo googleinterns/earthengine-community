@@ -2,10 +2,12 @@
  * @fileoverview This file contains helper functions that are specific to the reducer itself.
  */
 import { AppCreatorStore, WidgetMetaData } from './reducer';
-import { PaletteNames } from './types/enums';
+import { PaletteNames, WidgetType } from './types/enums';
 import { PalettePicker } from '../widgets/palette-picker/palette-picker';
 import { EEWidget } from './types/types';
 import { UpdateWidgetMetaData } from './types/actions';
+import { ROOT_ID, SCRATCH_PANEL } from '../utils/constants';
+import { SharedAttributes } from './types/attributes';
 
 /**
  * Removes widget meta data from the current template.
@@ -44,29 +46,37 @@ export function applyPalette(
   color: PaletteNames
 ) {
   for (const widgetId in widgets) {
+    if (widgetId === SCRATCH_PANEL || widgets[widgetId].shared) {
+      continue;
+    }
+
     // Set the background color of panel elements. Non-panel elements start with a transparent background.
-    if (widgetId.startsWith('panel') || widgetId.startsWith('sidemenu')) {
+    if (
+      widgetId.startsWith(WidgetType.PANEL) ||
+      widgetId.startsWith(WidgetType.SIDEMENU)
+    ) {
       widgets[widgetId].style.backgroundColor =
         PalettePicker.palette[color].backgroundColor;
+      if (widgetId === ROOT_ID) {
+        widgets[widgetId].style.color = PalettePicker.palette[color].color;
+      }
       widgets[widgetId].style.backgroundOpacity = '100';
-    } else if (widgetId.startsWith('map')) {
+    } else if (widgetId.startsWith(WidgetType.MAP)) {
       // Apply map styling.
       widgets[widgetId].uniqueAttributes.mapStyles =
         PalettePicker.palette[color].map;
     } else if (
-      !widgetId.startsWith('panel') &&
-      !widgetId.startsWith('button')
+      !widgetId.startsWith(WidgetType.PANEL) &&
+      !widgetId.startsWith(WidgetType.BUTTON)
     ) {
       // Apply color property on non-panel elements.
       widgets[widgetId].style.color = PalettePicker.palette[color].color;
       // Setting transparent background.
       widgets[widgetId].style.backgroundColor = '#ffffff00';
-    } else if (widgetId.startsWith('button')) {
+    } else if (widgetId.startsWith(WidgetType.BUTTON)) {
       // Apply styles for button elements.
-      widgets[widgetId].style.backgroundColor =
-        PalettePicker.palette[color].color;
-      widgets[widgetId].style.color =
-        PalettePicker.palette[color].backgroundColor;
+      // TODO: change when backgroundColor is supported on the code editor.
+      widgets[widgetId].style.backgroundColor = '#ffffff';
       widgets[widgetId].style.backgroundOpacity = '100';
     }
     (widgets[widgetId].widgetRef as EEWidget)?.setStyle(
@@ -127,7 +137,7 @@ export function getBackgroundColor(style: { [key: string]: any }): string {
 
   // Empty string case.
   if (backgroundOpacityStr === '') {
-    backgroundOpacityStr = '100';
+    backgroundOpacityStr = '00';
   }
 
   const backgroundOpacity = parseInt(backgroundOpacityStr);
@@ -224,7 +234,7 @@ export function getAttributePrefix(attribute: string): string {
 /**
  * List of default styles shared across all widgets.
  */
-export const DEFAULT_STYLES: { [key: string]: string } = {
+export const DEFAULT_STYLES: { [key in SharedAttributes]: string } = {
   height: 'px',
   width: 'px',
   padding: '0px',

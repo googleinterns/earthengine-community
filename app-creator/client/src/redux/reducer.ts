@@ -20,6 +20,8 @@ import {
   SET_PALETTE,
   SET_EVENT_TYPE,
   RemoveWidget,
+  UPDATE_WIDGET_IDS,
+  UPDATE_WIDGET_SHARED_STATUS,
 } from './types/actions';
 import { Reducer, AnyAction } from 'redux';
 import { UniqueAttributes } from './types/attributes';
@@ -41,6 +43,7 @@ import {
 export interface WidgetMetaData {
   id: string;
   editable?: boolean;
+  shared?: boolean;
   widgetRef?: HTMLElement;
   children: string[];
   uniqueAttributes: UniqueAttributes;
@@ -151,7 +154,6 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
       };
     case ADD_WIDGET_META_DATA:
       const widgetWithPalette = Object.assign({}, action.payload);
-
       /**
        * When we add widgets for the first time into the DOM, we want
        * to apply the correct styling so it matches the currently selected palette.
@@ -180,7 +182,7 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
       const { id } = action.payload;
 
       // Set the widget's backgroundColor style property with the appropriate value
-      // (i.e. #FFFFFF00) with the appropriate opacity.
+      // (i.e. #ffffff00) with the appropriate opacity.
       templateToBeUpdated.widgets[
         id
       ].style.backgroundColor = getBackgroundColor(
@@ -192,7 +194,29 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
       const { widgetRef } = templateToBeUpdated.widgets[id];
 
       // Update the css styling on the element.
-      widgetRef.setStyle(templateToBeUpdated.widgets[id].style);
+      const widgetStyle = Object.assign(
+        {},
+        templateToBeUpdated.widgets[id].style
+      );
+
+      /**
+       * For widgets that are on the scratch panel and have a white color,
+       * and their background color is either white or transparent, we
+       * keep the background color from the selected palette.
+       */
+      if (
+        templateToBeUpdated.widgets[id].shared &&
+        widgetStyle.color.startsWith('#ffffff') &&
+        (widgetStyle.backgroundColor.startsWith('#ffffff') ||
+          (widgetStyle.backgroundColor.length === 9 &&
+            widgetStyle.backgroundColor.endsWith('00')))
+      ) {
+        widgetStyle.backgroundColor = state.selectedPalette.backgroundColor;
+        widgetStyle.padding = '8px';
+        widgetStyle.borderRadius = '8px';
+      }
+
+      widgetRef.setStyle(widgetStyle);
 
       // Update unique attributes (i.e. label, disabled, mapstyles, etc...).
       updateUniqueAttributesInDOM(widgetRef, templateToBeUpdated);
@@ -200,6 +224,18 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
       return {
         ...state,
         template: templateToBeUpdated,
+      };
+    case UPDATE_WIDGET_SHARED_STATUS:
+      const templateWithUpdatedStatus = deepCloneTemplate(
+        state.template,
+        false
+      );
+      templateWithUpdatedStatus.widgets[action.payload.id].shared =
+        action.payload.isShared;
+
+      return {
+        ...state,
+        template: templateWithUpdatedStatus,
       };
     case REMOVE_WIDGET:
       // Create template copy.
@@ -224,6 +260,14 @@ export const reducer: Reducer<AppCreatorStore, AppCreatorAction | AnyAction> = (
         widgetIDs: {
           ...state.widgetIDs,
           [action.payload.id]: state.widgetIDs[action.payload.id] + 1,
+        },
+      };
+    case UPDATE_WIDGET_IDS:
+      return {
+        ...state,
+        widgetIDs: {
+          ...state.widgetIDs,
+          ...action.payload.updatedIDs,
         },
       };
     case SET_SELECTED_TEMPLATE:

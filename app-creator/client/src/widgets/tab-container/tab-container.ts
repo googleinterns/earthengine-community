@@ -3,6 +3,7 @@
  *  in the actions-panel.
  */
 import { LitElement, html, customElement, css, property } from 'lit-element';
+import { styleMap } from 'lit-html/directives/style-map';
 
 @customElement('tab-container')
 export class TabContainer extends LitElement {
@@ -24,15 +25,20 @@ export class TabContainer extends LitElement {
   `;
 
   /**
+   * Additional custom styles.
+   */
+  @property({ type: Object }) styles = {};
+
+  /**
    * The title of the tab container.
    */
   @property({ type: String })
   title = '';
 
   render() {
-    const { title } = this;
+    const { title, styles } = this;
     return html`
-      <div id="container">
+      <div id="container" style=${styleMap(styles)}>
         <h5>${title}</h5>
         <slot></slot>
       </div>

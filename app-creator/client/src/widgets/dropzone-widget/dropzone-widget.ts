@@ -12,10 +12,16 @@ import {
   addWidgetMetaData,
   removeWidgetMetaData,
   updateWidgetChildren,
+  updateWidgetSharedStatus,
 } from '../../redux/actions';
 import { EventType } from '../../redux/types/enums';
+import { SCRATCH_PANEL } from '../../utils/constants';
 import '@polymer/iron-icon/iron-icon.js';
 import '../empty-notice/empty-notice';
+import {
+  addBackgroundColorToSharedWidget,
+  removeBackgroundColorFromSharedWidget,
+} from '../../utils/helpers';
 
 export const CONTAINER_ID = 'container';
 
@@ -85,7 +91,7 @@ export class Dropzone extends LitElement {
   /**
    * Return children IDs for a given dropzone.
    */
-  getChildrenIds(): string[] {
+  private getChildrenIds(): string[] {
     return Array.from(this.children).map((el) => {
       return el.firstElementChild!.id;
     });
@@ -94,34 +100,43 @@ export class Dropzone extends LitElement {
   /**
    * Places the dragging widget in the correct order in the container.
    */
-  handleReorderingWidget(
+  private handleReorderingWidget(
     parent: Element | null,
     widget: Element,
+    widgetWrapper: Element,
     nextElement: Element | null
   ) {
     if (nextElement == null) {
-      this.appendChild(widget);
+      this.appendChild(widgetWrapper);
     } else {
-      this.insertBefore(widget, nextElement);
+      this.insertBefore(widgetWrapper, nextElement);
     }
 
     // Update children ordering in store.
     const ids = this.getChildrenIds();
     if (parent != null) {
       store.dispatch(updateWidgetChildren(parent.id, ids));
+      if (parent.id === SCRATCH_PANEL) {
+        store.dispatch(updateWidgetSharedStatus(widget.id, true));
+        addBackgroundColorToSharedWidget(widget as HTMLElement);
+      } else {
+        removeBackgroundColorFromSharedWidget(widget as HTMLElement);
+        store.dispatch(updateWidgetSharedStatus(widget.id, false));
+      }
     }
 
     // set the global reordering state to true so we know that we don't increment the current widget id
     if (store.getState().eventType !== EventType.REORDERING) {
       store.dispatch(setReordering(true));
     }
+
     return;
   }
 
   /**
    * Places a clone of the dragging widget in the correct order in the container.
    */
-  handleAddingWidget(
+  private handleAddingWidget(
     parent: Element | null,
     widget: Element,
     nextElement: Element | null
@@ -137,6 +152,7 @@ export class Dropzone extends LitElement {
         typeof widgets[id] === 'object' &&
         !Array.isArray(widgets[id]) &&
         id !== parent!.id &&
+        id !== SCRATCH_PANEL &&
         widgets[id].children.includes(clone.id)
       ) {
         const widget = widgets[clone.id].widgetRef;
@@ -176,13 +192,14 @@ export class Dropzone extends LitElement {
       store.dispatch(setElementAdded(true));
     }
 
-    store.dispatch(addWidgetMetaData(clone.id, clone));
+    const isShared = parent!.id === SCRATCH_PANEL;
+    store.dispatch(addWidgetMetaData(clone.id, clone, isShared));
   }
 
   /**
    * Callback triggered whenever we drag a widget over a dropzone-widget.
    */
-  handleDragOver(e: DragEvent) {
+  private handleDragOver(e: DragEvent) {
     // Get widget that's currently being dragged.
     const widget = store.getState().draggingElement;
 
@@ -204,6 +221,7 @@ export class Dropzone extends LitElement {
     if (isReordering) {
       this.handleReorderingWidget(
         this.parentElement,
+        widget,
         widgetWrapper,
         nextElement
       );
@@ -216,7 +234,7 @@ export class Dropzone extends LitElement {
    * Takes in a cloned element and returns that element with a draggable wrapper around it.
    * @param clone element to be wrapped.
    */
-  wrapDraggableWidget(clone: HTMLElement): DraggableWidget {
+  private wrapDraggableWidget(clone: HTMLElement): DraggableWidget {
     const cloneDraggableWrapper = document.createElement('draggable-widget');
     cloneDraggableWrapper.editable = true;
     cloneDraggableWrapper.style.width = '100%';
@@ -230,7 +248,7 @@ export class Dropzone extends LitElement {
    * @param widget widget currently being dragged.
    * @param y the y coordinate of the triggered event.
    */
-  getNextElement(widget: Element, y: number): Element | null {
+  private getNextElement(widget: Element, y: number): Element | null {
     /**
      * Get all widgets in the container excluding the currently dragged widget.
      * The direct children of the container are the widget wrappers that allow them to be

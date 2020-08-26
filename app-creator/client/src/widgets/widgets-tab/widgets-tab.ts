@@ -96,7 +96,7 @@ export class WidgetsTab extends LitElement {
       name: 'slider',
       markup: html`<h6 class="subtitle">Slider</h6>
         <draggable-widget>
-          <ui-slider id="slider" label="Item"></ui-slider>
+          <ui-slider id="slider"></ui-slider>
         </draggable-widget>`,
     },
     {
@@ -112,7 +112,7 @@ export class WidgetsTab extends LitElement {
       name: 'chart',
       markup: html`<h6 class="subtitle">Chart</h6>
         <draggable-widget>
-          <ui-chart id="chart" label="Item"></ui-chart>
+          <ui-chart id="chart"></ui-chart>
         </draggable-widget>`,
     },
   ];
@@ -164,7 +164,7 @@ export class WidgetsTab extends LitElement {
    * Sets the query property when an onsearch event is dispatched from the
    * searchbar widget.
    */
-  handleSearch({ detail: { query } }: onSearchEvent) {
+  private handleSearch({ detail: { query } }: onSearchEvent) {
     this.query = query;
   }
 }

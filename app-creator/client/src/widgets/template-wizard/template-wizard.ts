@@ -10,6 +10,7 @@ import {
   html,
 } from 'lit-element';
 import { nothing, TemplateResult } from 'lit-html';
+import { classMap } from 'lit-html/directives/class-map';
 import { DeviceType, PaletteNames } from '../../redux/types/enums';
 import { TemplateItem } from '../../client/fetch-templates';
 import { PaperDialogElement } from '@polymer/paper-dialog';
@@ -17,11 +18,11 @@ import { templatesManager } from '../../data/templates';
 import { PaperToastElement } from '@polymer/paper-toast';
 import { TemplatesTabItem, TemplatesTab } from '../templates-tab/templates-tab';
 import { onSearchEvent } from '../search-bar/search-bar';
-import { generateRandomId } from '../../utils/helpers';
+import { generateRandomId, chips } from '../../utils/helpers';
 import { store } from '../../redux/store';
 import { setSelectedTemplate, setPalette } from '../../redux/actions';
+import { transferData } from '../../utils/template-generation';
 import '@polymer/paper-progress/paper-progress';
-import '@cwmr/paper-chip/paper-chip.js';
 
 @customElement('template-wizard')
 export class TemplateWizard extends LitElement {
@@ -83,18 +84,20 @@ export class TemplateWizard extends LitElement {
       flex-wrap: wrap;
       align-items: center;
       justify-content: center;
-      margin-top: var(--tight);
-    }
-
-    paper-chip {
-      margin: 0px var(--extra-tight);
-      background-color: var(--primary-color);
-      color: var(--accent-color);
+      margin-top: var(--regular);
     }
 
     .selected-paper-chip {
       background-color: var(--accent-color);
       color: var(--primary-color);
+    }
+
+    .button-chip {
+      padding: var(--tight);
+      height: 24px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      text-transform: none;
     }
 
     #content-body {
@@ -132,7 +135,7 @@ export class TemplateWizard extends LitElement {
       border-top: var(--light-border);
     }
 
-    paper-button {
+    #continue-button {
       background-color: var(--accent-color);
       color: var(--primary-color);
       height: 30px;
@@ -271,21 +274,21 @@ export class TemplateWizard extends LitElement {
     this.showTemplateSelectionModal();
   }
 
-  showTemplateSelectionModal() {
+  private showTemplateSelectionModal() {
     this.dialog.open();
   }
 
   /**
    * Used for filtering templates.
    */
-  handleDeviceFilters(device: DeviceType) {
+  private handleDeviceFilters(device: DeviceType) {
     this.deviceFilter = device;
   }
 
   /**
    * Generates an input header for each setting input.
    */
-  createInputHeader(title: string) {
+  private createInputHeader(title: string) {
     return html`
       <div class="input-header">
         <p class="input-label">${title}</p>
@@ -296,14 +299,14 @@ export class TemplateWizard extends LitElement {
   /**
    * Sets currently selected template id.
    */
-  handleTemplateSelection(id: string) {
+  private handleTemplateSelection(id: string) {
     this.selectedTemplateID = id;
   }
 
   /**
    * Returns an array of template cards.
    */
-  getTemplateCards(showTitle = false): Array<TemplatesTabItem> {
+  private getTemplateCards(showTitle = false): Array<TemplatesTabItem> {
     return this.templates.map(({ id, name, imageUrl, device }) => {
       return {
         id,
@@ -328,14 +331,14 @@ export class TemplateWizard extends LitElement {
    * Sets the query property when an onsearch event is dispatched from the
    * searchbar widget.
    */
-  handleSearch({ detail: { query } }: onSearchEvent) {
+  private handleSearch({ detail: { query } }: onSearchEvent) {
     this.query = query.trim();
   }
 
   /**
    * Creates a text input element.
    */
-  createTextInput(
+  private createTextInput(
     title: string,
     value: string,
     placeholder: string,
@@ -362,45 +365,9 @@ export class TemplateWizard extends LitElement {
   }
 
   /**
-   * Creates a select input element.
-   */
-  createSelectInput(
-    key: string,
-    title: string,
-    value: string,
-    items: string[]
-  ): TemplateResult | {} {
-    if (items == null) {
-      return nothing;
-    }
-    const optionList = [];
-    for (const item of items) {
-      optionList.push(html`<option value="${item}" ?selected=${item === value}
-        >${item}</option
-      >`);
-    }
-
-    return html`
-      <div class="config-input-container config-select-input">
-        ${this.createInputHeader(title)}
-        <select
-          name="${title}"
-          class="config-input"
-          .value="${this.config[key]}"
-          @change=${(e: Event) => {
-            this.config[key] = (e.target as HTMLSelectElement).value;
-          }}
-        >
-          ${optionList}
-        </select>
-      </div>
-    `;
-  }
-
-  /**
    * Callback triggered on continue button click.
    */
-  handleContinueClick() {
+  private handleContinueClick() {
     try {
       // Get template from database.
       const template = templatesManager
@@ -419,6 +386,9 @@ export class TemplateWizard extends LitElement {
         // Set new template in store.
         store.dispatch(setSelectedTemplate(templateJSON));
 
+        // Populate template with widgets from localStorage.
+        transferData();
+
         // Close dialog.
         const { dialog } = this;
         if (dialog != null) {
@@ -426,12 +396,18 @@ export class TemplateWizard extends LitElement {
         }
       }
     } catch (e) {
+      console.error(e);
       if (this.parsingErrorToast) {
         this.parsingErrorToast.open();
       }
     }
   }
 
+  /*
+   * TODO: Add elements to differentiate duplication flow from regular flow.
+   * Examples: populate text input with 'Copy of <previous-template>', or skip template wizard and go
+   * straight to app creation.
+   */
   render() {
     const {
       handleSearch,
@@ -478,29 +454,19 @@ export class TemplateWizard extends LitElement {
 
     const sortingChips = html`
       <div id="chips-container">
-        <paper-chip
-          selectable
-          class="${this.deviceFilter === DeviceType.ALL
-            ? 'selected-paper-chip'
-            : ''}"
-          @click=${() => handleDeviceFilters.call(this, DeviceType.ALL)}
-          >All</paper-chip
-        >
-        <paper-chip
-          selectable
-          class="${this.deviceFilter === DeviceType.DESKTOP
-            ? 'selected-paper-chip'
-            : ''}"
-          @click=${() => handleDeviceFilters.call(this, DeviceType.DESKTOP)}
-          >Web</paper-chip
-        ><paper-chip
-          selectable
-          class="${this.deviceFilter === DeviceType.MOBILE
-            ? 'selected-paper-chip'
-            : ''}"
-          @click=${() => handleDeviceFilters.call(this, DeviceType.MOBILE)}
-          >Mobile</paper-chip
-        >
+        ${chips.map(({ label, device }) => {
+          return html`
+            <paper-button
+              class=${classMap({
+                'selected-paper-chip': this.deviceFilter === device,
+                'button-chip': true,
+              })}
+              @click=${() => handleDeviceFilters.call(this, device)}
+            >
+              ${label}
+            </paper-button>
+          `;
+        })}
       </div>
     `;
 
@@ -509,9 +475,9 @@ export class TemplateWizard extends LitElement {
         <h3>Settings</h3>
         <div class="form-inputs">
           ${this.createTextInput(
-            'Template Name:',
+            'App Name:',
             this.config.name,
-            'Enter Name',
+            'i.e. Global Forest Change',
             'name',
             false,
             true
@@ -553,6 +519,7 @@ export class TemplateWizard extends LitElement {
           </div>
           <div id="button-container">
             <paper-button
+              id="continue-button"
               class="${disabledClass}"
               ?disabled=${!validForm}
               @click=${handleContinueClick}

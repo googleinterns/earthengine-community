@@ -9,6 +9,7 @@ import {
   assert,
   elementUpdated,
 } from '@open-wc/testing';
+import { PaperButtonElement } from '@polymer/paper-button';
 
 suite('template-wizard', () => {
   test('is defined', () => {
@@ -34,8 +35,8 @@ suite('template-wizard', () => {
 
       // Find continue button.
       const continueButton = templateWizard.shadowRoot?.querySelector(
-        'paper-button'
-      );
+        '#continue-button'
+      ) as PaperButtonElement;
 
       if (!continueButton) {
         // Force fail if continue button is not found.
@@ -56,8 +57,8 @@ suite('template-wizard', () => {
 
       // Find continue button.
       const continueButton = templateWizard.shadowRoot?.querySelector(
-        'paper-button'
-      );
+        '#continue-button'
+      ) as PaperButtonElement;
 
       if (!continueButton) {
         // Force fail if continue button is not found.
@@ -78,8 +79,8 @@ suite('template-wizard', () => {
 
       // Find continue button.
       const continueButton = templateWizard.shadowRoot?.querySelector(
-        'paper-button'
-      );
+        '#continue-button'
+      ) as PaperButtonElement;
 
       if (!continueButton) {
         // Force fail if continue button is not found.
@@ -101,8 +102,8 @@ suite('template-wizard', () => {
 
       // Find continue button.
       const continueButton = templateWizard.shadowRoot?.querySelector(
-        'paper-button'
-      );
+        '#continue-button'
+      ) as PaperButtonElement;
 
       if (!continueButton) {
         // Force fail if continue button is not found.

@@ -99,7 +99,7 @@ suite('util helpers', () => {
   });
 });
 
-function createTemplateStub(): AppCreatorStore['template'] {
+export function createTemplateStub(): AppCreatorStore['template'] {
   return {
     widgets: {
       'panel-0': {
