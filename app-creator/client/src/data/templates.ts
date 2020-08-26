@@ -31,6 +31,12 @@ class TemplatesManager {
     return this.templates;
   }
 
+  reorderTemplates() {
+    this.templates.sort(
+      (first: TemplateItem, second: TemplateItem) => first.order - second.order
+    );
+  }
+
   /**
    * fetchTemplates fetches the templates from the datastore. If the
    * network request is not successful, it will fall back by setting
@@ -52,6 +58,8 @@ class TemplatesManager {
 
       this.templates = await response.json();
 
+      this.reorderTemplates();
+
       return this.templates;
     } catch (e) {
       /**
@@ -62,6 +70,9 @@ class TemplatesManager {
         await this.fetchTemplates(false);
       } else {
         this.templates = database;
+
+        this.reorderTemplates();
+
         throw e;
       }
     }

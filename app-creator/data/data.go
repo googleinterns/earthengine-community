@@ -28,10 +28,11 @@ import (
 */
 type Template struct {
 	Id       string `json:"id"`
-	Version  string `json:"version"`
 	Name     string `json:"name"`
-	ImageURL string `json:"imageURL"`
+	ImageUrl string `json:"imageUrl"`
 	Template string `json:"template"`
+	Order    int32  `json:"order"`
+	Device   string `json:"device"`
 }
 
 /*

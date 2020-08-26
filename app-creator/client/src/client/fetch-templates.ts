@@ -24,6 +24,7 @@ export interface TemplateItem {
   name: string;
   imageUrl: string;
   device: DeviceType;
+  order: number;
   template: string;
 }
 
@@ -38,6 +39,7 @@ export const database: TemplateItem[] = [
     imageUrl:
         'https://storage.cloud.google.com/ee-app-creator.appspot.com/left-panel.png',
     device: DeviceType.DESKTOP,
+    order: 0,
     template: `{
         "config": {
             "parentID": "left-side-panel",
@@ -110,6 +112,7 @@ export const database: TemplateItem[] = [
     imageUrl:
         'https://storage.googleapis.com/ee-app-creator.appspot.com/left-drawer-mobile.png',
     device: DeviceType.MOBILE,
+    order: 6,
     template: `{
         "config": {
             "parentID": "left-drawer-mobile",
@@ -189,6 +192,7 @@ export const database: TemplateItem[] = [
     imageUrl:
         'https://storage.cloud.google.com/ee-app-creator.appspot.com/right-panel.png',
     device: DeviceType.DESKTOP,
+    order: 1,
     template: `{
         "config": {
             "parentID": "right-side-panel",
@@ -261,6 +265,7 @@ export const database: TemplateItem[] = [
     imageUrl:
         'https://storage.cloud.google.com/ee-app-creator.appspot.com/legend-example.png',
     device: DeviceType.DESKTOP,
+    order: 2,
     template: `{
         "config": {
             "parentID": "left-side-legend",
@@ -339,6 +344,7 @@ export const database: TemplateItem[] = [
     imageUrl:
         'https://storage.googleapis.com/ee-app-creator.appspot.com/map-with-legend-right-side.png',
     device: DeviceType.DESKTOP,
+    order: 3,
     template: `{
         "config": {
             "parentID": "right-side-legend",
@@ -417,6 +423,7 @@ export const database: TemplateItem[] = [
     imageUrl:
         'https://storage.cloud.google.com/ee-app-creator.appspot.com/two-map.png',
     device: DeviceType.DESKTOP,
+    order: 4,
     template: `{
         "config": {
             "parentID": "two-maps",
@@ -545,6 +552,7 @@ export const database: TemplateItem[] = [
     imageUrl:
         'https://storage.cloud.google.com/ee-app-creator.appspot.com/four-maps.png',
     device: DeviceType.DESKTOP,
+    order: 5,
     template: `{
         "config": {
             "parentID": "four-maps",

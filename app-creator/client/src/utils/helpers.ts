@@ -269,7 +269,6 @@ export function normalizeTemplate(template: AppCreatorStore['template']) {
       const colors = widgets[id].uniqueAttributes.color;
       widgets[id].uniqueAttributes.color =
           getArrayStringFromCommaSeparatedValues(colors);
-
       const dataTable = widgets[id].uniqueAttributes.dataTable;
       widgets[id].uniqueAttributes.dataTable = normalizeDataTable(dataTable);
     }

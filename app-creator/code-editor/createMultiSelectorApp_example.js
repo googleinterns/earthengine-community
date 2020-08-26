@@ -28,7 +28,7 @@ var AppCreator =
  * The API takes in an optional object on construction.
  * The object's keys are used as items on a ui.Select element.
  * Each key points to an app instance created by either AppCreator.createApp or
- * AppCreator.createResponsiveApp. This enables users to build switchable apps
+ * AppCreator.createMultiDeviceApp. This enables users to build switchable apps
  * with responsive features.
  *
  * If an initial object is not passed in, calling the set method can be used to
