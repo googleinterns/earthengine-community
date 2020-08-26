@@ -3,18 +3,9 @@ var sidemenu = require('users/msibrahim/app-creator:sidemenu');
 
 exports.createApp = createApp;
 exports.createMultiDeviceApp = createMultiDeviceApp;
-exports.createResponsiveApp = createResponsiveApp;
 exports.createMultiSelectorApp = createMultiSelectorApp;
 
 var MOBILE_WINDOW_SIZE = 900;
-
-/**
- * Temporary placeholder to avoid breaking apps already created with this API.
- */
-function createResponsiveApp(apps) {
-  print('This API has changed to createMultiDeviceApp.');
-  return createMultiDeviceApp(apps);
-}
 
 /**
  * Creates a multiSelectorApp instance given an optional object with the following format.
