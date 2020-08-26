@@ -20,6 +20,8 @@
  * and import into the code editor.
  */
 
+import '@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js';
+
 import {PaperDialogElement} from '@polymer/paper-dialog/paper-dialog.js';
 import {PaperToastElement} from '@polymer/paper-toast/paper-toast.js';
 import {css, customElement, html, LitElement, property, query,} from 'lit-element';
