@@ -2,8 +2,10 @@ var mapStyles = require('users/msibrahim/app-creator:map-styles');
 var sidemenu = require('users/msibrahim/app-creator:sidemenu');
 
 exports.createApp = createApp;
-exports.createResponsiveApp = createResponsiveApp;
+exports.createMultiDeviceApp = createMultiDeviceApp;
 exports.createMultiSelectorApp = createMultiSelectorApp;
+
+var MOBILE_WINDOW_SIZE = 900;
 
 /**
  * Creates a multiSelectorApp instance given an optional object with the following format.
@@ -163,9 +165,9 @@ function createMultiSelectorApp(apps) {
 }
 
 /**
- * Creates a reponsive app instance given desktop and mobile apps.
+ * Creates a multiDevice app instance given desktop and mobile apps.
  */
-function createResponsiveApp(apps) {
+function createMultiDeviceApp(apps) {
   var responsiveApp = {};
 
   responsiveApp.desktop = apps.desktop;
@@ -182,7 +184,7 @@ function createResponsiveApp(apps) {
      * If it is not, we don't execute the onResize logic.
      */
     if (responsiveApp.active) {
-      if (!deviceInfo.is_desktop || deviceInfo.width < 900) {
+      if (!deviceInfo.is_desktop || deviceInfo.width < MOBILE_WINDOW_SIZE) {
         responsiveApp.root = responsiveApp.mobile.root;
         responsiveApp.mobile.draw(responsiveApp.renderRoot);
       } else {
@@ -191,6 +193,34 @@ function createResponsiveApp(apps) {
       }
     }
   };
+
+  /**
+   * Render responsive app to the screen.
+   */
+  responsiveApp.draw = function (container) {
+    responsiveApp.active = true;
+    responsiveApp.renderRoot = container;
+    ui.root.onResize(responsiveApp.resizeHandler);
+  };
+
+  return responsiveApp;
+}
+
+/**
+ * Creates a single app instance given a template string.
+ */
+function createApp(template) {
+  /**
+   * The namespace for the application. All the state is kept in here.
+   */
+  var app = {};
+
+  /**
+   * Allow users to further customize the generated widgets by providing a reference to each element created.
+   * Type: {[key: WidgetID]: {node: EEWidget, map?: ui.Map}}, for map widgets, we wrap them with a panel widget and return
+   * both elements.
+   */
+  app.widgetInterface = ui.data.ActiveDictionary();
 
   /**
    * Render responsive app to the screen.
@@ -402,8 +432,8 @@ function createApp(template) {
 
     var items = [''];
     try {
-      items = JSON.parse(uniqueAttributes.items);
-      items = items.map(function (item) {
+      var templateItems = JSON.parse(uniqueAttributes.items);
+      items = templateItems.map(function (item) {
         return item.trim();
       });
     } catch (e) {
@@ -526,17 +556,10 @@ function createApp(template) {
    * Helper function for creating map elements.
    */
   app.createMapElement = function (obj, style) {
-    // Wrap map widget with panel.
-    var mapHeight = style.height;
-    var mapWidth = style.width;
-    var panelStyle = { height: mapHeight, width: mapWidth };
-
     // Update map dimensions to take up all the panel space.
-    style.width = '100%';
-    style.height = '100%';
+    style.width = 'auto';
 
     var map = ui.Map({ style: style });
-    var panel = ui.Panel({ style: panelStyle, widgets: [map] });
 
     var uniqueAttributes = obj.uniqueAttributes;
 
@@ -578,7 +601,7 @@ function createApp(template) {
         : customMapStylesJSON;
     map.setOptions({ styles: { custom: appliedStyles } });
 
-    return panel;
+    return map;
   };
 
   /**
@@ -635,6 +658,8 @@ function createApp(template) {
 
   /**
    * Draw UI to the screen by adding the root to ui.Root.
+   * @param container An optional render root to use instead of the default ui.Root.
+   * This is used in MultiSelectorApps to draw to the app body so that the toolbar remains displayed.
    */
   app.draw = function (container) {
     if (!container) {
