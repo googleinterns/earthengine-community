@@ -1,48 +1,51 @@
 /**
- *  @fileoverview The attributes-tab widget contains the different
- *  attributes that a user can edit for a particular element.
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @fileoverview The attributes-tab widget contains the different
+ * attributes that a user can edit for a particular element.
  */
-import { html, customElement, css, property, LitElement } from 'lit-element';
-import { nothing, render, TemplateResult } from 'lit-html';
-import { connect } from 'pwa-helpers';
+
 import '../tab-container/tab-container';
-import {
-  sharedAttributes,
-  AttributeMetaData,
-  UniqueAttributes,
-  Tooltip,
-  SharedAttributes,
-} from '../../redux/types/attributes.js';
-import {
-  camelCaseToTitleCase,
-  getWidgetType,
-  emptySet,
-} from '../../utils/helpers.js';
-import { updateWidgetMetaData } from '../../redux/actions.js';
-import {
-  EventType,
-  AttributeType,
-  InputType,
-  WidgetType,
-} from '../../redux/types/enums.js';
-import { Label } from '../ui-label/ui-label.js';
-import { Button } from '../ui-button/ui-button.js';
-import { Checkbox } from '../ui-checkbox/ui-checkbox.js';
-import { Select } from '../ui-select/ui-select.js';
-import { Slider } from '../ui-slider/ui-slider.js';
-import { Textbox } from '../ui-textbox/ui-textbox.js';
-import { Chart } from '../ui-chart/ui-chart.js';
-import { Map } from '../ui-map/ui-map.js';
-import { store } from '../../redux/store';
-import { AppCreatorStore } from '../../redux/reducer';
-import { Panel } from '../ui-panel/ui-panel';
-import { SideMenu } from '../ui-sidemenu/ui-sidemenu';
-import { PaperDialogElement } from '@polymer/paper-dialog/paper-dialog.js';
 import '@polymer/paper-dialog/paper-dialog.js';
 import '../empty-notice/empty-notice';
 
-@customElement('attributes-tab')
-export class AttributesTab extends connect(store)(LitElement) {
+import {PaperDialogElement} from '@polymer/paper-dialog/paper-dialog.js';
+import {css, customElement, html, LitElement, property} from 'lit-element';
+import {nothing, render, TemplateResult} from 'lit-html';
+import {connect} from 'pwa-helpers';
+
+import {updateWidgetMetaData} from '../../redux/actions.js';
+import {AppCreatorStore} from '../../redux/reducer';
+import {store} from '../../redux/store';
+import {AttributeMetaData, sharedAttributes, SharedAttributes, Tooltip, UniqueAttributes,} from '../../redux/types/attributes.js';
+import {AttributeType, EventType, InputType, WidgetType,} from '../../redux/types/enums.js';
+import {camelCaseToTitleCase, emptySet, getWidgetType,} from '../../utils/helpers.js';
+import {Button} from '../ui-button/ui-button.js';
+import {Chart} from '../ui-chart/ui-chart.js';
+import {Checkbox} from '../ui-checkbox/ui-checkbox.js';
+import {Label} from '../ui-label/ui-label.js';
+import {Map} from '../ui-map/ui-map.js';
+import {Panel} from '../ui-panel/ui-panel';
+import {Select} from '../ui-select/ui-select.js';
+import {SideMenu} from '../ui-sidemenu/ui-sidemenu';
+import {Slider} from '../ui-slider/ui-slider.js';
+import {Textbox} from '../ui-textbox/ui-textbox.js';
+
+@customElement('attributes-tab') export class AttributesTab extends connect
+(store)(LitElement) {
   static styles = css`
     input {
       margin: var(--tight) 0px;
@@ -164,15 +167,14 @@ export class AttributesTab extends connect(store)(LitElement) {
   /**
    * Sets the search query.
    */
-  @property({ type: String }) query = '';
+  @property({type: String}) query = '';
 
   stateChanged(state: AppCreatorStore) {
     if (state.editingElement !== this.editingWidget) {
       this.editingWidget = state.editingElement;
 
-      const slot = this.shadowRoot
-        ?.querySelector('tab-container')
-        ?.querySelector('slot')!;
+      const slot = this.shadowRoot?.querySelector('tab-container')
+                       ?.querySelector('slot')!;
 
       if (slot == null) {
         return;
@@ -184,25 +186,23 @@ export class AttributesTab extends connect(store)(LitElement) {
       render(html``, slot);
 
       render(
-        html`${uniqueAttributesMarkup} ${styleAttributesMarkup}
+          html`${uniqueAttributesMarkup} ${styleAttributesMarkup}
         ${this.editingWidget ? nothing : AttributesTab.emptyNotice}`,
-        slot
-      );
+          slot);
     }
   }
 
   /**
    * Widget currently being edited.
    */
-  editingWidget: Element | null =
-    store.getState().eventType === EventType.EDITING
-      ? store.getState().editingElement
-      : null;
+  editingWidget: Element|null =
+      store.getState().eventType === EventType.EDITING ?
+      store.getState().editingElement :
+      null;
 
   private openTooltipBy(e: Event, key: string) {
-    const tooltip = this.shadowRoot?.getElementById(
-      key + '-tooltip'
-    ) as PaperDialogElement;
+    const tooltip =
+        this.shadowRoot?.getElementById(key + '-tooltip') as PaperDialogElement;
     if (tooltip != null && e.target != null) {
       tooltip.positionTarget = e.target as HTMLElement;
       tooltip.open();
@@ -210,10 +210,9 @@ export class AttributesTab extends connect(store)(LitElement) {
   }
 
   private getInputHeader(key: string, title: string, tooltip?: Tooltip) {
-    const tooltipMarkup =
-      tooltip == null
-        ? nothing
-        : html`<p
+    const tooltipMarkup = tooltip == null ?
+        nothing :
+        html`<p
               id="${key}-info"
               class="info-icon"
               @click=${(e: Event) => this.openTooltipBy(e, key)}
@@ -229,11 +228,11 @@ export class AttributesTab extends connect(store)(LitElement) {
                 ${tooltip.text ?? nothing}
               </p>
               <p class="tooltip-text">
-                ${tooltip.url
-                  ? html`<a href="${tooltip.url}" target="_blank"
+                ${
+            tooltip.url ? html`<a href="${tooltip.url}" target="_blank"
                       >${tooltip.url}</a
-                    >`
-                  : nothing}
+                    >` :
+                          nothing}
               </p>
             </paper-dialog>`;
 
@@ -246,10 +245,8 @@ export class AttributesTab extends connect(store)(LitElement) {
   }
 
   private handleInputKeyup(
-    e: Event,
-    dispatcher: (value: string) => void,
-    validator?: AttributeMetaData['key']['validator']
-  ) {
+      e: Event, dispatcher: (value: string) => void,
+      validator?: AttributeMetaData['key']['validator']) {
     const inputElement = e.target as HTMLInputElement;
     if (validator != null) {
       if (validator(inputElement.value)) {
@@ -266,15 +263,9 @@ export class AttributesTab extends connect(store)(LitElement) {
   }
 
   private getTextInput(
-    key: string,
-    title: string,
-    value: string,
-    id: string,
-    attributeType: AttributeType,
-    placeholder?: string,
-    tooltip?: Tooltip,
-    validator?: AttributeMetaData['key']['validator']
-  ): TemplateResult {
+      key: string, title: string, value: string, id: string,
+      attributeType: AttributeType, placeholder?: string, tooltip?: Tooltip,
+      validator?: AttributeMetaData['key']['validator']): TemplateResult {
     return html`
       <div class="attribute-input-container">
       ${this.getInputHeader(key, title, tooltip)}
@@ -282,15 +273,12 @@ export class AttributesTab extends connect(store)(LitElement) {
           class='attribute-input text-input'
           placeholder="${placeholder ?? ''}"
           @keyup=${(e: Event) => {
-            this.handleInputKeyup(
-              e,
-              (value: string) =>
-                store.dispatch(
-                  updateWidgetMetaData(key, value.trim(), id, attributeType)
-                ),
-              validator
-            );
-          }}
+      this.handleInputKeyup(
+          e,
+          (value: string) => store.dispatch(
+              updateWidgetMetaData(key, value.trim(), id, attributeType)),
+          validator);
+    }}
             value="${value}"
         ></input>
       </div>
@@ -298,10 +286,7 @@ export class AttributesTab extends connect(store)(LitElement) {
   }
 
   private handleTextAreaKeyup(
-    e: Event,
-    dispatcher: (value: string) => void,
-    validator?: Function
-  ) {
+      e: Event, dispatcher: (value: string) => void, validator?: Function) {
     const textareaInput = e.target as HTMLTextAreaElement;
     if (validator != null) {
       if (validator(textareaInput.value) || textareaInput.value === '') {
@@ -316,15 +301,9 @@ export class AttributesTab extends connect(store)(LitElement) {
   }
 
   private getTextareaInput(
-    key: string,
-    title: string,
-    value: string,
-    id: string,
-    attributeType: AttributeType,
-    placeholder?: string,
-    tooltip?: Tooltip,
-    validator?: Function
-  ): TemplateResult {
+      key: string, title: string, value: string, id: string,
+      attributeType: AttributeType, placeholder?: string, tooltip?: Tooltip,
+      validator?: Function): TemplateResult {
     return html`
       <div class="attribute-input-container">
         ${this.getInputHeader(key, title, tooltip)}
@@ -333,15 +312,12 @@ export class AttributesTab extends connect(store)(LitElement) {
           placeholder="${placeholder ?? ''}"
           rows="4"
           @keyup=${(e: Event) => {
-            this.handleTextAreaKeyup(
-              e,
-              (value: string) =>
-                store.dispatch(
-                  updateWidgetMetaData(key, value.trim(), id, attributeType)
-                ),
-              validator
-            );
-          }}
+      this.handleTextAreaKeyup(
+          e,
+          (value: string) => store.dispatch(
+              updateWidgetMetaData(key, value.trim(), id, attributeType)),
+          validator);
+    }}
         >
 ${value}</textarea
         >
@@ -350,13 +326,8 @@ ${value}</textarea
   }
 
   private getColorInput(
-    key: string,
-    title: string,
-    value: string,
-    id: string,
-    attributeType: AttributeType,
-    tooltip?: Tooltip
-  ): TemplateResult {
+      key: string, title: string, value: string, id: string,
+      attributeType: AttributeType, tooltip?: Tooltip): TemplateResult {
     // Since the color input does not read opacity values, we need to strip off,
     // the last two hex numbers that represent opacity.
     if (key === 'backgroundColor') {
@@ -369,15 +340,9 @@ ${value}</textarea
         <input
           class='attribute-input color-input'
           type='color'
-          @change=${(e: Event) =>
-            store.dispatch(
-              updateWidgetMetaData(
-                key,
-                (e.target as HTMLInputElement).value,
-                id,
-                attributeType
-              )
-            )}
+          @change=${
+        (e: Event) => store.dispatch(updateWidgetMetaData(
+            key, (e.target as HTMLInputElement).value, id, attributeType))}
           value='${value}'
         ></input
         >
@@ -386,14 +351,9 @@ ${value}</textarea
   }
 
   private getSelectInput(
-    key: string,
-    title: string,
-    value: string,
-    id: string,
-    attributeType: AttributeType,
-    tooltip?: Tooltip,
-    items?: string[] | boolean[]
-  ): TemplateResult | {} {
+      key: string, title: string, value: string, id: string,
+      attributeType: AttributeType, tooltip?: Tooltip,
+      items?: string[]|boolean[]): TemplateResult|{} {
     if (items == null) {
       return nothing;
     }
@@ -411,15 +371,9 @@ ${value}</textarea
           name="${title}"
           class="attribute-input"
           .value="${value}"
-          @change=${(e: Event) =>
-            store.dispatch(
-              updateWidgetMetaData(
-                key,
-                (e.target as HTMLInputElement).value,
-                id,
-                attributeType
-              )
-            )}
+          @change=${
+        (e: Event) => store.dispatch(updateWidgetMetaData(
+            key, (e.target as HTMLInputElement).value, id, attributeType))}
         >
           ${optionList}
         </select>
@@ -428,19 +382,10 @@ ${value}</textarea
   }
 
   private getNumberInput(
-    key: string,
-    title: string,
-    value: string,
-    id: string,
-    attributeType: AttributeType,
-    placeholder?: string,
-    tooltip?: Tooltip,
-    validator?: AttributeMetaData['key']['validator'],
-    unit?: string,
-    step?: number,
-    min?: number,
-    max?: number
-  ): TemplateResult {
+      key: string, title: string, value: string, id: string,
+      attributeType: AttributeType, placeholder?: string, tooltip?: Tooltip,
+      validator?: AttributeMetaData['key']['validator'], unit?: string,
+      step?: number, min?: number, max?: number): TemplateResult {
     let valueUnit = '';
     if (value.endsWith('px')) {
       valueUnit = 'px';
@@ -448,23 +393,17 @@ ${value}</textarea
       valueUnit = '%';
     }
 
-    const unitMarkup =
-      unit == null
-        ? nothing
-        : html`
+    const unitMarkup = unit == null ?
+        nothing :
+        html`
             <select
               name="unit"
               class="unit-input"
               .value="${unit}"
-              @change=${(e: Event) =>
-                store.dispatch(
-                  updateWidgetMetaData(
-                    key + '-unit',
-                    (e.target as HTMLInputElement).value,
-                    id,
-                    attributeType
-                  )
-                )}
+              @change=${
+            (e: Event) => store.dispatch(updateWidgetMetaData(
+                key + '-unit', (e.target as HTMLInputElement).value, id,
+                attributeType))}
             >
               <option value="px" ?selected=${valueUnit === 'px'}>px</option>
               <option value="%" ?selected=${valueUnit === '%'}>%</option>
@@ -482,18 +421,16 @@ ${value}</textarea
           min=${min ?? 0}
           max=${max ?? Number.MAX_VALUE}
           step="${step ?? 0.01}"
-          oninput="${validator == null ? "validity.valid || (value = '')" : ''}"
+          oninput="${
+        validator == null ? `validity.valid || (value = '')` : ''}"
           value='${value.replace(valueUnit, '')}'
           @keyup=${(e: Event) => {
-            this.handleInputKeyup(
-              e,
-              (value: string) =>
-                store.dispatch(
-                  updateWidgetMetaData(key, value, id, attributeType)
-                ),
-              validator
-            );
-          }}
+      this.handleInputKeyup(
+          e,
+          (value: string) => store.dispatch(
+              updateWidgetMetaData(key, value, id, attributeType)),
+          validator);
+    }}
         ></input>
         ${unitMarkup}
         </div>
@@ -502,10 +439,8 @@ ${value}</textarea
   }
 
   private getUniqueAttributeMarkup(
-    attributesArray: AttributeMetaData,
-    uniqueAttributes: UniqueAttributes,
-    id: string
-  ): Array<TemplateResult | {}> {
+      attributesArray: AttributeMetaData, uniqueAttributes: UniqueAttributes,
+      id: string): Array<TemplateResult|{}> {
     return Object.keys(attributesArray).map((key) => {
       const value = uniqueAttributes[key];
       const placeholder = attributesArray[key].placeholder;
@@ -523,132 +458,71 @@ ${value}</textarea
       switch (type) {
         case InputType.TEXT:
           return this.getTextInput(
-            key,
-            attributeTitle,
-            value,
-            id,
-            AttributeType.UNIQUE,
-            placeholder,
-            tooltip,
-            validator
-          );
+              key, attributeTitle, value, id, AttributeType.UNIQUE, placeholder,
+              tooltip, validator);
         case InputType.TEXTAREA:
           return this.getTextareaInput(
-            key,
-            attributeTitle,
-            value,
-            id,
-            AttributeType.UNIQUE,
-            placeholder,
-            tooltip,
-            validator
-          );
+              key, attributeTitle, value, id, AttributeType.UNIQUE, placeholder,
+              tooltip, validator);
         case InputType.COLOR:
           return this.getColorInput(
-            key,
-            attributeTitle,
-            value,
-            id,
-            AttributeType.UNIQUE,
-            tooltip
-          );
+              key, attributeTitle, value, id, AttributeType.UNIQUE, tooltip);
         case InputType.SELECT:
           return this.getSelectInput(
-            key,
-            attributeTitle,
-            value,
-            id,
-            AttributeType.UNIQUE,
-            tooltip,
-            items
-          );
+              key, attributeTitle, value, id, AttributeType.UNIQUE, tooltip,
+              items);
         case InputType.NUMBER:
           return this.getNumberInput(
-            key,
-            attributeTitle,
-            value,
-            id,
-            AttributeType.UNIQUE,
-            placeholder,
-            tooltip,
-            validator,
-            unit,
-            step,
-            min,
-            max
-          );
+              key, attributeTitle, value, id, AttributeType.UNIQUE, placeholder,
+              tooltip, validator, unit, step, min, max);
         default:
           return nothing;
       }
     });
   }
 
-  private getUniqueAttributes(): Array<TemplateResult | {}> | {} {
+  private getUniqueAttributes(): Array<TemplateResult|{}>|{} {
     const widget = this.editingWidget;
     if (widget == null) {
       return nothing;
     }
 
-    const uniqueAttributes = store.getState().template.widgets[widget.id]
-      .uniqueAttributes;
+    const uniqueAttributes =
+        store.getState().template.widgets[widget.id].uniqueAttributes;
 
     const widgetType = getWidgetType(widget.id);
 
     switch (widgetType) {
       case WidgetType.LABEL:
         return this.getUniqueAttributeMarkup(
-          Label.attributes,
-          uniqueAttributes,
-          widget.id
-        );
+            Label.attributes, uniqueAttributes, widget.id);
       case WidgetType.BUTTON:
         return this.getUniqueAttributeMarkup(
-          Button.attributes,
-          uniqueAttributes,
-          widget.id
-        );
+            Button.attributes, uniqueAttributes, widget.id);
       case WidgetType.CHECKBOX:
         return this.getUniqueAttributeMarkup(
-          Checkbox.attributes,
-          uniqueAttributes,
-          widget.id
-        );
+            Checkbox.attributes, uniqueAttributes, widget.id);
       case WidgetType.SELECT:
         return this.getUniqueAttributeMarkup(
-          Select.attributes,
-          uniqueAttributes,
-          widget.id
-        );
+            Select.attributes, uniqueAttributes, widget.id);
       case WidgetType.SLIDER:
         return this.getUniqueAttributeMarkup(
-          Slider.attributes,
-          uniqueAttributes,
-          widget.id
-        );
+            Slider.attributes, uniqueAttributes, widget.id);
       case WidgetType.TEXTBOX:
         return this.getUniqueAttributeMarkup(
-          Textbox.attributes,
-          uniqueAttributes,
-          widget.id
-        );
+            Textbox.attributes, uniqueAttributes, widget.id);
       case WidgetType.CHART:
         return this.getUniqueAttributeMarkup(
-          Chart.attributes,
-          uniqueAttributes,
-          widget.id
-        );
+            Chart.attributes, uniqueAttributes, widget.id);
       case WidgetType.MAP:
         return this.getUniqueAttributeMarkup(
-          Map.attributes,
-          uniqueAttributes,
-          widget.id
-        );
+            Map.attributes, uniqueAttributes, widget.id);
       default:
         return nothing;
     }
   }
 
-  private getDisabledStyles(type: WidgetType): Set<SharedAttributes> | null {
+  private getDisabledStyles(type: WidgetType): Set<SharedAttributes>|null {
     switch (type) {
       case WidgetType.MAP:
         return Map.disabledStyles;
@@ -680,9 +554,9 @@ ${value}</textarea
    * selected widget filtered out.
    */
   filterDisabledStyles(
-    styleAttributes: { [key in SharedAttributes]: string },
-    disabledStyles: Set<SharedAttributes>
-  ): { [key in SharedAttributes]: string } {
+      styleAttributes: {[key in SharedAttributes]: string},
+      disabledStyles: Set<SharedAttributes>):
+      {[key in SharedAttributes]: string} {
     const styles = Object.assign({}, styleAttributes);
 
     for (const attribute of disabledStyles) {
@@ -692,7 +566,7 @@ ${value}</textarea
     return styles;
   }
 
-  private getStyleAttributes(): Array<TemplateResult | {}> | {} {
+  private getStyleAttributes(): Array<TemplateResult|{}>|{} {
     const widget = this.editingWidget;
     if (widget == null) {
       return nothing;
@@ -703,11 +577,9 @@ ${value}</textarea
     const disabledStyles = this.getDisabledStyles(getWidgetType(widget.id));
 
     const filteredStyleAttributes = this.filterDisabledStyles(
-      styleAttributes,
-      disabledStyles ?? (emptySet as Set<SharedAttributes>)
-    );
+        styleAttributes, disabledStyles ?? (emptySet as Set<SharedAttributes>));
 
-    const inputs: Array<TemplateResult | {}> = [];
+    const inputs: Array<TemplateResult|{}> = [];
     for (const key of Object.keys(sharedAttributes)) {
       if (!filteredStyleAttributes.hasOwnProperty(key)) {
         continue;
@@ -727,75 +599,29 @@ ${value}</textarea
 
       switch (type) {
         case InputType.TEXT:
-          inputs.push(
-            this.getTextInput(
-              key,
-              attributeTitle,
-              value,
-              widget.id,
-              AttributeType.STYLE,
-              placeholder,
-              tooltip,
-              validator
-            )
-          );
+          inputs.push(this.getTextInput(
+              key, attributeTitle, value, widget.id, AttributeType.STYLE,
+              placeholder, tooltip, validator));
           break;
         case InputType.TEXTAREA:
-          inputs.push(
-            this.getTextareaInput(
-              key,
-              attributeTitle,
-              value,
-              widget.id,
-              AttributeType.STYLE,
-              placeholder,
-              tooltip,
-              validator
-            )
-          );
+          inputs.push(this.getTextareaInput(
+              key, attributeTitle, value, widget.id, AttributeType.STYLE,
+              placeholder, tooltip, validator));
           break;
         case InputType.COLOR:
-          inputs.push(
-            this.getColorInput(
-              key,
-              attributeTitle,
-              value,
-              widget.id,
-              AttributeType.STYLE,
-              tooltip
-            )
-          );
+          inputs.push(this.getColorInput(
+              key, attributeTitle, value, widget.id, AttributeType.STYLE,
+              tooltip));
           break;
         case InputType.SELECT:
-          inputs.push(
-            this.getSelectInput(
-              key,
-              attributeTitle,
-              value,
-              widget.id,
-              AttributeType.STYLE,
-              tooltip,
-              items
-            )
-          );
+          inputs.push(this.getSelectInput(
+              key, attributeTitle, value, widget.id, AttributeType.STYLE,
+              tooltip, items));
           break;
         case InputType.NUMBER:
-          inputs.push(
-            this.getNumberInput(
-              key,
-              attributeTitle,
-              value,
-              widget.id,
-              AttributeType.STYLE,
-              placeholder,
-              tooltip,
-              validator,
-              unit,
-              step,
-              min,
-              max
-            )
-          );
+          inputs.push(this.getNumberInput(
+              key, attributeTitle, value, widget.id, AttributeType.STYLE,
+              placeholder, tooltip, validator, unit, step, min, max));
           break;
       }
     }

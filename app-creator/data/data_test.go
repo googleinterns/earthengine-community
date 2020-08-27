@@ -1,12 +1,26 @@
+// Copyright 2020 The Google Earth Engine Community Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package data
 
 import (
-	"testing"
-	"net/http/httptest"
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"encoding/json"
+	"net/http/httptest"
 	"strings"
+	"testing"
 )
 
 func TestToJSON(t *testing.T) {
@@ -51,11 +65,11 @@ func TestFromJSON(t *testing.T) {
 
 var TemplatesStub = Templates{
 	&Template{
-		Id: "left-side-panel",
-		Name: "Left Side Panel",
+		Id:       "left-side-panel",
+		Name:     "Left Side Panel",
 		ImageUrl: "https://storage.googleapis.com/ee-app-creator.appspot.com/left-side-panel.jpeg",
-		Order: 1,
-		Device: "desktop",
+		Order:    1,
+		Device:   "desktop",
 		Template: `{
 			"id": "left-side-panel",
 			"name": "Left Side Panel",

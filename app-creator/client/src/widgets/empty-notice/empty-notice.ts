@@ -1,10 +1,27 @@
 /**
- *  @fileoverview The empty-notice widget displays an icon and a message.
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @fileoverview The empty-notice widget displays an icon and a message.
  */
-import { css, customElement, html, LitElement, property } from 'lit-element';
-import { styleMap } from 'lit-html/directives/style-map';
-import { classMap } from 'lit-html/directives/class-map';
+
 import '@polymer/iron-icon/iron-icon.js';
+
+import {css, customElement, html, LitElement, property} from 'lit-element';
+import {classMap} from 'lit-html/directives/class-map';
+import {styleMap} from 'lit-html/directives/style-map';
 
 export const EMPTY_NOTICE_ID = 'empty-notice';
 
@@ -73,39 +90,35 @@ export class EmptyNotice extends LitElement {
   /**
    * Additional custom styles.
    */
-  @property({ type: Object }) styles = {};
+  @property({type: Object}) styles = {};
 
   /**
    * Message to be displayed.
    */
-  @property({ type: String })
-  message = '';
+  @property({type: String}) message = '';
 
   /**
    * Iron icon id.
    */
-  @property({ type: String })
-  icon = '';
+  @property({type: String}) icon = '';
 
   /**
    * Sets icon and font size.
    */
-  @property({ type: String })
-  size = 'small';
+  @property({type: String}) size = 'small';
 
   /**
    * Sets bold property of message.
    */
-  @property({ type: Boolean })
-  bold = false;
+  @property({type: Boolean}) bold = false;
 
   render() {
-    const { message, icon, size, bold, styles } = this;
+    const {message, icon, size, bold, styles} = this;
 
     return html`
       <div id="container" class="${size}" style="${styleMap(styles)}">
         <iron-icon id="${EMPTY_NOTICE_ID}-icon" icon="${icon}"></iron-icon>
-        <p id="${EMPTY_NOTICE_ID}-message" class="${classMap({ bold })}">
+        <p id="${EMPTY_NOTICE_ID}-message" class="${classMap({bold})}">
           ${message}
         </p>
       </div>

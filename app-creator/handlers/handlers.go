@@ -1,17 +1,31 @@
+// Copyright 2020 The Google Earth Engine Community Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package handlers
 
 import (
-	"log"
-	"net/http"
-	"modules/data"
 	"github.com/googleapis/google-cloud-go-testing/datastore/dsiface"
+	"log"
+	"modules/data"
+	"net/http"
 )
 
 /*
  TemplatesHandler define the structure of a templates handler instance.
 */
 type TemplatesHandler struct {
-	l *log.Logger 
+	l  *log.Logger
 	db dsiface.Client
 }
 
@@ -27,12 +41,12 @@ func New(l *log.Logger, db dsiface.Client) *TemplatesHandler {
 */
 func (t *TemplatesHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
-		case http.MethodGet:
-			t.getTemplates(rw, r)
-			return
-		case http.MethodPost:
-			t.addTemplate(rw, r)
-			return
+	case http.MethodGet:
+		t.getTemplates(rw, r)
+		return
+	case http.MethodPost:
+		t.addTemplate(rw, r)
+		return
 	}
 
 	// Return method-not-allowed status for non-implemented methods.
@@ -54,7 +68,7 @@ func (t *TemplatesHandler) getTemplates(rw http.ResponseWriter, r *http.Request)
 }
 
 /*
- addTemplate is a helper method called on POST requests to "/templates". 
+ addTemplate is a helper method called on POST requests to "/templates".
  Adds a new template to the database.
 */
 func (t *TemplatesHandler) addTemplate(rw http.ResponseWriter, r *http.Request) {
@@ -71,4 +85,3 @@ func (t *TemplatesHandler) addTemplate(rw http.ResponseWriter, r *http.Request) 
 
 	t.l.Printf("Template added successfully to datastore: %#v", template)
 }
-

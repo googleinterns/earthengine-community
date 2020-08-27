@@ -1,10 +1,27 @@
 /**
- *  @fileoverview The palette-picker widget handles palette changes across the app creator.
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @fileoverview The palette-picker widget handles palette changes across the
+ * app creator.
  */
-import { css, customElement, html, LitElement, property } from 'lit-element';
-import { nothing } from 'lit-html';
-import { styleMap } from 'lit-html/directives/style-map';
-import { PaletteNames } from '../../redux/types/enums';
+
+import {css, customElement, html, LitElement, property} from 'lit-element';
+import {nothing} from 'lit-html';
+import {styleMap} from 'lit-html/directives/style-map';
+import {PaletteNames} from '../../redux/types/enums';
 
 export interface Palette {
   name: PaletteNames;
@@ -90,18 +107,17 @@ export class PalettePicker extends LitElement {
   /**
    * Additional custom styles.
    */
-  @property({ type: Object }) styles = {};
+  @property({type: Object}) styles = {};
 
   /**
    * Determines whether a title is displayed on top of the select input or not.
    */
-  @property({ type: Boolean }) showTitle = true;
+  @property({type: Boolean}) showTitle = true;
 
   /**
    * Selected palette.
    */
-  @property({ type: String }) selectedPalette: PaletteNames =
-    PaletteNames.LIGHT;
+  @property({type: String}) selectedPalette: PaletteNames = PaletteNames.LIGHT;
 
   /**
    * Callback triggered on new palette selection.
@@ -122,26 +138,25 @@ export class PalettePicker extends LitElement {
   }
 
   render() {
-    const { selectedPalette, showTitle, handlePaletteSelection, styles } = this;
+    const {selectedPalette, showTitle, handlePaletteSelection, styles} = this;
 
     const optionList = html`
       ${Object.keys(PaletteNames).map((palette) => {
-        const paletteLowerCase = palette.toLowerCase();
-        return html`<option
+      const paletteLowerCase = palette.toLowerCase();
+      return html`<option
           value="${paletteLowerCase}"
           ?selected=${this.selectedPalette === paletteLowerCase}
           >${paletteLowerCase}</option
         >`;
-      })}
+    })}
     `;
 
-    const header = showTitle
-      ? html`
+    const header = showTitle ? html`
           <div id="input-header">
             <p id="input-label">Palette</p>
           </div>
-        `
-      : nothing;
+        ` :
+                               nothing;
 
     return html`
       <div class="select-input-container" style=${styleMap(styles)}>

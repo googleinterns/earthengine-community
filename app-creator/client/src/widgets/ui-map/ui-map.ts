@@ -1,22 +1,38 @@
+/**
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @fileoverview The ui-map widget wraps a Google Map and exposes convenience
+ * methods to set properties on it.
+ */
+
 import {} from 'googlemaps';
-import { customElement, html, LitElement, css } from 'lit-element';
-import { InputType, Tab } from '../../redux/types/enums';
-import {
-  AttributeMetaData,
-  DefaultAttributesType,
-  getDefaultAttributes,
-  SharedAttributes,
-} from '../../redux/types/attributes';
-import { store } from '../../redux/store';
-import { setEditingWidget, setSelectedTab } from '../../redux/actions';
-import { aubergine } from '../../map-styles/aubergine';
-import { standard } from '../../map-styles/standard';
-import { silver } from '../../map-styles/silver';
-import { retro } from '../../map-styles/retro';
-import { night } from '../../map-styles/night';
-import { dark } from '../../map-styles/dark';
-import { DraggableWidget } from '../draggable-widget/draggable-widget';
-import { MAP_STYLES } from '../../utils/constants';
+import {css, customElement, html, LitElement} from 'lit-element';
+
+import {aubergine} from '../../map-styles/aubergine';
+import {dark} from '../../map-styles/dark';
+import {night} from '../../map-styles/night';
+import {retro} from '../../map-styles/retro';
+import {silver} from '../../map-styles/silver';
+import {standard} from '../../map-styles/standard';
+import {setEditingWidget, setSelectedTab} from '../../redux/actions';
+import {store} from '../../redux/store';
+import {AttributeMetaData, DefaultAttributesType, getDefaultAttributes, SharedAttributes,} from '../../redux/types/attributes';
+import {InputType, Tab} from '../../redux/types/enums';
+import {MAP_STYLES} from '../../utils/constants';
+import {DraggableWidget} from '../draggable-widget/draggable-widget';
 
 declare global {
   interface Window {
@@ -36,10 +52,8 @@ function loadGoogleMaps(apiKey: string) {
   }
   if (!initCalled) {
     const script = document.createElement('script');
-    script.src =
-      'https://maps.googleapis.com/maps/api/js?' +
-      (apiKey ? `key=${apiKey}&` : '') +
-      'callback=__initGoogleMap';
+    script.src = 'https://maps.googleapis.com/maps/api/js?' +
+        (apiKey ? `key=${apiKey}&` : '') + 'callback=__initGoogleMap';
     document.head.appendChild(script);
     initCalled = true;
   }
@@ -59,10 +73,12 @@ export class Map extends LitElement {
       min: -90,
       max: 90,
       type: InputType.NUMBER,
-      validator: (value: string) => {
-        const float = parseFloat(value);
-        return value === '' || (!isNaN(float) && float >= -90 && float <= 90);
-      },
+      validator:
+          (value: string) => {
+            const float = parseFloat(value);
+            return value === '' ||
+                (!isNaN(float) && float >= -90 && float <= 90);
+          },
     },
     longitude: {
       value: '-122.078827',
@@ -71,10 +87,12 @@ export class Map extends LitElement {
       max: 180,
       placeholder: '-122.078827',
       type: InputType.NUMBER,
-      validator: (value: string) => {
-        const float = parseFloat(value);
-        return value === '' || (!isNaN(float) && float >= -180 && float <= 180);
-      },
+      validator:
+          (value: string) => {
+            const float = parseFloat(value);
+            return value === '' ||
+                (!isNaN(float) && float >= -180 && float <= 180);
+          },
     },
     zoom: {
       value: '4',
@@ -113,14 +131,15 @@ export class Map extends LitElement {
     },
     customMapStyles: {
       value: '',
-      validator: (value: string) => {
-        try {
-          JSON.parse(value);
-          return true;
-        } catch (e) {
-          return false;
-        }
-      },
+      validator:
+          (value: string) => {
+            try {
+              JSON.parse(value);
+              return true;
+            } catch (e) {
+              return false;
+            }
+          },
       placeholder: 'Paste JSON here',
       type: InputType.TEXTAREA,
       tooltip: {
@@ -146,9 +165,8 @@ export class Map extends LitElement {
     'shown',
   ]);
 
-  static DEFAULT_MAP_ATTRIBUTES: DefaultAttributesType = getDefaultAttributes(
-    Map.attributes
-  );
+  static DEFAULT_MAP_ATTRIBUTES: DefaultAttributesType =
+      getDefaultAttributes(Map.attributes);
 
   /**
    * Map api key.
@@ -214,7 +232,7 @@ export class Map extends LitElement {
   /**
    * Sets map element.
    */
-  private map: google.maps.Map | null = null;
+  private map: google.maps.Map|null = null;
 
   connectedCallback() {
     this.onmousedown = this.handleMouseDown;
@@ -250,10 +268,9 @@ export class Map extends LitElement {
 
       this.mapOptions.mapTypeControl = this.mapTypeControl;
 
-      this.mapOptions.styles =
-        this.customMapStyles != ''
-          ? JSON.parse(this.customMapStyles)
-          : this.mapStyles;
+      this.mapOptions.styles = this.customMapStyles != '' ?
+          JSON.parse(this.customMapStyles) :
+          this.mapStyles;
 
       if (this.map == null) {
         this.map = new google.maps.Map(this, this.mapOptions);
@@ -262,8 +279,7 @@ export class Map extends LitElement {
       }
 
       this.dispatchEvent(
-        new CustomEvent('google-maps-ready', { detail: this.map })
-      );
+          new CustomEvent('google-maps-ready', {detail: this.map}));
     });
   }
 
@@ -307,10 +323,10 @@ export class Map extends LitElement {
         this.center = value;
         break;
       case 'latitude':
-        this.center = { ...this.center, lat: parseFloat(value) };
+        this.center = {...this.center, lat: parseFloat(value)};
         break;
       case 'longitude':
-        this.center = { ...this.center, lng: parseFloat(value) };
+        this.center = {...this.center, lng: parseFloat(value)};
         break;
       case 'map':
         this.map = value;
@@ -345,7 +361,7 @@ export class Map extends LitElement {
     return this.mapStyles;
   }
 
-  setStyle(style: { [key: string]: string }) {
+  setStyle(style: {[key: string]: string}) {
     for (const attribute in style) {
       if (attribute === 'height' || attribute === 'width') {
         this.style[attribute] = '100%';
@@ -364,19 +380,19 @@ export class Map extends LitElement {
     this.zoom = value;
   }
 
-  getCenter(): { lat: number; lng: number } {
+  getCenter(): {lat: number; lng: number} {
     return this.center;
   }
 
-  setCenter(value: { lat: number; lng: number }) {
+  setCenter(value: {lat: number; lng: number}) {
     this.center = value;
   }
 
-  getMap(): google.maps.Map<Element> | null {
+  getMap(): google.maps.Map<Element>|null {
     return this.map;
   }
 
-  setMap(map: google.maps.Map | null) {
+  setMap(map: google.maps.Map|null) {
     this.map = map;
   }
 }

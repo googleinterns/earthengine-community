@@ -1,17 +1,23 @@
 /**
- *  @fileoverview The widgets-tab component contains the different widgets that the user can add to their
- *  template
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @fileoverview The widgets-tab component contains the different widgets that
+ * the user can add to their template
  */
-import {
-  LitElement,
-  html,
-  customElement,
-  css,
-  TemplateResult,
-  property,
-} from 'lit-element';
-import { nothing } from 'lit-html';
-import { onSearchEvent } from '../search-bar/search-bar';
+
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '../tab-container/tab-container';
@@ -27,6 +33,11 @@ import '../ui-chart/ui-chart';
 import '../search-bar/search-bar';
 import '../empty-notice/empty-notice';
 import '../ui-map/ui-map';
+
+import {css, customElement, html, LitElement, property, TemplateResult,} from 'lit-element';
+import {nothing} from 'lit-html';
+
+import {onSearchEvent} from '../search-bar/search-bar';
 
 interface WidgetItem {
   id: string;
@@ -120,10 +131,10 @@ export class WidgetsTab extends LitElement {
   /**
    * Sets the search query.
    */
-  @property({ type: String }) query = '';
+  @property({type: String}) query = '';
 
   render() {
-    const { query, filterWidgets, handleSearch } = this;
+    const {query, filterWidgets, handleSearch} = this;
     const filteredWidgets: WidgetItem[] = filterWidgets(query);
     const emptyNotice = html`
       <empty-notice
@@ -141,7 +152,7 @@ export class WidgetsTab extends LitElement {
           placeholder="Search for widget (i.e. button)"
           @onsearch=${handleSearch}
         ></search-bar>
-        ${filteredWidgets.map(({ markup }) => markup)}
+        ${filteredWidgets.map(({markup}) => markup)}
         ${filteredWidgets.length === 0 ? emptyNotice : nothing}
       </tab-container>
     `;
@@ -151,12 +162,11 @@ export class WidgetsTab extends LitElement {
    * Returns widgets with names and ids that include the search query.
    */
   filterWidgets(query: string): WidgetItem[] {
-    return WidgetsTab.widgets.filter(({ id, name }) => {
+    return WidgetsTab.widgets.filter(({id, name}) => {
       const lowerCasedQuery = query.toLowerCase();
       return (
-        id.toLowerCase().includes(lowerCasedQuery) ||
-        name.toLowerCase().includes(lowerCasedQuery)
-      );
+          id.toLowerCase().includes(lowerCasedQuery) ||
+          name.toLowerCase().includes(lowerCasedQuery));
     });
   }
 
@@ -164,7 +174,7 @@ export class WidgetsTab extends LitElement {
    * Sets the query property when an onsearch event is dispatched from the
    * searchbar widget.
    */
-  private handleSearch({ detail: { query } }: onSearchEvent) {
+  private handleSearch({detail: {query}}: onSearchEvent) {
     this.query = query;
   }
 }

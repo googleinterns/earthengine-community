@@ -1,31 +1,23 @@
 /**
- *  @fileoverview The templates-tab widget contains the different templates that the user can use for their earth engine app.
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @fileoverview The templates-tab widget contains the different templates
+ * that the user can use for their Earth Engine App.
  */
-import {
-  LitElement,
-  html,
-  customElement,
-  css,
-  property,
-  query,
-} from 'lit-element';
-import { nothing, TemplateResult } from 'lit-html';
-import { onSearchEvent } from '../search-bar/search-bar';
-import { store } from '../../redux/store';
-import { setSelectedTemplate } from '../../redux/actions';
-import { templatesManager } from '../../data/templates';
-import { connect } from 'pwa-helpers';
-import { AppCreatorStore } from '../../redux/reducer';
-import { DeviceType } from '../../redux/types/enums';
-import { classMap } from 'lit-html/directives/class-map';
-import {
-  chips,
-  storeSnapshotInLocalStorage,
-  setUrlParam,
-} from '../../utils/helpers';
-import { transferData } from '../../utils/template-generation';
-import { PaperDialogElement } from '@polymer/paper-dialog';
-import { TEMPLATE_TIMESTAMP } from '../../utils/constants';
+
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '../tab-container/tab-container';
@@ -42,6 +34,22 @@ import '../search-bar/search-bar';
 import '../empty-notice/empty-notice';
 import '../template-card/template-card';
 
+import {PaperDialogElement} from '@polymer/paper-dialog';
+import {css, customElement, html, LitElement, property, query,} from 'lit-element';
+import {nothing, TemplateResult} from 'lit-html';
+import {classMap} from 'lit-html/directives/class-map';
+import {connect} from 'pwa-helpers';
+
+import {templatesManager} from '../../data/templates';
+import {setSelectedTemplate} from '../../redux/actions';
+import {AppCreatorStore} from '../../redux/reducer';
+import {store} from '../../redux/store';
+import {DeviceType} from '../../redux/types/enums';
+import {TEMPLATE_TIMESTAMP} from '../../utils/constants';
+import {chips, setUrlParam, storeSnapshotInLocalStorage,} from '../../utils/helpers';
+import {transferData} from '../../utils/template-generation';
+import {onSearchEvent} from '../search-bar/search-bar';
+
 export interface TemplatesTabItem {
   id: string;
   name: string;
@@ -49,8 +57,8 @@ export interface TemplatesTabItem {
   device: DeviceType;
 }
 
-@customElement('templates-tab')
-export class TemplatesTab extends connect(store)(LitElement) {
+@customElement('templates-tab') export class TemplatesTab extends connect
+(store)(LitElement) {
   static styles = css`
     paper-button {
       color: var(--accent-color);
@@ -92,24 +100,25 @@ export class TemplatesTab extends connect(store)(LitElement) {
   `;
 
   /**
-   * Represents the id of the currently selected template. Used to rerender templates tab.
+   * Represents the id of the currently selected template. Used to rerender
+   * templates tab.
    */
-  @property({ type: String }) selectedTemplateID: string = '';
+  @property({type: String}) selectedTemplateID: string = '';
 
   /**
    * ID of template to be selected.
    */
-  @property({ type: String }) requestedTemplateID: string = '';
+  @property({type: String}) requestedTemplateID: string = '';
 
   /**
    * Sets the search query.
    */
-  @property({ type: String }) query = '';
+  @property({type: String}) query = '';
 
   /**
    * Sets device filter.
    */
-  @property({ type: String }) deviceFilter = DeviceType.ALL;
+  @property({type: String}) deviceFilter = DeviceType.ALL;
 
   /**
    * Reference to template change confirmation dialog.
@@ -126,7 +135,7 @@ export class TemplatesTab extends connect(store)(LitElement) {
 
   private getTemplateCards(showTitle = false) {
     const templates = templatesManager.getTemplates();
-    return templates.map(({ id, name, imageUrl, device }) => {
+    return templates.map(({id, name, imageUrl, device}) => {
       return {
         id,
         name,
@@ -150,19 +159,16 @@ export class TemplatesTab extends connect(store)(LitElement) {
    * Returns widgets with names and ids that include the search query.
    */
   static filterTemplates(
-    templateCards: TemplatesTabItem[],
-    query: string,
-    deviceFilter: DeviceType
-  ): Array<TemplatesTabItem> {
-    return templateCards.filter(({ id, name, device }) => {
+      templateCards: TemplatesTabItem[], query: string,
+      deviceFilter: DeviceType): Array<TemplatesTabItem> {
+    return templateCards.filter(({id, name, device}) => {
       // Matches either the ID or name.
-      const queryMatch =
-        id.match(new RegExp(`${query}`, 'i')) ||
-        name.match(new RegExp(`${query}`, 'i'));
+      const queryMatch = id.match(new RegExp(`${query}`, 'i')) ||
+          name.match(new RegExp(`${query}`, 'i'));
 
       // And matches the device type (or all).
       const deviceMatch =
-        deviceFilter === DeviceType.ALL || device === deviceFilter;
+          deviceFilter === DeviceType.ALL || device === deviceFilter;
 
       return queryMatch && deviceMatch;
     });
@@ -184,9 +190,9 @@ export class TemplatesTab extends connect(store)(LitElement) {
    * Callback triggered on template change confirmation.
    */
   private handleTemplateChangeConfirmation() {
-    const template = templatesManager
-      .getTemplates()
-      .find(({ id }) => id === this.requestedTemplateID)?.template;
+    const template = templatesManager.getTemplates()
+                         .find(({id}) => id === this.requestedTemplateID)
+                         ?.template;
 
     if (template) {
       try {
@@ -196,7 +202,8 @@ export class TemplatesTab extends connect(store)(LitElement) {
 
         storeSnapshotInLocalStorage(timestamp);
 
-        // Replace the redux store with the new template and trigger a re-render.
+        // Replace the redux store with the new template and trigger a
+        // re-render.
         const templateJSON = JSON.parse(template);
 
         store.dispatch(setSelectedTemplate(templateJSON));
@@ -224,20 +231,17 @@ export class TemplatesTab extends connect(store)(LitElement) {
    * Sets the query property when an onsearch event is dispatched from the
    * searchbar widget.
    */
-  private handleSearch({ detail: { query } }: onSearchEvent) {
+  private handleSearch({detail: {query}}: onSearchEvent) {
     this.query = query.trim();
   }
 
   render() {
-    const { query, deviceFilter, getTemplateCards, handleSearch } = this;
+    const {query, deviceFilter, getTemplateCards, handleSearch} = this;
 
     const templateCards = getTemplateCards.call(this);
 
-    const filteredTemplates = TemplatesTab.filterTemplates(
-      templateCards,
-      query,
-      deviceFilter
-    );
+    const filteredTemplates =
+        TemplatesTab.filterTemplates(templateCards, query, deviceFilter);
 
     const emptyNotice = html`
       <empty-notice
@@ -251,21 +255,21 @@ export class TemplatesTab extends connect(store)(LitElement) {
 
     const sortingChips = html`
       <div id="chips-container">
-        ${chips.map(({ label, device }) => {
-          return html`
+        ${chips.map(({label, device}) => {
+      return html`
             <paper-button
               class=${classMap({
-                'selected-paper-chip': this.deviceFilter === device,
-                'button-chip': true,
-              })}
+        'selected-paper-chip': this.deviceFilter === device,
+        'button-chip': true,
+      })}
               @click=${() => {
-                this.deviceFilter = device;
-              }}
+        this.deviceFilter = device;
+      }}
             >
               ${label}
             </paper-button>
           `;
-        })}
+    })}
       </div>
     `;
 
@@ -296,7 +300,7 @@ export class TemplatesTab extends connect(store)(LitElement) {
         ></search-bar>
         ${sortingChips}
         <div id="cards-container">
-          ${filteredTemplates.map(({ markup }) => markup)}
+          ${filteredTemplates.map(({markup}) => markup)}
           ${filteredTemplates.length === 0 ? emptyNotice : nothing}
         </div>
         ${templateChangeConfirmationDialog}

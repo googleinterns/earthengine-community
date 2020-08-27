@@ -1,16 +1,27 @@
 /**
- *  @fileoverview This file tests the helper functions defined in utils.
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @fileoverview This file tests the helper functions defined in utils.
  */
-import { expect } from '@open-wc/testing';
-import { AppCreatorStore } from '../../redux/reducer';
-import { PaletteNames } from '../../redux/types/enums';
-import {
-  deepCloneTemplate,
-  camelCaseToTitleCase,
-  getWidgetType,
-  getIdPrefixLastIndex,
-  generateRandomId,
-} from '../helpers';
+
+import {expect} from '@open-wc/testing';
+
+import {AppCreatorStore} from '../../redux/reducer';
+import {PaletteNames} from '../../redux/types/enums';
+import {camelCaseToTitleCase, deepCloneTemplate, generateRandomId, getIdPrefixLastIndex, getWidgetType,} from '../helpers';
 
 suite('util helpers', () => {
   suite('deep cloning templates', () => {
@@ -25,16 +36,14 @@ suite('util helpers', () => {
       const template = createTemplateStub();
       const templateCopy = deepCloneTemplate(template);
 
-      expect(templateCopy.widgets['panel-0'].children).not.equal(
-        template.widgets['panel-0'].children
-      );
+      expect(templateCopy.widgets['panel-0'].children)
+          .not.equal(template.widgets['panel-0'].children);
     });
 
     test('skips refs by default', () => {
       const template = createTemplateStub();
-      template.widgets['label-0'].widgetRef = document.createElement(
-        'ui-label'
-      );
+      template.widgets['label-0'].widgetRef =
+          document.createElement('ui-label');
       const templateCopy = deepCloneTemplate(template);
 
       expect(templateCopy.widgets['label-0'].widgetRef).to.not.exist;

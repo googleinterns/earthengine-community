@@ -1,10 +1,26 @@
 /**
- *  @fileoverview This file tests the attributes-tab widget.
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @fileoverview This file tests the attributes-tab widget.
  */
-import { AttributesTab } from '../attributes-tab';
-import { fixture, html, expect, assert } from '@open-wc/testing';
-import { DEFAULT_STYLES } from '../../../redux/helpers';
-import { SharedAttributes } from '../../../redux/types/attributes';
+import {assert, expect, fixture, html} from '@open-wc/testing';
+
+import {DEFAULT_STYLES} from '../../../redux/helpers';
+import {SharedAttributes} from '../../../redux/types/attributes';
+import {AttributesTab} from '../attributes-tab';
 
 suite('attributes-tab', () => {
   test('is defined', () => {
@@ -29,10 +45,8 @@ suite('attributes-tab', () => {
 
   test('disabled styles are not part of style attributes', async () => {
     const attributesTab = new AttributesTab();
-    const styles: { [key in SharedAttributes]: string } = Object.assign(
-      {},
-      DEFAULT_STYLES
-    );
+    const styles: {[key in SharedAttributes]: string} =
+        Object.assign({}, DEFAULT_STYLES);
 
     const disabledStyles = new Set<SharedAttributes>([
       'backgroundColor',
@@ -41,10 +55,8 @@ suite('attributes-tab', () => {
       'fontWeight',
     ]);
 
-    const filteredStyles = attributesTab.filterDisabledStyles(
-      styles,
-      disabledStyles
-    );
+    const filteredStyles =
+        attributesTab.filterDisabledStyles(styles, disabledStyles);
 
     expect(filteredStyles).deep.equal({
       height: 'px',

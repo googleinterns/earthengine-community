@@ -1,16 +1,24 @@
 /**
+ * @license
+ * Copyright 2020 The Google Earth Engine Community Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  *  @fileoverview The actions-panel widget is the left side panel in which
  *  all template actions take place. This includes selecting templates,
  *  adding widgets, and editing widget attributes.
  */
-import { LitElement, html, customElement, css, property } from 'lit-element';
-import { nothing } from 'lit-html';
-import { IronIconElement } from '@polymer/iron-icon';
-import { store } from '../../redux/store';
-import { connect } from 'pwa-helpers';
-import { AppCreatorStore } from '../../redux/reducer';
-import { setSelectedTab } from '../../redux/actions';
-import { Tab } from '../../redux/types/enums';
+
 import '@polymer/paper-tabs/paper-tabs.js';
 import '@polymer/paper-tabs/paper-tab.js';
 import '@polymer/iron-icon/iron-icon.js';
@@ -21,8 +29,18 @@ import '../widgets-tab/widgets-tab';
 import '../attributes-tab/attributes-tab';
 import '../templates-tab/templates-tab';
 
-@customElement('actions-panel')
-export class ActionsPanel extends connect(store)(LitElement) {
+import {IronIconElement} from '@polymer/iron-icon';
+import {css, customElement, html, LitElement, property} from 'lit-element';
+import {nothing} from 'lit-html';
+import {connect} from 'pwa-helpers';
+
+import {setSelectedTab} from '../../redux/actions';
+import {AppCreatorStore} from '../../redux/reducer';
+import {store} from '../../redux/store';
+import {Tab} from '../../redux/types/enums';
+
+@customElement('actions-panel') export class ActionsPanel extends connect
+(store)(LitElement) {
   static styles = css`
     #container {
       width: var(--actions-panel-width);
@@ -66,8 +84,7 @@ export class ActionsPanel extends connect(store)(LitElement) {
   /**
    * Sets the currently selected tab.
    */
-  @property({ type: Number })
-  selectedTab = Tab.TEMPLATES;
+  @property({type: Number}) selectedTab = Tab.TEMPLATES;
 
   private handleTabSwitch(index: Tab) {
     store.dispatch(setSelectedTab(index));
@@ -76,7 +93,7 @@ export class ActionsPanel extends connect(store)(LitElement) {
   /**
    * Collapses/Expands the actions panel.
    */
-  private togglePanel({ target }: { target: EventTarget }) {
+  private togglePanel({target}: {target: EventTarget}) {
     const panel = this.shadowRoot?.getElementById('container');
 
     if (panel == null) {
@@ -93,7 +110,7 @@ export class ActionsPanel extends connect(store)(LitElement) {
   }
 
   render() {
-    const { selectedTab } = this;
+    const {selectedTab} = this;
 
     let renderedTab = nothing;
     switch (selectedTab) {
