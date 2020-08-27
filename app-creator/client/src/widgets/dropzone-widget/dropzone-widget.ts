@@ -152,9 +152,12 @@ export class Dropzone extends LitElement {
     // If a widget exists in another panel, remove it.
     const widgets = store.getState().template.widgets;
     for (const id in widgets) {
-      if (typeof widgets[id] === 'object' && !Array.isArray(widgets[id]) &&
-          id !== parent!.id && id !== SCRATCH_PANEL &&
-          widgets[id].children.includes(clone.id)) {
+      if (
+        typeof widgets[id] === 'object' &&
+        !Array.isArray(widgets[id]) &&
+        id !== parent!.id &&
+        widgets[id].children.includes(clone.id)
+      ) {
         const widget = widgets[clone.id].widgetRef;
         const draggable = widget.parentElement as DraggableWidget;
         const dropzone = draggable.parentElement as Dropzone;

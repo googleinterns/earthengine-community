@@ -271,10 +271,24 @@ export function normalizeTemplate(template: AppCreatorStore['template']) {
           getArrayStringFromCommaSeparatedValues(colors);
       const dataTable = widgets[id].uniqueAttributes.dataTable;
       widgets[id].uniqueAttributes.dataTable = normalizeDataTable(dataTable);
+    } else if (type === WidgetType.MAP) {
+      const customMapStyles = widgets[id].uniqueAttributes.customMapStyles;
+      if (customMapStyles !== '') {
+        widgets[id].uniqueAttributes.customMapStyles = normalizeCustomMapStyles(
+          customMapStyles
+        );
+      }
     }
   }
 
   return template;
+}
+
+/**
+ * Removes white spaces and adds the necessary escape characters for parsing.
+ */
+function normalizeCustomMapStyles(customMapStyles: string) {
+  return customMapStyles.replace(/\s/g, '').replace(/\"/g, '\\"');
 }
 
 /**
