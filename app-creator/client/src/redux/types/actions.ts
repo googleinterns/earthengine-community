@@ -142,4 +142,4 @@ export type AppCreatorAction =
     SetSelectedTabAction|SetIsReorderingAction|SetSelectedTemplate|
     SetSelectedTemplateIDAction|SetPalette|SetEventType|AddWidgetMetaData|
     ResetDraggingValuesAction|RemoveWidget|IncrementWidgetAction|
-    UpdateWidgetMetaData|UpdateWidgetChildren|UpdateWidgetIDs;
+    UpdateWidgetMetaData|UpdateWidgetChildren|UpdateWidgetIDs|UpdateWidgetSharedStatus;

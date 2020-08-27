@@ -18,7 +18,7 @@
  * uses to resolve dispatched actions.
  */
 
-import {AnyAction, Reducer} from 'redux';
+import {Reducer} from 'redux';
 
 import {deepCloneTemplate} from '../utils/helpers';
 import {Palette, PalettePicker,} from '../widgets/palette-picker/palette-picker';
@@ -79,7 +79,7 @@ const INITIAL_STATE: AppCreatorStore = {
  * @param state current state of our application.
  * @param action action to be resolved.
  */
-export const reducer: Reducer<AppCreatorStore, AppCreatorAction|AnyAction> =
+export const reducer: Reducer<AppCreatorStore, AppCreatorAction> =
     (state = INITIAL_STATE, action): AppCreatorStore => {
       switch (action.type) {
         case SET_DRAGGING_WIDGET:

@@ -18,7 +18,8 @@
  * state of our application.
  */
 
-import {createStore} from 'redux';
-import {reducer} from './reducer.js';
+import {createStore, Store, AnyAction} from 'redux';
+import {reducer, AppCreatorStore} from './reducer.js';
+import { AppCreatorAction } from './types/actions.js';
 
-export const store = createStore(reducer);
+export const store: Store<AppCreatorStore, AppCreatorAction|AnyAction> = createStore(reducer);
