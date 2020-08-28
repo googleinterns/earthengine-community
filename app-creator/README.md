@@ -16,8 +16,9 @@ Let's get started!
 
 ___
 
-The core features of the App Creator revolve around its templates. A template can be defined as a particular layout configuration (i.e. Left Side Panel, Right Side Legend, etc...).
-Here are some examples of what a template may look like.
+The core features of the App Creator revolve around its templates. A template can be defined as a particular layout configuration (i.e. Left Side Panel, Right Side Legend, etc...). Here are some examples of what a template may look like.
+
+
 
 
 
