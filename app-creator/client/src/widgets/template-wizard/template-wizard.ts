@@ -271,12 +271,15 @@ export class TemplateWizard extends LitElement {
         this.templates = templates;
       }
     } catch (e) {
-      const fetchErrorToast = this.shadowRoot?.getElementById(
-                                  'fetch-error-toast') as PaperToastElement;
+      console.error(e);
+      // TODO: Uncomment when datastore templates do not 
+      // reflect the ones on the client.
+      // const fetchErrorToast = this.shadowRoot?.getElementById(
+      //                             'fetch-error-toast') as PaperToastElement;
 
-      if (fetchErrorToast != null) {
-        fetchErrorToast.open();
-      }
+      // if (fetchErrorToast != null) {
+      //   fetchErrorToast.open();
+      // }
       this.templates = templatesManager.getTemplates();
     } finally {
       this.loading = false;
