@@ -10,8 +10,7 @@
 <p align="center">
 The Earth Engine App Creator is an open source UI editor that lets users build rich and beautiful Earth Engine Apps with ease. 
 The App Creator was developed to help users quickly build user interfaces for their apps without needing to write any code. 
-Apps developed using the App Creator can be imported into the code editor for further development (i.e. Binding actions, Loading datasets, Adding map layers, etc...). This
-doc walks through some of the features of the App Creator and looks at how one can set up a development environment locally. 
+Apps developed using the App Creator can be imported into the code editor for further development (i.e. Binding actions, Loading datasets, Adding map layers, etc...). This doc walks through some of the features of the App Creator and looks at how one can set up a development environment locally. 
 Let's get started!
 </p>
 
