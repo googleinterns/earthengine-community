@@ -1,4 +1,13 @@
 <!--
+---
+title: Getting started with the Earth Engine App Creator
+description: This tutorial is an introduction to the Earth Engine App Creator. A code-free UI editor that lets users build rich and beautiful Earth Engine Apps with ease.
+author: mibrah42
+tags: earth-engine, app-creator, front-end, apps, javascript 
+date_published: 2020-09-01
+---
+-->
+<!--
 Copyright 2019 The Google Earth Engine Community Authors
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,8 +34,17 @@ This tutorial is an introduction to the Earth Engine App Creator. A code-free UI
 </div>
 
 <div align="center">
-<i align="center">The App Creator Interface.</i>
+<i align="center">Figure 1. The App Creator Interface.</i>
 </div>
+
+## Table of contents
+1. Building a simple app.
+2. Binding Actions.
+3. Loading a dataset.
+4. Template switching.
+5. Template Duplication.
+6. Creating Multi-selector Apps.
+7. Creating Multi-device Apps. 
 
 ## Building a simple app
 
@@ -39,7 +57,7 @@ Let's look at how we can create the following user interface.
 </div>
 
 <div align="center">
-<i align="center">The Earth Engine App we're going to build in this section.</i>
+<i align="center">Figure 2. The Earth Engine App we're going to build in this section.</i>
 </div>
 <br  />
 
@@ -53,7 +71,7 @@ To start off, let's first open the App Creator by going on the following link: [
 </kbd>
 </div>
 <div align="center">
-<i align="center">App configuration wizard.</i>
+<i align="center">Figure 3. App configuration wizard.</i>
 </div>
 <br  />
 
@@ -67,7 +85,7 @@ Simply drag and drop the widgets you would like to add to a designated drop zone
 </kbd>
 </div>
 <div align="center">
-<i align="center">Adding widgets to the template.</i>
+<i align="center">Figure 4. Adding widgets to the template.</i>
 </div>
 <br  />
 
@@ -79,7 +97,7 @@ In order to edit widget attributes such as text and colour properties, we can si
 </kbd>
 </div>
 <div align="center">
-<i align="center">Editing widget attributes.</i>
+<i align="center">Figure 5. Editing widget attributes.</i>
 </div>
 <br  />
 
@@ -91,7 +109,7 @@ Let's also add some padding on the panel widget by changing the value from `0px`
 </kbd>
 </div>
 <div align="center">
-<i align="center">Editing the padding attribute on a panel widget.</i>
+<i align="center">Figure 6. Editing the padding attribute on a panel widget.</i>
 </div>
 <br  />
 
@@ -103,7 +121,7 @@ Now that we are done creating our UI, let's look at how we can load our app in t
 </kbd>
 </div>
 <div align="center">
-<i align="center">Exporting a template and copying code snippet.</i>
+<i align="center">Figure 7. Exporting a template and copying code snippet.</i>
 </div>
 <br  />
 
@@ -131,7 +149,7 @@ We can now paste this snippet in the code editor to render our app.
 </kbd>
 </div>
 <div align="center">
-<i align="center">Running code snippet on the code editor.</i>
+<i align="center">Figure 8. Running code snippet on the code editor.</i>
 </div>
 <br  />
 
@@ -180,7 +198,7 @@ In this section, we are going to look at how we can load a dataset into the Eart
 </kbd>
 </div>
 <div align="center">
-<i align="center">The Earth Engine App built in this section visualizing the SRTM90_V4 dataset.</i>
+<i align="center">Figure 9. The Earth Engine App built in this section visualizing the SRTM90_V4 dataset.</i>
 </div>
 <br  />
 
@@ -268,7 +286,7 @@ Template switching allows us to change templates in the App Creator without havi
 </kbd>
 </div>
 <div align="center">
-<i align="center">Example of switching between a `Left Side Panel` template and a `Right Side Panel` template.</i>
+<i align="center">Figure 10. Example of switching between a `Left Side Panel` template and a `Right Side Panel` template.</i>
 </div>
 <br  />
 
@@ -284,11 +302,11 @@ To duplicate a template, we can click on the `duplicate` button on the top-right
 
 <div align="center">
 <kbd>
-<img src="https://user-images.githubusercontent.com/26859947/91486054-beeb4d00-e879-11ea-9790-a680735733b1.gif" width="500px"  />
+<img src="https://user-images.githubusercontent.com/26859947/91486054-beeb4d00-e879-11ea-9790-a680735733b1.gif" width="600px"  />
 </kbd>
 </div>
 <div align="center">
-<i align="center">Example of duplicating a template.</i>
+<i align="center">Figure 11. Example of duplicating a template.</i>
 </div>
 <br  />
 
@@ -300,7 +318,7 @@ Once, we have selected the template, we can now edit all of our text fields to b
 </kbd>
 </div>
 <div align="center">
-<i align="center">Spanish version of the app created in section 1.</i>
+<i align="center">Figure 12. Spanish version of the app created in section 1.</i>
 </div>
 <br  />
 
@@ -316,7 +334,7 @@ In this section, we're going to look at how we can create a multi-lingual app th
 </kbd>
 </div>
 <div align="center">
-<i align="center">The multi-lingual app built by the end of this section that supports English and Spanish.</i>
+<i align="center">Figure 13. The multi-lingual app built by the end of this section that supports English and Spanish.</i>
 </div>
 <br  />
 
@@ -353,7 +371,7 @@ Note that the keys of the object passed in to the `createMultiSelectorApp` metho
 </kbd>
 </div>
 <div align="center">
-<i align="center">Example of a select drop down menu used in multi-selector apps.</i>
+<i align="center">Figure 14. Example of a select drop down menu used in multi-selector apps.</i>
 </div>
 <br  />
 
@@ -383,7 +401,7 @@ multiSelectorApp.set('Spanish', spanish);
  multiSelectorApp.draw();
 ```
 
-As you can see above, we created an empty `multiSelectorApp` object and added the apps created in a following step. Lastly, let's look at how this code works with the rest of our example from the first 3 sections. This includes how we bind actions to buttons on each version and how to load a dataset on each map.
+As you can see above, we created an empty `multiSelectorApp` object and added the apps created in a following step. Lastly, let's look at how this code works with the rest of our example from the first 3 sections. This includes binding actions to buttons on each version and loading a dataset on each map.
 
 ```Typescript
 var AppCreator = require('...');
@@ -440,3 +458,77 @@ var multiSelectorApp = AppCreator.createMultiSelectorApp({
  */
  multiSelectorApp.draw();
 ```
+
+And now our app is complete! This approach can also be used for other use cases such building a multi-themed app with light and dark modes.
+
+In the next section, we're going to look at how we can create dynamically re-sizable apps using the `createMultiDeviceApp` API.
+
+## Creating Multi-Device Apps
+
+In order to create apps that adjust to all screen sizes, the App Creator module provides a method called `createMultiDeviceApp` that lets us create dynamically re-sizable templates. Let's look at the app that we're going to create by the end of this section. 
+
+<div align="center">
+<kbd>
+<img src="https://user-images.githubusercontent.com/26859947/91491828-a2074780-e882-11ea-9d64-4c195bcc0d43.gif" width="500px"  />
+</kbd>
+</div>
+<div align="center">
+<i align="center">Figure 15. A dynamically re-sizable app created using the createMultiDeviceApp API.</i>
+</div>
+<br  />
+
+While building this app, we're also going to learn how to quickly change themes by selecting one of the pre-existing color palettes. 
+
+Let's start off from the app built in section 1. To achieve the dark themed look as the figure above displays, we can change the color palette using the drop down menu right above the story board. As we can see, there are a set of pre-defined palettes to choose from. Let's select the palette with the name `aubergine`. The next step is to change the styling on the map widget. We can do this by clicking on the map and setting the `Map Styles` property to `silver`. The following figure demonstrates these steps.
+
+<div align="center">
+<kbd>
+<img src="https://user-images.githubusercontent.com/26859947/91520199-b4a17100-e8c2-11ea-96bb-a27853023037.gif" width="600px"  />
+</kbd>
+</div>
+<div align="center">
+<i align="center">Figure 16. Example of changing color palettes and map styles.</i>
+</div>
+<br  />
+ 
+After we've changed the theme, lets duplicate the app by clicking on the `duplicate` button on the top right corner. We will use the new copy for creating our mobile version. In the new browser tab, let's add a name in the `App name` field, select `aubergine` for the color palette, select `Left Drawer Mobile` for the template, and click `Continue`.
+
+We will notice that the scratch panel on the right hand side has been populated by widgets from the previous template. Lets drag and drop those widgets onto the new one. We will also want to change the map styling to `silver`. Here is what the final result should look like.
+
+<div align="center">
+<kbd>
+<img src="https://user-images.githubusercontent.com/26859947/91521514-d05a4680-e8c5-11ea-9dd2-01fee97090cb.png" width="300px"  />
+</kbd>
+</div>
+<div align="center">
+<i align="center">Figure 17. The mobile version of the app created in this section.</i>
+</div>
+<br  />
+
+In order to create a dynamically re-sizable app using the two templates created above, we will need to import them into the code editor and pass them as arguments to the `createMultiDeviceApp` method.
+
+Let's do this by exporting both templates and adding them to the code editor. The merged code output should look like this.
+
+```Typescript
+var AppCreator = require('...');
+
+/**
+ * Create desktop and mobile apps.
+ */
+var desktop = AppCreator.createApp('...');
+var mobile = AppCreator.createApp('...');
+
+/**
+ * Create a multiDeviceApp object.
+ */
+var multiDeviceApp = AppCreator.createMultiDeviceApp({desktop: desktop, mobile: mobile});
+
+/**
+ * Draw app to screen. 
+ */
+multiDeviceApp.draw();
+```
+
+We can notice that the `createMultiDeviceApp` takes in an object with the keys `desktop` and `mobile`. The values passed to those keys are single app instances created using the `createApp` API. The method then creates an app that re-renders on smaller screen sizes to display the mobile version. 
+
+And that's it! We have successfully created an app that dynamically resizes to fit smaller screens. If we would like to bind actions to it or add map layers, we can follow the same approach as we used for multi-selector apps.
