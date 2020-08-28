@@ -106,16 +106,13 @@ Here is a visualization of how our JSON structure maps to a UI layout.
 
 We can see that the widgets with ids `panel-template-1` and `map-template-0` are declared as children to `panel-template-0` and how that relationship is reflected in the UI. Notice that the child ordering in the JSON is important because having `["panel-template-1", "map-template-0"]` renders a different layout than `["map-template-0", "panel-template-1"]`.
 
-
 ## Setup
 
-switch to client directory:
+Switch to client directory:
 
 ```bash
 cd client
 ```
-
-Install dependencies:
 
 ```bash
 npm i
