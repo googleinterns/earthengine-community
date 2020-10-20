@@ -16,7 +16,7 @@
  */
 
 var AppCreator =
-    require('users/msibrahim/app-creator:app-creator-deserializer');
+    require('users/google/app-creator:app-creator-deserializer');
 
 /**
  * AppCreator.createMultiSelectorApp provides an API for building switchable

@@ -301,10 +301,10 @@ export class TemplateWizard extends LitElement {
   /**
    * Generates an input header for each setting input.
    */
-  private createInputHeader(title: string) {
+  private createInputHeader(title: string, required: boolean) {
     return html`
       <div class="input-header">
-        <p class="input-label">${title}</p>
+        <p class="input-label">${title}${required ? html`&nbsp;<span style="color:red">(required)</span>` : nothing}</p>
       </div>
     `;
   }
@@ -356,7 +356,7 @@ export class TemplateWizard extends LitElement {
       disabled: boolean, required?: boolean): TemplateResult {
     return html`
     <div class="config-input-container">
-        ${this.createInputHeader(title)}
+        ${this.createInputHeader(title, !!required)}
         <input
             class='config-input text-input'
             placeholder=${placeholder}
@@ -479,7 +479,7 @@ export class TemplateWizard extends LitElement {
         <div class="form-inputs">
           ${
         this.createTextInput(
-            'App Name:', this.config.name, 'i.e. Global Forest Change', 'name',
+            'App Name', this.config.name, 'i.e. Global Forest Change', 'name',
             false, true)}
           <palette-picker
             class="config-input-container config-select-input"

@@ -61,11 +61,11 @@ export class WidgetsTab extends LitElement {
     {
       id: 'ui-label',
       name: 'text',
-      markup: html`<h6 class="subtitle">Text</h6>
+      markup: html`<h6 class="subtitle">Label</h6>
         <draggable-widget>
           <ui-label
             id="label"
-            value="Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities and makes it available for scientists, researchers, and developers to detect changes, map trends, and quantify differences on the Earth's surface."
+            value="Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities."
           ></ui-label>
         </draggable-widget> `,
     },
@@ -92,7 +92,7 @@ export class WidgetsTab extends LitElement {
     {
       id: 'ui-textbox',
       name: 'textbox',
-      markup: html`<h6 class="subtitle">Textbox</h6>
+      markup: html`<h6 class="subtitle">Text Input</h6>
         <draggable-widget>
           <ui-textbox
             id="textbox"

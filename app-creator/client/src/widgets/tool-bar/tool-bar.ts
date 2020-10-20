@@ -406,6 +406,7 @@ export class ToolBar extends LitElement {
         <h3>
           <strong id="app-title-prefix">${ToolBar.prefix}</strong>
           <span id="app-title-suffix">${ToolBar.suffix}</span>
+          <sup><span style="color:red; font-weight:lighter;">Experimental</sup>
         </h3>
 
         <div>

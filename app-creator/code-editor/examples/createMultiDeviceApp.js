@@ -1,4 +1,4 @@
-var AppCreator = require('users/msibrahim/app-creator:app-creator-deserializer');
+var AppCreator = require('users/google/app-creator:app-creator-deserializer');
 
 /**
  * AppCreator.createMultiDeviceApp provides an API for building responsive templates.

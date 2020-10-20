@@ -22,15 +22,15 @@ function createSidemenu(style) {
   var sidemenu = {};
 
   /**
-   * Initializes panel and returns a reference to the sidePanel (outer level
-   * widget) and contentPanel (panel were widgets are added).
+   * Initializes panel and returns a reference to the sidePanel (outer level widget) and contentPanel (panel were widgets are added).
    */
-  sidemenu.init = function() {
+  sidemenu.init = function () {
     var sidePanel = ui.Panel({
       layout: ui.Panel.Layout.flow('horizontal'),
       style: {
         width: '30px',
         height: '100%',
+        maxWidth: '500px'
       },
     });
 
@@ -38,11 +38,13 @@ function createSidemenu(style) {
 
     var menuButton = sidemenu.createMenuButton(sidePanel, contentPanel);
 
-    var verticalMenuButtonWrapper =
-        sidemenu.createVerticalMenuButtonWrapper(menuButton);
+    var verticalMenuButtonWrapper = sidemenu.createVerticalMenuButtonWrapper(
+      menuButton
+    );
 
-    var horizontalMenuButtonWrapper =
-        sidemenu.createHorizontalMenuButtonWrapper(verticalMenuButtonWrapper);
+    var horizontalMenuButtonWrapper = sidemenu.createHorizontalMenuButtonWrapper(
+      verticalMenuButtonWrapper
+    );
 
     sidePanel.widgets().add(contentPanel);
 
@@ -55,10 +57,9 @@ function createSidemenu(style) {
   };
 
   /**
-   * Creates contentPanel which hosts user defined widgets (i.e. label, textbox,
-   * select, etc...).
+   * Creates contentPanel which hosts user defined widgets (i.e. label, textbox, select, etc...).
    */
-  sidemenu.createContentPanel = function(style) {
+  sidemenu.createContentPanel = function (style) {
     // Overwriting mandatory properties.
     style.width = 0;
     style.height = '100%';
@@ -70,35 +71,38 @@ function createSidemenu(style) {
   };
 
   /**
-   * Uses an underlying checkbox to create a menu button that expands and
-   * collapses.
+   * Uses an underlying checkbox to create a menu button that expands and collapses.
    */
-  sidemenu.createMenuButton = function(sidePanel, contentPanel) {
+  sidemenu.createMenuButton = function (sidePanel, contentPanel) {
     return ui.Checkbox({
-      label: '| ▶',
-      onChange: function() {
+      label: '|    ▶',
+      onChange: function () {
         var sidePanelWidth = sidePanel.style().get('width');
-        sidePanel.style().set(
-            'width', sidePanelWidth === '30px' ? '80%' : '30px');
+        sidePanel
+          .style()
+          .set('width', sidePanelWidth === '30px' ? '80%' : '30px');
 
         var contentPanelWidth = contentPanel.style().get('width');
-        contentPanel.style().set(
-            'width', contentPanelWidth ? 0 : 'calc(100% - 30px)');
+        contentPanel
+          .style()
+          .set('width', contentPanelWidth ? 0 : 'calc(100% - 30px)');
         contentPanel.style().set('padding', contentPanelWidth ? '0px' : '16px');
       },
       style: {
-        height: '100%',
+        height:'50px',
+        border: '0.5px solid black',
+        padding: '0px 6px',
         margin: '0px 0px 0px -28px',
-        fontSize: '20px',
+        fontSize: '18px',
+        color: '#000000'
       },
     });
   };
 
   /**
-   * Creates vertical and horizontal spacers for centering items. Used for
-   * centering menu button vertically and horizontally.
+   * Creates vertical and horizontal spacers for centering items. Used for centering menu button vertically and horizontally.
    */
-  sidemenu.makeSpacer = function(direction) {
+  sidemenu.makeSpacer = function (direction) {
     return ui.Label({
       value: ' ',
       style: {
@@ -112,7 +116,7 @@ function createSidemenu(style) {
   /*
    * Creates a vertical wrapper for the button that centers it vertically.
    */
-  sidemenu.createVerticalMenuButtonWrapper = function(menuButton) {
+  sidemenu.createVerticalMenuButtonWrapper = function (menuButton) {
     return ui.Panel({
       widgets: [
         sidemenu.makeSpacer('vertical'),
@@ -123,6 +127,7 @@ function createSidemenu(style) {
         height: '100%',
         margin: 0,
         padding: 0,
+        backgroundColor: '#f5f6f9'
       },
       layout: ui.Panel.Layout.flow('vertical'),
     });
@@ -131,8 +136,9 @@ function createSidemenu(style) {
   /*
    * Creates a horizontal wrapper for the button that centers it horizontally.
    */
-  sidemenu.createHorizontalMenuButtonWrapper = function(
-      verticalMenuButtonWrapper) {
+  sidemenu.createHorizontalMenuButtonWrapper = function (
+    verticalMenuButtonWrapper
+  ) {
     return ui.Panel({
       widgets: [
         sidemenu.makeSpacer('horizontal'),
@@ -150,7 +156,7 @@ function createSidemenu(style) {
     });
   };
 
-  return sidemenu;
+  return sidemenu.init();
 }
 
 exports.createSidemenu = createSidemenu;

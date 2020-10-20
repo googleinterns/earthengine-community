@@ -16,7 +16,7 @@
  */
 
 var AppCreator =
-    require('users/msibrahim/app-creator:app-creator-deserializer');
+    require('users/google/app-creator:app-creator-deserializer');
 
 /**
  * AppCreator.createApp provides an API for building a single app instance from

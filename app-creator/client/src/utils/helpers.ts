@@ -240,7 +240,7 @@ export function removeBackgroundColorFromSharedWidget(element: HTMLElement) {
  * Get sample code snippet for creating an app on the code editor.
  */
 export function getCodeSnippet(template: string) {
-  return `var AppCreator = require('users/msibrahim/app-creator:app-creator-deserializer');
+  return `var AppCreator = require('users/google/app-creator:app-creator-deserializer');
 
 /**
  * Create app instance.

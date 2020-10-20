@@ -39,15 +39,13 @@ export class Label extends LitElement {
     }
 
     a {
-      text-decoration: none;
       color: inherit;
     }
   `;
 
   static attributes: AttributeMetaData = {
     value: {
-      value:
-          'Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities and makes it available for scientists, researchers, and developers to detect changes, map trends, and quantify differences on the Earth\'s surface.',
+      value: 'Google Earth Engine combines a multi-petabyte catalog of satellite imagery and geospatial datasets with planetary-scale analysis capabilities.',
       placeholder: 'Enter text',
       type: InputType.TEXTAREA,
     },

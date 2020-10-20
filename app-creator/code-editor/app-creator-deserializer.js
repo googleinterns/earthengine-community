@@ -15,8 +15,16 @@
  * limitations under the License.
  */
 
-var mapStyles = require('users/msibrahim/app-creator:map-styles');
-var sidemenu = require('users/msibrahim/app-creator:sidemenu');
+print(
+  'Thank you for trying out the Earth Engine App Creator!',
+  'This tool is currently experimental and has not been',
+  'officially launched, so some features may change before',
+  'official launch. Documentation for how to use the',
+  'App Creator is coming soon.'
+);
+
+var mapStyles = require('users/google/app-creator:map-styles');
+var sidemenu = require('users/google/app-creator:sidemenu');
 
 exports.createApp = createApp;
 exports.createMultiDeviceApp = createMultiDeviceApp;
@@ -25,8 +33,7 @@ exports.createMultiSelectorApp = createMultiSelectorApp;
 var MOBILE_WINDOW_SIZE = 900;
 
 /**
- * Creates a multiSelectorApp instance given an optional object with the
- * following format.
+ * Creates a multiSelectorApp instance given an optional object with the following format.
  * {[key: string]: AppInstance (could be from createApp or responsiveApp)}.
  */
 function createMultiSelectorApp(apps) {
@@ -71,12 +78,10 @@ function createMultiSelectorApp(apps) {
     return ui.Select({
       items: Object.keys(multiSelectorApp.apps),
       value: multiSelectorApp.selectedApp,
-      onChange: function(value) {
+      onChange: function (value) {
         /**
-         * We set the active state of the app to be switched out to false to
-         * avoid rendering on window resize. We use this property to
-         * conditionaly call the onResize handler on the responsive app
-         * instance.
+         * We set the active state of the app to be switched out to false to avoid rendering on window resize.
+         * We use this property to conditionaly call the onResize handler on the responsive app instance.
          */
         multiSelectorApp.apps[multiSelectorApp.selectedApp].active = false;
         multiSelectorApp.selectedApp = value;
@@ -86,16 +91,17 @@ function createMultiSelectorApp(apps) {
   }
 
   /**
-   * Create a panel with height 1px that acts as a bottom border for the
-   * toolbar.
+   * Create a panel with height 1px that acts as a bottom border for the toolbar.
    */
   function createBottomBorder() {
     return ui.Panel({
       style: {
         height: '1px',
-        backgroundColor: multiSelectorApp.apps[multiSelectorApp.selectedApp]
-                             .root.style()
-                             .get('color'),
+        backgroundColor: multiSelectorApp.apps[
+          multiSelectorApp.selectedApp
+        ].root
+          .style()
+          .get('color'),
       },
     });
   }
@@ -110,24 +116,24 @@ function createMultiSelectorApp(apps) {
       style: {
         width: '100%',
         height: '45px',
-        backgroundColor: multiSelectorApp.apps[multiSelectorApp.selectedApp]
-                             .root.style()
-                             .get('backgroundColor'),
+        backgroundColor: multiSelectorApp.apps[
+          multiSelectorApp.selectedApp
+        ].root
+          .style()
+          .get('backgroundColor'),
       },
     });
   }
 
   /**
-   * Adds a new entry to the apps object with the name as the key and value as
-   * the app instance passed to the argument.
+   * Adds a new entry to the apps object with the name as the key and value as the app instance passed to the argument.
    */
-  multiSelectorApp.set = function(name, app) {
+  multiSelectorApp.set = function (name, app) {
     if (!name || !app) {
       return;
     }
 
-    // If we have not initialized the apps object yet, we do so and add the new
-    // template.
+    // If we have not initialized the apps object yet, we do so and add the new template.
     if (!multiSelectorApp.apps) {
       multiSelectorApp.apps = {};
       multiSelectorApp.apps[name] = app;
@@ -141,7 +147,7 @@ function createMultiSelectorApp(apps) {
   /*
    * Render app to screen.
    */
-  multiSelectorApp.draw = function() {
+  multiSelectorApp.draw = function () {
     if (!multiSelectorApp.apps) {
       return;
     }
@@ -150,31 +156,31 @@ function createMultiSelectorApp(apps) {
     if (appNames.length === 0) {
       return;
     } else if (appNames.length === 1) {
-      // If there is only one app instance set, we render it just like a normal
-      // createApp instance (i.e. Without the toolbar).
+      // If there is only one app instance set, we render it just like a normal createApp instance (i.e. Without the toolbar).
       multiSelectorApp.selectedApp = appNames[0];
       multiSelectorApp.apps[appNames[0]].draw();
     } else {
-      // Set the currently selectedApp to the first app in our object by
-      // default.
+      // Set the currently selectedApp to the first app in our object by default.
       if (!multiSelectorApp.selectedApp) {
         multiSelectorApp.selectedApp = appNames[0];
       }
 
       /**
-       * In the case that we have at least two apps in our multiSelectorApp
-       * instance, we draw the currently selected app passing in the app body as
-       * a render root. This allows child apps to draw on the app body rather
-       * than on ui.root. This is needed because we want to keep the Toolbar
-       * displayed and just swap the apps instead.
+       * In the case that we have at least two apps in our multiSelectorApp instance, we draw the currently selected app
+       * passing in the app body as a render root. This allows child apps to draw on the app body rather
+       * than on ui.root. This is needed because we want to keep the Toolbar displayed and just swap the
+       * apps instead.
        */
       multiSelectorApp.apps[multiSelectorApp.selectedApp].draw(
-          multiSelectorApp.appBody);
-      multiSelectorApp.appContainer.widgets().reset([
-        createToolbar(),
-        createBottomBorder(),
-        multiSelectorApp.appBody,
-      ]);
+        multiSelectorApp.appBody
+      );
+      multiSelectorApp.appContainer
+        .widgets()
+        .reset([
+          createToolbar(),
+          createBottomBorder(),
+          multiSelectorApp.appBody,
+        ]);
 
       ui.root.widgets().reset([multiSelectorApp.appContainer]);
     }
@@ -195,10 +201,9 @@ function createMultiDeviceApp(apps) {
   responsiveApp.root = apps.desktop.root;
 
   /**
-   * Callback triggered on window resize to conditionally render mobile and
-   * desktop templates.
+   * Callback triggered on window resize to conditionally render mobile and desktop templates.
    */
-  responsiveApp.resizeHandler = function(deviceInfo) {
+  responsiveApp.resizeHandler = function (deviceInfo) {
     /**
      * We use the active property to know if this app is currently rendered.
      * If it is not, we don't execute the onResize logic.
@@ -217,7 +222,7 @@ function createMultiDeviceApp(apps) {
   /**
    * Render responsive app to the screen.
    */
-  responsiveApp.draw = function(container) {
+  responsiveApp.draw = function (container) {
     responsiveApp.active = true;
     responsiveApp.renderRoot = container;
     ui.root.onResize(responsiveApp.resizeHandler);
@@ -236,10 +241,9 @@ function createApp(template) {
   var app = {};
 
   /**
-   * Allow users to further customize the generated widgets by providing a
-   * reference to each element created. Type: {[key: WidgetID]: {node: EEWidget,
-   * map?: ui.Map}}, for map widgets, we wrap them with a panel widget and
-   * return both elements.
+   * Allow users to further customize the generated widgets by providing a reference to each element created.
+   * Type: {[key: WidgetID]: {node: EEWidget, map?: ui.Map}}, for map widgets, we wrap them with a panel widget and return
+   * both elements.
    */
   app.widgetInterface = ui.data.ActiveDictionary();
 
@@ -274,15 +278,14 @@ function createApp(template) {
   /**
    * Returns reference to the widget interface.
    */
-  app.widgets = function() {
+  app.widgets = function () {
     return app.widgetInterface;
   };
 
   /**
-   * Recursively traverses the widget tree starting at panel-template-0 and
-   * creates ee ui widgets accordingly.
+   * Recursively traverses the widget tree starting at panel-template-0 and creates ee ui widgets accordingly.
    */
-  app.deserializeUI = function(widgetTreeJSON) {
+  app.deserializeUI = function (widgetTreeJSON) {
     function helper(nodeObj) {
       var obj = app.createUIElement(nodeObj);
       if (!obj) {
@@ -292,8 +295,9 @@ function createApp(template) {
       var map = null;
       if (obj instanceof ui.Panel) {
         // If the panel is a map wrapper, we want to extract the map itself.
-        var isMapWrapper = obj.widgets().length() === 1 &&
-            obj.widgets().get(0) instanceof ui.Map;
+        var isMapWrapper =
+          obj.widgets().length() === 1 &&
+          obj.widgets().get(0) instanceof ui.Map;
         map = isMapWrapper ? obj.widgets().get(0) : null;
       }
 
@@ -327,15 +331,15 @@ function createApp(template) {
       return helper(widgetTree.widgets['panel-template-0']);
     } catch (e) {
       print(
-          'Template JSON is incorrectly formatted. Please check that the JSON is formatted correctly.');
+        'Template JSON is incorrectly formatted. Please check that the JSON is formatted correctly.'
+      );
     }
   };
 
   /**
-   * Takes in a node object containing meta data about a node and returns the
-   * created ui element.
+   * Takes in a node object containing meta data about a node and returns the created ui element.
    */
-  app.createUIElement = function(nodeObj) {
+  app.createUIElement = function (nodeObj) {
     var type = nodeObj.id.slice(0, nodeObj.id.indexOf('-'));
     var filteredStyles = app.filterStyleObject(nodeObj.style);
     switch (type) {
@@ -367,7 +371,7 @@ function createApp(template) {
   /**
    * Helper function for creating slider elements.
    */
-  app.createSliderElement = function(obj, style) {
+  app.createSliderElement = function (obj, style) {
     var uniqueAttributes = obj.uniqueAttributes;
 
     var min = parseFloat(uniqueAttributes.min);
@@ -403,13 +407,13 @@ function createApp(template) {
 
     var dataTable = {
       cols: [
-        {id: 'task', label: 'Task', type: 'string'},
-        {id: 'hours', label: 'Hours per Day', type: 'number'},
+        { id: 'task', label: 'Task', type: 'string' },
+        { id: 'hours', label: 'Hours per Day', type: 'number' },
       ],
       rows: [
-        {c: [{v: 'Eat'}, {v: 2}]},
-        {c: [{v: 'Write EE Code'}, {v: 9}]},
-        {c: [{v: 'Sleep'}, {v: 7, f: '7.000'}]},
+        { c: [{ v: 'Eat' }, { v: 2 }] },
+        { c: [{ v: 'Write EE Code' }, { v: 9 }] },
+        { c: [{ v: 'Sleep' }, { v: 7, f: '7.000' }] },
       ],
     };
 
@@ -422,7 +426,7 @@ function createApp(template) {
     var colors = [''];
     try {
       colors = JSON.parse(uniqueAttributes.color);
-      colors = colors.map(function(color) {
+      colors = colors.map(function (color) {
         return color.trim();
       });
     } catch (e) {
@@ -448,7 +452,7 @@ function createApp(template) {
   /**
    * Helper function for creating select elements.
    */
-  app.createSelectElement = function(obj, style) {
+  app.createSelectElement = function (obj, style) {
     var uniqueAttributes = obj.uniqueAttributes;
 
     var items = [''];
@@ -474,7 +478,7 @@ function createApp(template) {
   /**
    * Helper function for creating textbox elements.
    */
-  app.createTextboxElement = function(obj, style) {
+  app.createTextboxElement = function (obj, style) {
     var uniqueAttributes = obj.uniqueAttributes;
 
     var textbox = ui.Textbox({
@@ -490,7 +494,7 @@ function createApp(template) {
   /**
    * Helper function for creating checkbox elements.
    */
-  app.createCheckboxElement = function(obj, style) {
+  app.createCheckboxElement = function (obj, style) {
     var uniqueAttributes = obj.uniqueAttributes;
 
     var checkbox = ui.Checkbox({
@@ -506,7 +510,7 @@ function createApp(template) {
   /**
    * Helper function for creating button elements.
    */
-  app.createButtonElement = function(obj, style) {
+  app.createButtonElement = function (obj, style) {
     var uniqueAttributes = obj.uniqueAttributes;
 
     var button = ui.Button({
@@ -521,10 +525,10 @@ function createApp(template) {
   /**
    * Helper function for creating label elements.
    */
-  app.createLabelElement = function(obj, style) {
+  app.createLabelElement = function (obj, style) {
     var uniqueAttributes = obj.uniqueAttributes;
 
-    var label = ui.Label({value: uniqueAttributes.value, style: style});
+    var label = ui.Label({ value: uniqueAttributes.value, style: style });
 
     var targetUrl = uniqueAttributes.targetUrl;
     if (targetUrl.trim() !== '') {
@@ -537,20 +541,21 @@ function createApp(template) {
   /**
    * Helper function for creating panel elements.
    */
-  app.createPanelElement = function(obj, style) {
+  app.createPanelElement = function (obj, style) {
     var uniqueAttributes = obj.uniqueAttributes;
 
-    var layout = uniqueAttributes.layout === 'row' ?
-        ui.Panel.Layout.Flow('horizontal') :
-        ui.Panel.Layout.Flow('vertical');
+    var layout =
+      uniqueAttributes.layout === 'row'
+        ? ui.Panel.Layout.Flow('horizontal')
+        : ui.Panel.Layout.Flow('vertical');
 
-    return ui.Panel({style: style, layout: layout});
+    return ui.Panel({ style: style, layout: layout });
   };
 
   /**
    * Helper function for creating sidemenu elements.
    */
-  app.createSidemenuElement = function(obj, style) {
+  app.createSidemenuElement = function (obj, style) {
     // Sidemenu is an object with the properties: sidePanel and contentPanel.
     return sidemenu.createSidemenu(style);
   };
@@ -558,7 +563,7 @@ function createApp(template) {
   /**
    * Helper function for getting the correct position.
    */
-  app.getPosition = function(style) {
+  app.getPosition = function (style) {
     if ('bottom' in style && 'left' in style) {
       return 'bottom-left';
     } else if ('bottom' in style && 'right' in style) {
@@ -606,7 +611,7 @@ function createApp(template) {
     // Map styling.
     var defaultMapStyles = uniqueAttributes.mapStyles;
     var customMapStyles = uniqueAttributes.customMapStyles;
-    var customMapSylesJSON = null;
+    var customMapStylesJSON = null;
     if (customMapStyles !== '') {
       try {
         customMapStylesJSON = JSON.parse(customMapStyles);
@@ -615,17 +620,17 @@ function createApp(template) {
       }
     }
 
-    var appliedStyles = customMapStyles === '' || customMapStylesJSON === null ?
-        mapStyles[defaultMapStyles] :
-        customMapStylesJSON;
-    map.setOptions({styles: {custom: appliedStyles}});
+    var appliedStyles =
+      customMapStyles === '' || customMapStylesJSON === null
+        ? mapStyles[defaultMapStyles]
+        : customMapStylesJSON;
+    map.setOptions({ styles: { custom: appliedStyles } });
 
     return map;
   };
 
   /**
-   * Since Sets are not supported here, we are using an object for constant time
-   * access. The boolean values are meaningless.
+   * Since Sets are not supported here, we are using an object for constant time access. The boolean values are meaningless.
    */
   var unsupportedKeys = {
     borderWidth: true,
@@ -644,7 +649,7 @@ function createApp(template) {
   /**
    * Takes in a style object and returns all the unsupported keys.
    */
-  app.filterStyleObject = function(obj) {
+  app.filterStyleObject = function (obj) {
     var clone = {};
 
     // Combine border properties.
@@ -672,7 +677,7 @@ function createApp(template) {
   /**
    * Create in-memory widget tree.
    */
-  app.init = function(template) {
+  app.init = function (template) {
     app.root = app.deserializeUI(template);
   };
 
@@ -681,7 +686,7 @@ function createApp(template) {
    * @param container An optional render root to use instead of the default ui.Root.
    * This is used in MultiSelectorApps to draw to the app body so that the toolbar remains displayed.
    */
-  app.draw = function(container) {
+  app.draw = function (container) {
     if (!container) {
       ui.root.widgets().reset([app.root]);
       return;
