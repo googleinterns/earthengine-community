@@ -75,8 +75,8 @@ export class ToolBar extends LitElement {
 
     #json-string-container {
       margin: 16px;
-      overflow-y: scroll;
-      overflow-x: scroll;
+      overflow-y: auto;
+      overflow-x: auto;
       padding: 16px;
       background-color: var(--background-color);
       height: 300px;

@@ -41,7 +41,7 @@ export class DraggableWidget extends LitElement {
       margin: var(--extra-tight) 0px;
       position: relative;
       cursor: move;
-      overflow: hidden;
+      overflow: hiden;
     }
 
     .overlay {

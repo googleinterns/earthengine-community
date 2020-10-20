@@ -44,7 +44,7 @@ export class TemplateWizard extends LitElement {
       width: 100%;
       margin-top: var(--regular);
       height: 300px;
-      overflow-y: scroll;
+      overflow-y: auto;
     }
 
     template-card {
@@ -59,7 +59,7 @@ export class TemplateWizard extends LitElement {
       display: flex;
       flex-direction: column;
       align-items: center;
-      overflow-y: scroll;
+      overflow-y: auto;
     }
 
     #header-content {
@@ -131,7 +131,7 @@ export class TemplateWizard extends LitElement {
       width: 70%;
       height: 100%;
       padding: var(--tight);
-      overflow: hidden;
+      overflow: auto;
     }
 
     #button-container {
@@ -200,7 +200,7 @@ export class TemplateWizard extends LitElement {
     .row {
       display: flex;
       height: 100%;
-      overflow: hidden;
+      overflow: auto;
     }
 
     .form-inputs {

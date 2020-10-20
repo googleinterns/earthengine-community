@@ -42,7 +42,7 @@ export class Dropzone extends LitElement {
       border: var(--light-dashed-border);
       display: flex;
       flex-direction: column;
-      overflow-y: scroll;
+      overflow-y: auto;
       height: calc(100% - 2 * var(--tight));
     }
 
